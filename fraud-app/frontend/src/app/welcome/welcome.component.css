@@ -1,0 +1,101 @@
+/* Body container - flexbox for vertical stacking */
+.body {
+    background-color: #081E26;
+    margin: 0 !important;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Logo styling - ensure good spacing and centered */
+.logo {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Heading - modern font and size */
+.welcomeTitle {
+    color: #BF9969;
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5rem;
+    margin-top: 20px;
+}
+
+/* Lead text - clear and concise */
+.lead {
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;  /* Restrict the width for readability */
+    margin: 20px auto;  /* Center text with some spacing */
+}
+
+/* Button container - flex for horizontal alignment */
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Primary button - more attention-grabbing */
+.welcomeBtn1 {
+    background-color: #BF9969;
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 12px 25px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    width: 100%;  /* Full width for larger touch targets */
+    max-width: 300px;
+    margin-bottom: 20px;  /* Spacing between the two buttons */
+}
+
+/* Hover effect for primary button */
+.welcomeBtn1:hover {
+    background-color: #C5B182;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary button - muted but still accessible */
+.welcomeBtn2 {
+    background-color: transparent;
+    color: #434C88;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    border-radius: 5px;
+    border: 2px solid #434C88;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Hover effect for secondary button */
+.welcomeBtn2:hover {
+    background-color: #434C88;
+    color: #FFFFFF;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .welcomeTitle {
+        font-size: 2rem;
+    }
+
+    .lead {
+        font-size: 1rem;
+    }
+
+    .welcomeBtn1, .welcomeBtn2 {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}

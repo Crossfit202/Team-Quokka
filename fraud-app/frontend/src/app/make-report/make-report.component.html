@@ -1,0 +1,246 @@
+<div class="report-container">
+    <div class="card-layout">
+      <!-- Show confirmation screen if submitted -->
+      <div *ngIf="isSubmitted" class="text-center">
+        <h4>Thank You for Your Submission!</h4>
+        <p>Your report has been successfully submitted. We appreciate your effort in helping maintain integrity and transparency.</p>
+        <button class="btn btn-primary" routerLink="/welcome">Return to Welcome Screen</button>
+      </div>
+  
+      <!-- Show form only if not submitted -->
+      <div *ngIf="!isSubmitted">
+        <!-- Progress Bar -->
+        <div class="progress mt-3">
+          <div class="progress-bar" [style.width.%]="(step / 8) * 100"></div>
+        </div>
+        <p>Step {{ step }} of 8</p>
+  
+      <!-- Step 1: Crime Type -->
+      <div *ngIf="step === 1">
+        <h4>Select the category of the financial crime:</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="fraud" name="crimeType" [(ngModel)]="crimeType" [value]="'Fraud'" aria-label="Fraud" />
+          <label class="form-check-label" for="fraud">Fraud</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="bribery" name="crimeType" [(ngModel)]="crimeType" [value]="'Bribery'" aria-label="Bribery" />
+          <label class="form-check-label" for="bribery">Bribery</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="moneyLaundering" name="crimeType" [(ngModel)]="crimeType" [value]="'Money Laundering'" aria-label="Money Laundering" />
+          <label class="form-check-label" for="moneyLaundering">Money Laundering</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="theft" name="crimeType" [(ngModel)]="crimeType" [value]="'Theft'" aria-label="Theft" />
+          <label class="form-check-label" for="theft">Theft</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="otherCrime" name="crimeType" [(ngModel)]="crimeType" [value]="'Other'" aria-label="Other crime type" />
+          <label class="form-check-label" for="otherCrime">Other</label>
+          <input *ngIf="crimeType === 'Other'" [(ngModel)]="otherCrimeType" type="text" class="form-control mt-2" placeholder="Specify crime type" aria-label="Specify other crime type" />
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!crimeType">Next</button>
+        </div>
+      </div>
+  
+      <!-- Step 2: Who Was Involved -->
+<div *ngIf="step === 2">
+    <h4>Who was involved in the incident?</h4>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="employer" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Employer'" aria-label="Employer" />
+      <label class="form-check-label" for="employer">Employer</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="superior" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Superior'" aria-label="Superior" />
+      <label class="form-check-label" for="superior">Superior</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="coworker" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Co-worker'" aria-label="Co-worker" />
+      <label class="form-check-label" for="coworker">Co-worker</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="subordinate" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Subordinate'" aria-label="Subordinate" />
+      <label class="form-check-label" for="subordinate">Subordinate</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="vendor" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Vendor'" aria-label="Vendor" />
+      <label class="form-check-label" for="vendor">Vendor</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="unknownPerson" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Unknown'" aria-label="Unknown person" />
+      <label class="form-check-label" for="unknownPerson">Unknown</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="otherPerson" name="peopleInvolved" [(ngModel)]="peopleInvolved" [value]="'Other'" aria-label="Other person" />
+      <label class="form-check-label" for="otherPerson">Other</label>
+      <input *ngIf="peopleInvolved === 'Other'" [(ngModel)]="peopleInvolved" type="text" class="form-control mt-2" placeholder="Specify other person" aria-label="Specify other person" />
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+      <button class="btn btn-primary" (click)="nextStep()" [disabled]="!peopleInvolved">Next</button>
+    </div>
+  </div>
+  
+  
+      <!-- Step 3: Location -->
+      <div *ngIf="step === 3">
+        <h4>Where did the incident occur?</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="office" name="location" [(ngModel)]="incidentLocation" [value]="'Office'" aria-label="Office" />
+          <label class="form-check-label" for="office">Office</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="warehouse" name="location" [(ngModel)]="incidentLocation" [value]="'Warehouse'" aria-label="Warehouse" />
+          <label class="form-check-label" for="warehouse">Warehouse</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="remote" name="location" [(ngModel)]="incidentLocation" [value]="'Remote Work'" aria-label="Remote work" />
+          <label class="form-check-label" for="remote">Remote Work</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="otherLocation" name="location" [(ngModel)]="incidentLocation" [value]="'Other'" aria-label="Other location" />
+          <label class="form-check-label" for="otherLocation">Other</label>
+          <input *ngIf="incidentLocation === 'Other'" [(ngModel)]="otherIncidentLocation" type="text" class="form-control mt-2" placeholder="Specify location" aria-label="Specify other location" />
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!incidentLocation">Next</button>
+        </div>
+      </div>
+  
+      <!-- Step 4: Description -->
+      <div *ngIf="step === 4">
+        <h4>How did this crime occur?</h4>
+        <textarea [(ngModel)]="incidentDescription" name="incidentDescription" class="form-control" rows="4" aria-label="Incident description"></textarea>
+        <div *ngIf="incidentDescription.length < 10">
+          <small class="text-warning">Please provide more details. A description of at least 10 characters is required.</small>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+          <button class="btn btn-primary" (click)="nextStep()" [disabled]="incidentDescription.length < 10">Next</button>
+        </div>
+      </div>
+  
+      <!-- Step 5: Impact -->
+      <div *ngIf="step === 5">
+        <h4>What is the estimated impact or loss?</h4>
+        <label for="monetaryLoss">Estimated Monetary Loss:</label>
+        <input type="number" id="monetaryLoss" [(ngModel)]="monetaryLoss" class="form-control mb-3" placeholder="Enter estimated loss in dollars" aria-label="Estimated monetary loss" />
+        <h5>Other Impacts (select all that apply):</h5>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="reputationDamage" [(ngModel)]="reputationDamage" aria-label="Reputation Damage" />
+          <label class="form-check-label" for="reputationDamage">Reputation Damage</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="customerRetention" [(ngModel)]="customerRetention" aria-label="Customer Retention Impact" />
+          <label class="form-check-label" for="customerRetention">Customer Retention Impact</label>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+          <button class="btn btn-primary" (click)="nextStep()">Next</button>
+        </div>
+      </div>
+  
+      <!-- Step 6: Ongoing Status -->
+      <div *ngIf="step === 6">
+        <h4>Is the reported crime ongoing?</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="ongoingYes" name="ongoing" [(ngModel)]="isOngoing" [value]="true" aria-label="Ongoing Yes" />
+          <label class="form-check-label" for="ongoingYes">Yes</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="ongoingNo" name="ongoing" [(ngModel)]="isOngoing" [value]="false" aria-label="Ongoing No" />
+          <label class="form-check-label" for="ongoingNo">No</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="ongoingUnknown" name="ongoing" [(ngModel)]="isOngoing" [value]="null" aria-label="Ongoing Unknown" />
+          <label class="form-check-label" for="ongoingUnknown">Unknown</label>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+          <button class="btn btn-primary" (click)="nextStep()" [disabled]="isOngoing === undefined">Next</button>
+        </div>
+      </div>
+  
+      <!-- Step 7: Discovery -->
+      <div *ngIf="step === 7">
+        <h4>How was the incident discovered?</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="audit" name="discovered" [(ngModel)]="incidentDiscovery" [value]="'Internal Audit'" aria-label="Internal Audit" />
+          <label class="form-check-label" for="audit">Internal Audit</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="complaint" name="discovered" [(ngModel)]="incidentDiscovery" [value]="'Customer Complaint'" aria-label="Customer Complaint" />
+          <label class="form-check-label" for="complaint">Customer Complaint</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="whistleblower" name="discovered" [(ngModel)]="incidentDiscovery" [value]="'Whistleblower'" aria-label="Whistleblower" />
+          <label class="form-check-label" for="whistleblower">Whistleblower</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="selfReport" name="discovered" [(ngModel)]="incidentDiscovery" [value]="'Self-Reporting'" aria-label="Self-Reporting" />
+          <label class="form-check-label" for="selfReport">Self-Reporting</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="otherDiscovery" name="discovered" [(ngModel)]="incidentDiscovery" [value]="'Other'" aria-label="Other Discovery" />
+          <label class="form-check-label" for="otherDiscovery">Other</label>
+          <input *ngIf="incidentDiscovery === 'Other'" [(ngModel)]="otherIncidentDiscovery" type="text" class="form-control mt-2" placeholder="Specify discovery method" aria-label="Specify other discovery method" />
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!incidentDiscovery">Next</button>
+        </div>
+      </div>
+  
+      <!-- Step 8: Review and Submit -->
+<div *ngIf="step === 8">
+    <h4>Review Your Report</h4>
+    <p>Please review the information below and confirm its accuracy before submitting:</p>
+    <div class="review-section scrollable">
+      <!-- Display user-entered data only -->
+      <h5>Crime Type:</h5>
+      <p>{{ crimeType }} <span *ngIf="crimeType === 'Other'">({{ otherCrimeType }})</span></p>
+      <h5>Who Was Involved:</h5>
+      <p>{{ peopleInvolved }}</p>
+      <h5>Location:</h5>
+      <p>{{ incidentLocation }} <span *ngIf="incidentLocation === 'Other'">({{ otherIncidentLocation }})</span></p>
+      <h5>Incident Description:</h5>
+      <p>{{ incidentDescription }}</p>
+      <h5>Estimated Impact:</h5>
+      <p>Monetary Loss: ${{ monetaryLoss || 'Not Provided' }}</p>
+      <p>
+        Additional Impacts:
+        <span *ngIf="reputationDamage">Reputation Damage</span>
+        <span *ngIf="customerRetention">, Customer Retention Impact</span>
+        <span *ngIf="!reputationDamage && !customerRetention">None</span>
+      </p>
+      <h5>Is the Crime Ongoing?</h5>
+      <p>{{ isOngoing === true ? 'Yes' : isOngoing === false ? 'No' : 'Unknown' }}</p>
+      <h5>How Was the Incident Discovered?</h5>
+      <p>{{ incidentDiscovery }} <span *ngIf="incidentDiscovery === 'Other'">({{ otherIncidentDiscovery }})</span></p>
+    </div>
+  
+    <!-- Accuracy Confirmation -->
+    <div class="accuracy-section mt-4">
+      <h5>Is all of the information above accurate?</h5>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="accurateYes" name="accuracy" [(ngModel)]="isAccurate" [value]="true" />
+        <label class="form-check-label" for="accurateYes">Yes</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="accurateNo" name="accuracy" [(ngModel)]="isAccurate" [value]="false" />
+        <label class="form-check-label" for="accurateNo">No</label>
+      </div>
+    </div>
+  
+    <!-- Navigation Buttons -->
+    
+    <div class="button-container">
+        <button *ngIf="step > 1" class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
+        <button *ngIf="step < 8" class="btn btn-primary" (click)="nextStep()" [disabled]="!isStepValid()">Next</button>
+        <button *ngIf="step === 8" class="btn btn-success" (click)="onSubmit()" [disabled]="isAccurate === null">Submit</button>
+    </div>
+      
+  </div>
+  

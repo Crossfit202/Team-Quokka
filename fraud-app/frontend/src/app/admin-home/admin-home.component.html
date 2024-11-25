@@ -1,0 +1,62 @@
+<div class="admin-home-container">
+    <!-- Report Card -->
+    <div class="card-layout">
+        <h4>Current Report</h4>
+        <div class="current-report-card">
+          <p><strong>Ticket Number:</strong> {{ currentReport?.ticket_number || 'N/A' }}</p>
+          <p><strong>Type:</strong> {{ currentReport?.report_type || 'N/A' }}</p>
+          <p><strong>Description:</strong> {{ currentReport?.description || 'N/A' }}</p>
+          <p><strong>Perpetrator:</strong> {{ currentReport?.perpetrator || 'N/A' }}</p>
+          <p><strong>Location:</strong> {{ currentReport?.incident_location || 'N/A' }}</p>
+          <p><strong>Monetary Damage:</strong> {{ currentReport?.monetary_damage || 'N/A' }}</p>
+          <p><strong>Additional Damage 1:</strong> {{ currentReport?.additional_damage1 ? 'Yes' : 'N/A' }}</p>
+          <p><strong>Additional Damage 2:</strong> {{ currentReport?.additional_damage2 ? 'Yes' : 'N/A' }}</p>
+          <p><strong>Ongoing:</strong> {{ currentReport?.ongoing || 'N/A' }}</p>
+          <p><strong>Discovery Method:</strong> {{ currentReport?.discovery_method || 'N/A' }}</p>
+          <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
+          <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
+          <p><strong>Created At:</strong> 
+            {{ currentReport?.created_at ? (currentReport?.created_at | date:'short') : 'N/A' }}
+          </p>
+          
+          <p><strong>Updated At:</strong> 
+            {{ currentReport?.updated_at ? (currentReport?.updated_at | date:'short') : 'N/A' }}
+          </p>
+          
+
+        </div>
+        <button class="btn btn-success" (click)="markAsCompleted(currentReport?.report_id)">
+          Mark as Completed
+        </button>
+      </div>
+      
+      
+  
+    <!-- Annotations Card -->
+    <div class="card-layout">
+        <h4>Annotations</h4>
+        <div class="annotations-card">
+          <div *ngFor="let annotation of dummyAnnotations">
+            <p>{{ annotation.content }}</p>
+            <small>{{ annotation.created_at | date: 'short' }}</small>
+            <hr />
+          </div>
+        </div>
+        <textarea [(ngModel)]="newAnnotation" placeholder="Add your annotation"></textarea>
+        <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
+      </div>
+      
+  
+  <!-- Advanced Functions Card (Visible Only for Admins) -->
+  <div class="card-layout" *ngIf="isAdvancedUser">
+    <h4>Admin Tools</h4>
+    <button class="btn btn-secondary" (click)="editReport()">Edit Report</button>
+    <button class="btn btn-danger" (click)="deleteReport()">Delete Report</button>
+    <button class="btn btn-warning" (click)="reassignReport()">Reassign Report</button>
+  </div>
+
+
+  <button class="btn btn-info" (click)="toggleAdvancedUser()">Toggle Admin Tools</button>
+
+  
+  

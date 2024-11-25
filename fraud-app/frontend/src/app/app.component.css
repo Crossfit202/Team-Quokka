@@ -1,0 +1,6 @@
+.body {
+    background-color:#081E26;
+    margin: 0 !important;
+    width: 100% !important;       /* Fills the entire width of the viewport */
+    height: 1000px !important;      /* Fills the entire height of the viewport */
+}

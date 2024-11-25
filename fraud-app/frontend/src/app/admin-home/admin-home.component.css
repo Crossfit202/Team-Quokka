@@ -1,0 +1,93 @@
+/* Admin Home Container */
+.admin-home-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap; /* Ensures responsiveness for smaller screens */
+    min-height: 100vh;
+    background-color: #081E26; /* Match the welcome screen background */
+    padding: 20px;
+    gap: 20px; /* Space between cards */
+    color: #FFFFFF; /* White text for headings and general page info */
+  }
+  
+  /* General Card Style */
+  .card-layout {
+    background-color: #FFFFFF; /* Light background */
+    color: #000000; /* Black text for better contrast */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between internal elements */
+  }
+  
+  .card-layout p {
+    color: #434C88; /* Consistent accent color */
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .card-layout h4 {
+    color: #434C88; /* Consistent accent color */
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .card-layout {
+      flex: 1 1 100%; /* Full-width cards on smaller screens */
+      max-width: none;
+    }
+  }
+
+  /* Current Report Card */
+.current-report-card {
+    max-height: 300px; /* Limit the visible height */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+    padding: 10px;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    background-color: #FFFFFF; /* Light background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  /* Scrollbar Styling (Optional, for consistent look) */
+  .current-report-card::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .current-report-card::-webkit-scrollbar-thumb {
+    background: #BF9969; /* Accent color for the scrollbar */
+    border-radius: 4px;
+  }
+  
+  .current-report-card::-webkit-scrollbar-thumb:hover {
+    background: #C5B182;
+  }
+  
+  /* Annotations Card */
+.annotations-card {
+    max-height: 200px; /* Limit height */
+    overflow-y: auto; /* Enable scrolling */
+    padding: 10px;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    background-color: #F8F9FA; /* Slightly different background */
+  }
+  
+  /* Scrollbar Styling */
+  .annotations-card::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .annotations-card::-webkit-scrollbar-thumb {
+    background: #BF9969;
+    border-radius: 4px;
+  }
+  
+  .annotations-card::-webkit-scrollbar-thumb:hover {
+    background: #C5B182;
+  }
+  
