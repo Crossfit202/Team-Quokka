@@ -5,11 +5,11 @@ import { routes } from './app.routes';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterModule, RouterOutlet], // Import RouterModule
+  standalone: true, // Declares this component as standalone
+  imports: [RouterModule, RouterOutlet], // Importing RouterModule and RouterOutlet for navigation
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Fi-Rep';
+  title = 'Fi-Rep'; // Title for the application
 }

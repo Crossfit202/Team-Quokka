@@ -28,6 +28,9 @@ export class Users {
     @Column()
     updated_at: Date;
 
+    // @Column()
+    // email: string;
+
     @OneToMany(() => Reports, report => report.users)
     reports: Reports[];
 

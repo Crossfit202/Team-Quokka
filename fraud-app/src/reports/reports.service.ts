@@ -10,6 +10,7 @@ export class ReportsService {
         private readonly reportRepository: Repository<Reports>,
     ) { }
 
+
     // CREATE
     async create(data: Partial<Reports>): Promise<Reports> {
         const newReport = this.reportRepository.create(data);
