@@ -2,10 +2,13 @@ import { Routes } from '@angular/router';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { MakeReportComponent } from './make-report/make-report.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { LoginScreenComponent } from './login-screen/login-screen.component';
 
 export const routes: Routes = [
-  { path: 'welcome', component: WelcomeComponent},
-  { path: 'create-report', component: MakeReportComponent},
+  { path: 'welcome', component: WelcomeComponent },
+  { path: 'create-report', component: MakeReportComponent },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
-  { path: 'admin-home', component: AdminHomeComponent }
+  { path: 'admin-home', component: AdminHomeComponent },
+  { path: 'login-screen', component: LoginScreenComponent }
+
 ];

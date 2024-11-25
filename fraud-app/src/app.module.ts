@@ -17,6 +17,9 @@ import { Report_annotations } from './report_annotations/report_annotations';
 import { Report_status_history } from './report_status_history/report_status_history';
 import { Reports } from './reports/reports';
 import { Users } from './users/users';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -52,12 +55,15 @@ import { Users } from './users/users';
     ReportStatusHistoryModule,
     ReportsModule,
     UsersModule,
+    AuthModule
   ],
   controllers: [
-    AppController, // Application Controller
+    AppController,
+    AuthController, // Application Controller
   ],
   providers: [
-    AppService, // Application Service
+    AppService,
+    AuthService, // Application Service
   ],
 })
 export class AppModule { }
