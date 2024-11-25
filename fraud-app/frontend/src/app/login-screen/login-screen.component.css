@@ -1,0 +1,71 @@
+/* Body container - full height and background color */
+.body {
+    background-color: #081E26;
+    /* Match your dark theme */
+    margin: 0 !important;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* Login box styling - aligned left, styled to match theme */
+.login-box {
+    background-color: #195e78;
+    padding: 150px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 40%;
+    width: 100%;
+    text-align: left;
+    /* Align text to the left */
+}
+
+/* Label and input styling */
+label {
+    color: #FFFFFF;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #BF9969;
+    border-radius: 5px;
+    background-color: white;
+    color: #081E26;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #C5B182;
+    box-shadow: 0 0 5px rgba(191, 153, 105, 0.5);
+    outline: none;
+}
+
+/* Login button styling */
+.login-button {
+    background-color: #BF9969;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #C5B182;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

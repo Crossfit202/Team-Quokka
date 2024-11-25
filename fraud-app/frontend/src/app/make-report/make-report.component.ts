@@ -69,8 +69,8 @@ export class MakeReportComponent {
 
     // Align reportData fields with the database schema
     const reportData = {
-      // ticket_number: `TICK${Math.floor(Math.random() * 100000)}`, // Generate unique ticket number
-      ticket_number: `TKT120`,
+      ticket_number: `TICK${Math.floor(Math.random() * 100000)}`, // Generate unique ticket number
+      // ticket_number: `TKT120`,
       report_type: this.crimeType, // Maps to "report_type" in DB
       description: this.incidentDescription, // Maps to "description"
       status: 'Open', // Default status for new reports
