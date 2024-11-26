@@ -1,0 +1,30 @@
+<div class="advanced-user-container">
+    <h1>Advanced User Dashboard</h1>
+  
+    <!-- Reports View Section -->
+    <section>
+      <h2>Assigned Reports</h2>
+      <p>Placeholder for reports view (similar to Admin-Home).</p>
+    </section>
+  
+    <!-- Delete Report Section -->
+    <section>
+      <h2>Delete a Report</h2>
+      <input type="text" placeholder="Enter Report ID" [(ngModel)]="deleteReportId" />
+      <button class="btn btn-danger" (click)="deleteReport()">Delete Report</button>
+    </section>
+  
+    <!-- Edit Report Section -->
+    <section>
+      <h2>Edit a Report</h2>
+      <input type="text" placeholder="Enter Report ID" [(ngModel)]="editReportId" />
+      <button class="btn btn-warning" (click)="editReport()">Edit Report</button>
+    </section>
+  
+    <!-- Review Reports Section -->
+    <section>
+      <h2>Reports for Review</h2>
+      <p>Placeholder for reviewing submitted reports.</p>
+    </section>
+  </div>
+  

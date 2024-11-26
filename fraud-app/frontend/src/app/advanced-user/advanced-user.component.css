@@ -1,0 +1,17 @@
+/* advanced-user.component.css */
+.advanced-user-container {
+    padding: 20px;
+    background-color: #081E26; /* Match project theme */
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  section {
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+    color: #000000;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
