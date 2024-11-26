@@ -11,7 +11,7 @@ export class Report_annotations {
     annotation_id: number;
 
     @Column()
-    @IsNotEmpty()
+    @IsNotEmpty({message: 'Annotation text cannot be empty.'})
     annotation_text: string;
 
     @Column()

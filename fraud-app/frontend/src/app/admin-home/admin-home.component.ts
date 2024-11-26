@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ReportsService } from '../services/reports.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, AuthService]
 })
 export class AdminHomeComponent implements OnInit {
   reports: any[] = []; // All reports
@@ -56,8 +57,9 @@ export class AdminHomeComponent implements OnInit {
   addAnnotation() {
     if (this.newAnnotation.trim() && this.currentReport) {
       const annotationData = {
-        report_id: this.currentReport.report_id,
-        content: this.newAnnotation,
+        annotation_text: this.newAnnotation,
+        created_at: new Date().toISOString(),
+        report_id: this.currentReport.report_id
       };
 
       this.reportsService.createAnnotation(annotationData).subscribe({
