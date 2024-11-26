@@ -12,4 +12,15 @@ import { routes } from './app.routes';
 })
 export class AppComponent {
   title = 'Fi-Rep'; // Title for the application
+  isDarkTheme: boolean = false;
+
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    if (this.isDarkTheme) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }
 }

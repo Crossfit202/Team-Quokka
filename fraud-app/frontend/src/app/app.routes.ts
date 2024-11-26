@@ -10,11 +10,11 @@ export const routes: Routes = [
   { path: 'create-report', component: MakeReportComponent },
   { path: 'login-screen', component: LoginScreenComponent },
   { path: 'admin-home', component: AdminHomeComponent }, // Admin dashboard
+  { path: 'advanced-user', component: AdvancedUserComponent },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' }, // Default redirect
   { path: '**', redirectTo: '/welcome' }, // Wildcard route to catch invalid paths
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'admin-home', component: AdminHomeComponent },
   { path: 'advanced-user', component: AdvancedUserComponent },
   { path: 'login-screen', component: LoginScreenComponent }
-
 ];

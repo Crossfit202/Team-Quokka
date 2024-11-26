@@ -1,71 +1,90 @@
-/* Body container - full height and background color */
+/* Body container - full height with gradient background */
 .body {
-    background-color: #081E26;
-    /* Match your dark theme */
+    background: linear-gradient(135deg, #081E26, #0F3443); /* Dark-to-light gradient */
     margin: 0 !important;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 20px;
-}
-
-/* Login box styling - aligned left, styled to match theme */
-.login-box {
-    background-color: #0c3b4d;
-    padding: 150px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    max-width: 40%;
+  }
+  
+  /* Login box styling */
+  .login-box {
+    background: linear-gradient(135deg, #FFFFFF, #F4F5F7); /* Subtle light gradient */
+    padding: 40px; /* Reduced padding for smaller viewports */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+    max-width: 400px;
     width: 100%;
-    text-align: left;
-    /* Align text to the left */
-}
-
-/* Label and input styling */
-label {
-    color: #FFFFFF;
+    text-align: left; /* Keep text aligned left */
+  }
+  
+  /* Label styling */
+  label {
+    color: #434C88;
     font-size: 1rem;
     margin-bottom: 8px;
     display: block;
-}
-
-input[type="text"],
-input[type="password"] {
+  }
+  
+  /* Input field styling */
+  input[type="text"],
+  input[type="password"] {
     width: 100%;
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #BF9969;
-    border-radius: 5px;
-    background-color: white;
-    color: #081E26;
+    border-radius: 8px;
+    background-color: #FFFFFF; /* Light input background */
+    color: #434C88;
     margin-bottom: 20px;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-    border-color: #C5B182;
-    box-shadow: 0 0 5px rgba(191, 153, 105, 0.5);
+  }
+  
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: #FFD27F; /* Lighter focus color */
+    box-shadow: 0 0 8px rgba(255, 210, 127, 0.6); /* Glow effect */
     outline: none;
-}
-
-/* Login button styling */
-.login-button {
+  }
+  
+  /* Login button styling */
+  .login-button {
     background-color: #BF9969;
     color: #FFFFFF;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
     padding: 12px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.login-button:hover {
+    width: 100%; /* Full-width button */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .login-button:hover {
     background-color: #C5B182;
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+    transform: scale(1.05); /* Subtle enlargement on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Slight shadow on hover */
+  }
+  
+  /* Error or validation messages */
+  .error-message {
+    color: #FF6B6B;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .login-box {
+      padding: 30px;
+      max-width: 90%; /* Wider on smaller screens */
+    }
+  
+    .login-button {
+      font-size: 1rem; /* Slightly smaller font size */
+    }
+  }
+  

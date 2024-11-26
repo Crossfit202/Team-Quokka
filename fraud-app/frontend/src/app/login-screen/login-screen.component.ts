@@ -25,9 +25,14 @@ export class LoginScreenComponent {
 
         // Navigate based on user role
         if (response.role === 'admin') {
+          console.log('Navigating to Admin Home');
           this.router.navigate(['/admin-home']);
+        } else if (response.role === 'admin2') {
+          console.log('Navigating to Advanced User Dashboard');
+          this.router.navigate(['/advanced-user']);
         } else {
-          this.router.navigate(['/welcome']);
+          console.error('Unknown role:', response.role);
+          alert('Invalid role detected!');
         }
       },
       error: (err) => {

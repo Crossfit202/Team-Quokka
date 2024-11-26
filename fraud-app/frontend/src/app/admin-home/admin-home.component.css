@@ -8,6 +8,8 @@
   padding: 20px;
   background-color: #081E26;
   color: #FFFFFF;
+  background: linear-gradient(135deg, #081E26, #0C3B4D);
+
 }
 
 /* Breadcrumb Navigation */
@@ -50,7 +52,8 @@
 }
 
 .reports-list-card li:hover {
-  background-color: #f0f0f0;
+  background-color: #C5B182;
+  transform: scale(1.02); /* Micro animation */
 }
 
 .reports-list-card li.selected {
@@ -61,9 +64,10 @@
 /* Right Cards */
 .current-report-card,
 .annotations-card {
+  background: linear-gradient(135deg, #FFFFFF, #F8F9FA);
   grid-column: 2 / 3;
   background-color: #FFFFFF;
-  color: #000000;
+  color: #434C88;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 20px;

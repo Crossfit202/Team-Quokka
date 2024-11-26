@@ -4,49 +4,64 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #081E26;
-  /* Match the welcome screen background color */
+  background: linear-gradient(135deg, #081E26, #0F3443); /* Dark gradient background */
   padding: 10px;
+  color: #FFFFFF; /* Default text color to ensure visibility */
 }
 
 /* Card layout with a consistent size */
 .card-layout {
-  width: 90%;
-  /* Responsive width */
-  max-width: 75%;
-  /* Max width for larger screens */
-  height: 80%;
-  /* Responsive height */
-  max-height: 75%;
-  /* Max height for larger screens */
-  overflow-y: auto;
-  /* Scrollable for overflow */
+  width: 90%; /* Responsive width */
+  max-width: 75%; /* Max width for larger screens */
+  height: auto; /* Adjust height dynamically */
   padding: 20px;
-  background-color: #fff;
-  /* Card background */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  /* Enhanced shadow */
-  border-radius: 10px;
-  /* Smooth rounded corners */
+  background: linear-gradient(135deg, #FFFFFF, #F8F9FA); /* Subtle light gradient */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+  border-radius: 10px; /* Smooth rounded corners */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  /* Ensures consistent spacing */
-  transition: all 0.3s ease-in-out;
-  /* Smooth transition for size changes */
+  justify-content: space-between; /* Ensures consistent spacing */
+  color: #434C88; /* Ensures text contrasts with card background */
 }
 
+/* Section Headers */
+.card-layout h1,
+.card-layout h2,
+.card-layout h3,
+.card-layout h4,
+.card-layout h5 {
+  color: #434C88; /* Text color matching the card content */
+}
+
+/* Input and Textarea Styling */
+textarea, input[type="text"], input[type="number"], select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #C5B182;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  color: #434C88;
+  margin-bottom: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea:focus, input:focus {
+  border-color: #BF9969; /* Accent color on focus */
+  box-shadow: 0 0 8px rgba(191, 153, 105, 0.4);
+  outline: none;
+}
 
 /* Progress Bar */
 .progress-bar {
-  background-color: #BF9969;
+  background: linear-gradient(90deg, #BF9969, #FFD27F); /* Gradient bar */
+  height: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
   transition: width 0.3s ease-in-out;
 }
 
-button {
-  margin-top: 20px;
-}
-
+/* Buttons */
 .btn-primary {
   background-color: #BF9969;
   border: none;
@@ -60,97 +75,39 @@ button {
   transform: scale(1.05);
 }
 
-.btn-secondary {
-  background-color: #434C88;
-  border: none;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background-color: #4E6C7F;
-  transform: scale(1.05);
-}
-
-.review-section {
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.review-section h5 {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.accuracy-section h5 {
-  margin-top: 20px;
-}
-
 /* Scrollable Review Section */
 .scrollable {
   max-height: 300px;
-  /* Adjust height as needed */
   overflow-y: auto;
-  /* Enable vertical scrolling */
   padding-right: 10px;
-  /* Add padding for better scroll appearance */
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  color: #434C88; /* Text color inside the scrollable section */
 }
 
-/* Optional Styling for Scrollbar */
 .scrollable::-webkit-scrollbar {
   width: 8px;
 }
 
 .scrollable::-webkit-scrollbar-thumb {
-  background-color: #BF9969;
-  /* Match the theme color */
+  background-color: #BF9969; /* Match the theme color */
   border-radius: 5px;
 }
 
 .scrollable::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
+  background-color: #F0F0F0;
 }
 
-button:focus,
-input:focus {
-  outline: 3px solid #BF9969;
-  /* Matches the theme color */
-  outline-offset: 2px;
+/* Adjustments for Better Readability */
+.card-layout p,
+.card-layout label,
+.card-layout span {
+  color: #434C88; /* Ensure readable text inside cards */
 }
 
-.btn-primary,
-.btn-secondary {
-  color: #FFFFFF;
-  /* Ensures text contrast */
-  background-color: #BF9969;
-  /* Theme color with adequate contrast */
-}
-
-.btn-primary:hover,
-.btn-secondary:hover {
-  background-color: #C5B182;
-  /* Slightly lighter for hover */
-}
-
-/* Media Query for Smaller Viewports */
+/* Responsive Design */
 @media (max-width: 768px) {
   .card-layout {
     width: 95%;
-    /* Wider on smaller screens */
-    height: 85%;
-    /* Slightly taller on smaller screens */
   }
-}
-
-body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  font-family: Arial, sans-serif;
-  /* Ensure consistent typography */
-  color: #FFFFFF;
-  /* Text color for contrast */
 }

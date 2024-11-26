@@ -1,6 +1,6 @@
 /* Body container - flexbox for vertical stacking */
 .body {
-    background-color: #081E26;
+    background: linear-gradient(135deg, #081E26, #0C3B4D); /* Enhanced gradient */
     margin: 0 !important;
     min-height: 100vh;
     display: flex;
@@ -9,7 +9,9 @@
     align-items: center;
     text-align: center;
     padding: 0 20px;
-}
+  }
+  
+ 
 
 /* Logo styling - ensure good spacing and centered */
 .logo {
@@ -58,7 +60,7 @@
 
 /* Hover effect for primary button */
 .welcomeBtn1:hover {
-    background-color: #C5B182;
+    background-color: #FFD27F; /* Slightly brighter hover effect */
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

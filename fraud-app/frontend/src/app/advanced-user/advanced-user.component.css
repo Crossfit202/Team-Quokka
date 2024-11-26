@@ -1,17 +1,161 @@
-/* advanced-user.component.css */
-.advanced-user-container {
-    padding: 20px;
-    background-color: #081E26; /* Match project theme */
-    color: #FFFFFF;
-    font-family: 'Roboto', sans-serif;
-  }
-  
-  section {
-    margin-bottom: 20px;
-    background-color: #FFFFFF;
-    color: #000000;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  
+/* Grid Layout */
+.advanced-user-grid {
+  background: linear-gradient(135deg, #081E26, #0F3443);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Equal-sized columns */
+  gap: 30px; /* Space between cards */
+  justify-content: center; /* Center grid horizontally */
+  align-content: center; /* Center grid vertically */
+  place-items: center; /* Ensures proper centering in both directions */
+  height: 100vh; /* Use full viewport height */
+  width: 100%; /* Ensure grid spans the entire width of the viewport */
+  padding: 30px;
+  background-color: #081E26; /* Match the project's background */
+  box-sizing: border-box; /* Includes padding in width/height calculations */
+}
+
+/* Card Styling */
+.card {
+  background: linear-gradient(135deg, #FFFFFF, #EDEFF1);
+  background-color: #FFFFFF;
+  color: #434C88;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 250px; /* Uniform card height */
+  width: 500px; /* Wider cards */
+  max-width: 90%; /* Ensures cards shrink on smaller screens */
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Styling */
+.btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  align-self: center; /* Centers buttons within the card */
+}
+
+.btn-primary {
+  background-color: #BF9969;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #C5B182;
+}
+
+.btn-danger {
+  background-color: #FF6B6B;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #FF8888;
+}
+
+.btn-warning {
+  background-color: #FFC107;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #FFD54F;
+}
+
+.btn-success {
+  background-color: #28A745;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #43B759;
+}
+
+/* Ensuring Consistency Across All Screen Sizes */
+body {
+  margin: 0; /* Removes default body margin */
+  overflow-x: hidden; /* Prevents horizontal scrollbars from appearing */
+}
+
+
+
+/* Enlarged Card View */
+.focus-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #FFFFFF;
+  color: #434C88;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  text-align: center;
+  width: 600px; /* Wider focused card */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers content horizontally */
+  justify-content: center; /* Centers content vertically */
+}
+
+
+/* Back Button */
+.btn-secondary {
+  background-color: #6C757D;
+  color: #FFFFFF;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5A6268;
+}
+
+.scrollable-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.scrollable-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+  background-color: #434C88; /* Accent color */
+  border-radius: 4px;
+}
+
+/* Back to Dashboard Button */
+.btn-secondary.mb-3 {
+  background-color: #434C88; /* Consistent secondary color */
+  color: white;
+  font-size: 1rem; /* Adjust font size */
+  padding: 10px 20px; /* Add padding */
+  border: none; /* Remove default border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: all 0.3s ease; /* Smooth hover effect */
+  position: absolute; /* Place it relative to its nearest positioned ancestor */
+  top: 20px; /* Distance from the top of the screen */
+  right: 20px; /* Distance from the right of the screen */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+/* Hover Effect */
+.btn-secondary.mb-3:hover {
+  background-color: #4E6C7F; /* Slightly lighter shade */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+  transform: translateY(-2px); /* Subtle lift effect */
+}

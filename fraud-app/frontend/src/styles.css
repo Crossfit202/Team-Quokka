@@ -1,1 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Background Gradient */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #081E26, #16293C); /* Gradient for body */
+    color: #FFFFFF;
+    transition: background 0.3s ease;
+  }
+  
+  /* Card Styling with Gradients */
+  .card {
+    background: linear-gradient(135deg, #FFFFFF, #F8F9FA);
+    color: #434C88;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Button Animations */
+  button {
+    background-color: #BF9969;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #C5B182;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Scrollable Areas */
+  .scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  
+  .scrollable::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollable::-webkit-scrollbar-thumb {
+    background-color: #BF9969;
+    border-radius: 4px;
+  }
+  
+  /* Fade-In Animation */
+  .fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Progress Bar with Gradient */
+  .progress-bar {
+    background: linear-gradient(90deg, #BF9969, #FFD27F);
+    transition: width 0.3s ease;
+  }
+  
