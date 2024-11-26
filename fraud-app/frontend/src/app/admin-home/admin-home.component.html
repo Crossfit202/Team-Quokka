@@ -4,14 +4,11 @@
   <div class="reports-list-card">
     <h4>Assigned Reports</h4>
     <ul>
-      <li
-        *ngFor="let report of sortedReports"
-        (click)="selectReport(report)"
-        [class.selected]="currentReport?.report_id === report.report_id"
-      >
+      <li *ngFor="let report of reports" (click)="selectReport(report)"
+        [class.selected]="currentReport?.report_id === report.report_id">
         <p><strong>Ticket:</strong> {{ report.ticket_number }}</p>
         <p><strong>Priority:</strong> {{ report.priority }}</p>
-        <p><strong>Assigned On:</strong> {{ report.created_at | date: 'short' }}</p>
+        <p><strong>Assigned On:</strong> {{ report.created_at ? (report.created_at | date: 'short') : 'N/A' }}</p>
         <hr class="divider" />
       </li>
     </ul>
@@ -32,16 +29,17 @@
     <p><strong>Discovery Method:</strong> {{ currentReport?.discovery_method || 'N/A' }}</p>
     <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
     <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
-    <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport?.created_at | date:'short') : 'N/A' }}</p>
-    <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport?.updated_at | date:'short') : 'N/A' }}</p>
-
+    <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport.created_at | date: 'short') : 'N/A' }}
+    </p>
+    <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A' }}
+    </p>
   </div>
 
   <!-- Right Bottom Card: Annotations -->
   <div class="annotations-card fade-in" #annotationsContainer>
     <h4>Annotations</h4>
     <div *ngFor="let annotation of currentAnnotations">
-      <p>{{ annotation.content }}</p>
+      <p><strong></strong> {{ annotation.annotation_text }}</p>
       <small>{{ annotation.created_at | date: 'short' }}</small>
       <hr class="divider" />
     </div>
@@ -50,4 +48,3 @@
       <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
     </div>
   </div>
-</div>

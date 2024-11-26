@@ -11,12 +11,12 @@ export class AuthService {
         private readonly usersRepository: Repository<Users>,
     ) { }
 
-    // Validate user credentials
-    async validateUser(username: string, password: string): Promise<any> {
+    async validateUser(username: string, password: string): Promise<{ role: string } | null> {
         const user = await this.usersRepository.findOne({ where: { username, password } });
         if (!user) {
             throw new UnauthorizedException('Invalid username or password');
         }
-        return user; // Return the user if validation is successful
+        return { role: user.role }; // Return user role
     }
 }
+
