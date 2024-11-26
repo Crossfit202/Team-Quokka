@@ -7,8 +7,8 @@ import { LoginScreenComponent } from './login-screen/login-screen.component';
 export const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
   { path: 'create-report', component: MakeReportComponent },
-  { path: '', redirectTo: '/welcome', pathMatch: 'full' },
-  { path: 'admin-home', component: AdminHomeComponent },
-  { path: 'login-screen', component: LoginScreenComponent }
-
+  { path: 'login-screen', component: LoginScreenComponent },
+  { path: 'admin-home', component: AdminHomeComponent }, // Admin dashboard
+  { path: '', redirectTo: '/welcome', pathMatch: 'full' }, // Default redirect
+  { path: '**', redirectTo: '/welcome' } // Wildcard route to catch invalid paths
 ];

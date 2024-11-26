@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ReportsService {
-  private apiUrl = 'http://localhost:3000/reports'; // Adjust to match your backend URL
+  private apiUrl = 'http://localhost:3000/reports'; // Adjust backend base URL as needed
 
   constructor(private http: HttpClient) { }
 
