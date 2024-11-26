@@ -9,13 +9,14 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, AuthService]
+  imports: [CommonModule, FormsModule]
 })
 export class AdminHomeComponent implements OnInit {
   reports: any[] = []; // All reports
   currentReport: any | null = null; // Currently selected report
   currentAnnotations: any[] = []; // Annotations for the current report
   newAnnotation: string = ''; // New annotation content
+  authService: any;
 
   constructor(private reportsService: ReportsService) { }
 
@@ -59,7 +60,8 @@ export class AdminHomeComponent implements OnInit {
       const annotationData = {
         annotation_text: this.newAnnotation,
         created_at: new Date().toISOString(),
-        report_id: this.currentReport.report_id
+        report_id: this.currentReport.report_id,
+        user_id: this.authService.getCurrentUserId()
       };
 
       this.reportsService.createAnnotation(annotationData).subscribe({

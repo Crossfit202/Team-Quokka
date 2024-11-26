@@ -11,7 +11,7 @@ export const routes: Routes = [
   { path: 'login-screen', component: LoginScreenComponent },
   { path: 'admin-home', component: AdminHomeComponent }, // Admin dashboard
   { path: '', redirectTo: '/welcome', pathMatch: 'full' }, // Default redirect
-  { path: '**', redirectTo: '/welcome' } // Wildcard route to catch invalid paths
+  { path: '**', redirectTo: '/welcome' }, // Wildcard route to catch invalid paths
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'admin-home', component: AdminHomeComponent },
   { path: 'advanced-user', component: AdvancedUserComponent },

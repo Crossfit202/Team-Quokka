@@ -20,6 +20,8 @@ export class LoginScreenComponent {
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
+        // store user data locally for later retrieval (for annotations)
+        this.authService.saveUserData(response.user);
 
         // Navigate based on user role
         if (response.role === 'admin') {
