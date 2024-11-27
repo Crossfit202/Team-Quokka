@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { error } from 'console';
-import { response } from 'express';
 
 @Injectable({
     providedIn: 'root',
@@ -14,18 +12,22 @@ export class AuthService {
 
     // Authenticate user
     login(credentials: { username: string; password: string }): Observable<any> {
-        return this.http.post(`${this.apiUrl}/login`, credentials)
-    }
-
-    saveUserData(userData: any): void {
-        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('user', JSON.stringify(credentials));
+        return this.http.post(`${this.apiUrl}/login`, credentials);
     }
 
     // Retrieve the current user ID
-    getCurrentUserId() {
+    getCurrentUserId(): number {
         const user = localStorage.getItem('user');
         if (user) {
-            return JSON.parse(user).user_id;
+            try {
+                const parsedUser = JSON.parse(user);
+                return parsedUser.user_id;
+            } catch (error) {
+                console.error('Error parsing user data from localStorage:', error);
+                throw new Error('Error retrieving user data. Please log in again.');
+            }
         }
+        throw new Error('User not found. Please log in.');
     }
 }

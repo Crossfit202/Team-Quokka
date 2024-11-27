@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportsService } from '../services/reports.service';
+import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-admin-home',
@@ -16,9 +16,8 @@ export class AdminHomeComponent implements OnInit {
   currentReport: any | null = null; // Currently selected report
   currentAnnotations: any[] = []; // Annotations for the current report
   newAnnotation: string = ''; // New annotation content
-  authService: any;
 
-  constructor(private reportsService: ReportsService) { }
+  constructor(private reportsService: ReportsService, private authService: AuthService) { }
 
   ngOnInit() {
     this.fetchReports(); // Fetch reports on component initialization
@@ -60,9 +59,10 @@ export class AdminHomeComponent implements OnInit {
       const annotationData = {
         annotation_text: this.newAnnotation,
         created_at: new Date().toISOString(),
-        report_id: this.currentReport.report_id,
-        user_id: this.authService.getCurrentUserId()
+        reportKey: this.currentReport.report_id,
+        userKey: this.authService.getCurrentUserId()
       };
+      console.log('Annotation Data:', annotationData);
 
       this.reportsService.createAnnotation(annotationData).subscribe({
         next: (newAnnotation) => {

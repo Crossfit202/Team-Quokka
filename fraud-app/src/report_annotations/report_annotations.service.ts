@@ -18,12 +18,17 @@ export class ReportAnnotationsService {
 
     // READ ALL
     async findAll(): Promise<Report_annotations[]> {
-        return await this.reportAnnotationsRepository.find();
+        return await this.reportAnnotationsRepository.find( {
+            relations: {
+                reports: true, users: true
+            }
+        });
     }
 
     // READ ONE
     async findOne(id: number): Promise<Report_annotations> {
-        const annotation = await this.reportAnnotationsRepository.findOne({ where: { annotation_id: id } });
+        const annotation = await this.reportAnnotationsRepository.findOne({ 
+            where: { annotation_id: id }, relations: { reports: true, users: true } });
         if (!annotation) {
             throw new NotFoundException(`Status with ID ${id} not found`);
         }
