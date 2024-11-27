@@ -13,7 +13,7 @@ import { ReportAnnotationsModule } from 'src/report_annotations/report_annotatio
   forwardRef(() => ReportsModule),
   forwardRef(() => AuditLogModule),
   forwardRef(() => ReportAnnotationsModule)],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, UsersService],
   controllers: [UsersController],
   providers: [UsersService],
 })
