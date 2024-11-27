@@ -1,90 +1,104 @@
 /* Body container - full height with gradient background */
 .body {
-    background: linear-gradient(135deg, #081E26, #0F3443); /* Dark-to-light gradient */
-    margin: 0 !important;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 20px;
-  }
-  
-  /* Login box styling */
+  background: linear-gradient(135deg, #081E26, #0F3443);
+  /* Dark-to-light gradient */
+  margin: 0 !important;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* Login box styling */
+.login-box {
+  background: #08384a;
+  /* Subtle light gradient */
+  padding: 40px;
+  /* Reduced padding for smaller viewports */
+  border-radius: 12px;
+  /* Rounded corners */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  /* Slight shadow for depth */
+  max-width: 400px;
+  width: 100%;
+  text-align: left;
+  /* Keep text aligned left */
+}
+
+/* Label styling */
+label {
+  color: #dcb584;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: bolder;
+}
+
+/* Input field styling */
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #BF9969;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  /* Light input background */
+  color: #434C88;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #FFD27F;
+  /* Lighter focus color */
+  box-shadow: 0 0 8px rgba(255, 210, 127, 0.6);
+  /* Glow effect */
+  outline: none;
+}
+
+/* Login button styling */
+.login-button {
+  background-color: #BF9969;
+  color: #FFFFFF;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  /* Full-width button */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #C5B182;
+  transform: scale(1.05);
+  /* Subtle enlargement on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  /* Slight shadow on hover */
+}
+
+/* Error or validation messages */
+.error-message {
+  color: #FF6B6B;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .login-box {
-    background: linear-gradient(135deg, #FFFFFF, #F4F5F7); /* Subtle light gradient */
-    padding: 40px; /* Reduced padding for smaller viewports */
-    border-radius: 12px; /* Rounded corners */
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
-    max-width: 400px;
-    width: 100%;
-    text-align: left; /* Keep text aligned left */
+    padding: 30px;
+    max-width: 90%;
+    /* Wider on smaller screens */
   }
-  
-  /* Label styling */
-  label {
-    color: #434C88;
-    font-size: 1rem;
-    margin-bottom: 8px;
-    display: block;
-  }
-  
-  /* Input field styling */
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #BF9969;
-    border-radius: 8px;
-    background-color: #FFFFFF; /* Light input background */
-    color: #434C88;
-    margin-bottom: 20px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  input[type="text"]:focus,
-  input[type="password"]:focus {
-    border-color: #FFD27F; /* Lighter focus color */
-    box-shadow: 0 0 8px rgba(255, 210, 127, 0.6); /* Glow effect */
-    outline: none;
-  }
-  
-  /* Login button styling */
+
   .login-button {
-    background-color: #BF9969;
-    color: #FFFFFF;
-    font-size: 1.1rem;
-    font-weight: bold;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%; /* Full-width button */
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    font-size: 1rem;
+    /* Slightly smaller font size */
   }
-  
-  .login-button:hover {
-    background-color: #C5B182;
-    transform: scale(1.05); /* Subtle enlargement on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Slight shadow on hover */
-  }
-  
-  /* Error or validation messages */
-  .error-message {
-    color: #FF6B6B;
-    font-size: 0.9rem;
-    margin-top: 10px;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .login-box {
-      padding: 30px;
-      max-width: 90%; /* Wider on smaller screens */
-    }
-  
-    .login-button {
-      font-size: 1rem; /* Slightly smaller font size */
-    }
-  }
-  
+}
