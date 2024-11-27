@@ -4,9 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AdminHomeComponent } from "../admin-home/admin-home.component";
 
-
 interface Report {
-  report_id: number; // Ensure this property exists
+  report_id: number;
   ticket_number: string;
   report_type: string;
   description: string;
@@ -23,153 +22,62 @@ interface Report {
   updated_at: Date;
 }
 
-
 @Component({
   selector: 'app-advanced-user',
   standalone: true,
   templateUrl: './advanced-user.component.html',
   styleUrls: ['./advanced-user.component.css'],
-  imports: [CommonModule, FormsModule, RouterModule, AdminHomeComponent], // Ensure necessary modules are imported
+  imports: [CommonModule, FormsModule, RouterModule, AdminHomeComponent],
 })
-
 export class AdvancedUserComponent {
-
-  constructor(private router: Router) {} // Inject Router service
-
-  [x: string]: any;
-  activeCard: string | null = null; // Tracks the active card
-  deleteReportId: number | null = null;
+  currentView: 'dashboard' | 'viewReports' | 'approveReports' | null = 'dashboard';
+  activeCard: string | null = null;
+  deleteReportId: string | number | null = '';
   confirmationInput: string = '';
-  editReportId: number | null = null;
-  selectedReport: any = null; // Holds report for editing
-  currentView: 'dashboard' | 'viewReports' = 'dashboard';
-  currentReport: Report | null = null;
-currentAnnotations: { content: string; created_at: Date }[] = []; // Annotations for the current report
-newAnnotation: string = ''; // Holds input for a new annotation
+  selectedReport: Report | null = null;
+  currentAnnotations: any[] = [];
+  reportSearchClicked: boolean = false;
 
-dummyReports: Report[] = [
-  {
-    report_id: 1,
-    ticket_number: 'ABC123',
-    report_type: 'Fraud',
-    description: 'Unauthorized transactions detected.',
-    perpetrator: 'John Doe',
-    incident_location: 'Main Office',
-    monetary_damage: '15000',
-    additional_damage1: true,
-    additional_damage2: false,
-    ongoing: 'Yes',
-    discovery_method: 'Audit',
-    status: 'Assigned',
-    priority: 'High',
-    created_at: new Date('2024-11-01'),
-    updated_at: new Date('2024-11-20'),
-  },
-  // Add more dummy data as needed
-];
+  dummyReports: Report[] = [
+    {
+      report_id: 1,
+      ticket_number: 'ABC123',
+      report_type: 'Fraud',
+      description: 'Unauthorized transactions detected.',
+      perpetrator: 'John Doe',
+      incident_location: 'Main Office',
+      monetary_damage: '15000',
+      additional_damage1: true,
+      additional_damage2: false,
+      ongoing: 'Yes',
+      discovery_method: 'Audit',
+      status: 'Assigned',
+      priority: 'High',
+      created_at: new Date('2024-11-01'),
+      updated_at: new Date('2024-11-20'),
+    }
+  ];
 
-dummyAnnotations = [
-  { report_id: 1, content: 'Initial investigation started.', created_at: new Date() },
-  { report_id: 1, content: 'Awaiting further details from the audit team.', created_at: new Date() },
-  { report_id: 2, content: 'Inventory checked, awaiting follow-up.', created_at: new Date() },
-];
-
-
-
-setCurrentView(view: 'dashboard' | 'viewReports'): void {
-  console.log(`Navigating to: ${view}`);
-  this.currentView = view;
-}
-
-
-
-  focusOnCard(card: string) {
-    this.activeCard = card;
+  setCurrentView(view: 'dashboard' | 'viewReports' | 'approveReports'): void {
+    this.currentView = view;
   }
 
-  resetFocus() {
-    this.activeCard = null;
-    this.deleteReportId = null;
-    this.confirmationInput = '';
-    this.editReportId = null;
+  findReport(): void {
+    const reportId = Number(this.deleteReportId);
+    this.selectedReport = this.dummyReports.find(r => r.report_id === reportId) || null;
+  }
+
+  resetFocus(): void {
+    this.deleteReportId = '';
     this.selectedReport = null;
+    this.currentAnnotations = [];
+    this.activeCard = null;
   }
 
-  deleteReport() {
-    console.log(`Deleting report: ${this.deleteReportId}`);
-    this.resetFocus();
-  }
-
-  editReport() {
-    console.log(`Editing report: ${this.editReportId}`);
-    this.selectedReport = { ticket_number: 'ABC123' }; // Example data
-  }
-
-  saveReportEdits() {
-    console.log('Saving report edits:', this.selectedReport);
-    this.resetFocus();
-  }
-
-  viewReports() {
-    console.log('Navigating to Admin Home...');
-    this.router.navigate(['/admin-home']);
-  }
-  
-
-
-  viewReportsForReview() {
-    console.log('Viewing reports for review');
-  }
-
-  // Select a report and fetch its annotations
-  selectReport(report: Report): void {
-    this.currentReport = report;
-    this.currentAnnotations = this.dummyAnnotations.filter(
-      (annotation) => annotation.report_id === report.report_id
-    );
-  }
-  
-
-// Return to the report list from the current report view
-backToReportList(): void {
-  this.currentReport = null;
-}
-
-
-// Add a new annotation to the current report
-addAnnotation(): void {
-  if (this.newAnnotation.trim() && this.currentReport) {
-    const annotation = {
-      report_id: this.currentReport.report_id,
-      content: this.newAnnotation,
-      created_at: new Date(),
-    };
-
-    // Add to dummy annotations and current annotations
-    this.dummyAnnotations.push(annotation);
-    this.currentAnnotations.push(annotation);
-
-    // Clear the input field
-    this.newAnnotation = '';
+  deleteReport(): void {
+    if (this.selectedReport) {
+      console.log(`Deleted report: ${this.selectedReport.ticket_number}`);
+      this.resetFocus();
+    }
   }
 }
-
-// Sort reports by priority and creation date
-get sortedReports(): Report[] {
-  return this.dummyReports
-    .slice()
-    .sort((a, b) => {
-      const priorityOrder = { High: 3, Medium: 2, Low: 1 };
-      const priorityA = priorityOrder[a.priority] || 0;
-      const priorityB = priorityOrder[b.priority] || 0;
-
-      if (priorityA !== priorityB) return priorityB - priorityA;
-
-      return a.created_at.getTime() - b.created_at.getTime();
-    });
-}
-
-
-  
-}
-

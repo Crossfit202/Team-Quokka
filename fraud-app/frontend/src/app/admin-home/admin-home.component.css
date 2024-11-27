@@ -31,34 +31,76 @@
   content: '';
 }
 
-/* Reports List Card */
+/* Reports List Card Container */
 .reports-list-card {
   grid-row: 1 / 3; /* Spans two rows */
   background-color: #FFFFFF;
-  color: #000000;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #434C88;
+  border-radius: 12px; /* Consistent border radius */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   padding: 20px;
-  overflow-y: auto;
+  overflow-y: auto; /* Allows scrolling */
   height: calc(100vh - 40px); /* Full height with padding considered */
 }
 
+/* Reports List Title */
+.reports-list-card h4 {
+  margin: 0 0 10px; /* Add spacing below the title */
+  font-size: 1.2rem;
+  color: #434C88;
+  text-align: center; /* Center align the title */
+  position: sticky; /* Keep the title fixed */
+  top: 0;
+  background: #F8F9FA; /* Match the card background */
+  z-index: 1; /* Ensure it stays above the scrollable content */
+  padding: 10px 0; /* Add padding for spacing */
+}
+
+/* Reports List Items */
+.reports-list-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto; /* Make the list scrollable */
+  flex: 1; /* Allow the list to take up the remaining space */
+}
+
+/* List Items */
 .reports-list-card li {
   cursor: pointer;
-  padding: 10px;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  transition: background-color 0.3s, border-color 0.3s;
+  padding: 10px; /* Add padding for better spacing */
+  border: 1px solid transparent; /* Default border for hover effect */
+  border-radius: 8px; /* Consistent rounded corners */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+  background: #FFFFFF; /* Default background */
+  color: #434C88;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin-bottom: 10px; /* Spacing between items */
+  font-weight: 500; /* Slightly thicker text for better readability */
 }
 
 .reports-list-card li:hover {
-  background-color: #C5B182;
-  transform: scale(1.02); /* Micro animation */
+  background-color: #C5B182; /* Hover background color */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Adjust shadow on hover */
+  border-radius: 8px; /* Ensure corners remain rounded */
 }
 
 .reports-list-card li.selected {
-  background-color: #c5b182;
-  border-color: #bf9969;
+  background-color: #C5B182; /* Accent color for selected item */
+  border-color: #BF9969;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow for selected */
+  border-radius: 8px; /* Preserve rounded corners */
+}
+
+
+/* Scrollbar for Reports List */
+.reports-list-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reports-list-card::-webkit-scrollbar-thumb {
+  background-color: #BF9969; /* Accent color */
+  border-radius: 4px;
 }
 
 /* Right Cards */
@@ -69,11 +111,14 @@
   background-color: #FFFFFF;
   color: #434C88;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
   padding: 20px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   height: calc((100vh - 60px) / 2); /* Matches left card height */
 }
+
+
 
 /* Divider Styling */
 .divider {
@@ -81,12 +126,22 @@
   margin: 15px 0;
 }
 
-/* Input and Button Styling */
+/* Input and Button Container */
 .input-container {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #E0E0E0; /* Separator for clarity */
+  background: #F8F9FA; /* Match card background */
+}
+
+.fixed-bottom {
+  margin-top: auto; /* Push to the bottom of the card */
+  background-color: #F8F9FA; /* Match card background */
+  padding: 10px 0;
+  border-top: 2px solid #E0E0E0; /* Separator for clarity */
 }
 
 textarea {
@@ -119,6 +174,48 @@ button:hover {
   animation: fadeIn 0.5s ease-in;
 }
 
+/* Annotations Card */
+.annotations-card {
+  background: #F8F9FA; /* Match card background */
+  color: #434C88;
+  border-radius: 8px; /* Consistent rounding */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); /* Slightly darker shadow for effect */
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Keeps the input box at the bottom */
+  height: calc((100vh - 60px) / 2); /* Matches the height of the other right card */
+  overflow: hidden; /* Prevent card overflow */
+}
+
+/* Scrollable Annotations List */
+.annotations-list {
+  flex: 1; /* Allow the list to fill the card above the input box */
+  overflow-y: auto; /* Enable scrolling */
+  margin: 10px 0; /* Adds some spacing above and below the list */
+  padding: 10px; /* Inner spacing to avoid cut-offs */
+  background: #FFFFFF; /* Subtle contrast for the list background */
+  border-radius: 8px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3); /* Darker shadow for inset effect */
+  list-style-type: none; /* Removes default bullet points */
+}
+
+.annotations-list li {
+  margin-bottom: 10px; /* Spacing between annotations */
+  padding: 5px; /* Inner padding for better display */
+  word-wrap: break-word; /* Ensures long text wraps correctly */
+}
+
+/* Scrollbar for Annotations */
+.annotations-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.annotations-list::-webkit-scrollbar-thumb {
+  background-color: #BF9969; /* Accent color */
+  border-radius: 4px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -126,4 +223,39 @@ button:hover {
   to {
     opacity: 1;
   }
+}
+
+/* Scrollable Report Summary */
+.report-summary {
+  flex: 1; /* Allow the summary to grow and fill the available space */
+  overflow-y: auto; /* Enable vertical scrolling */
+  margin-bottom: 10px; /* Space from other elements */
+  padding: 10px;
+  background: #F8F9FA; /* Match card background */
+  border-radius: 8px; /* Consistent rounding */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+}
+
+.report-summary::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.report-summary::-webkit-scrollbar-thumb {
+  background-color: #BF9969; /* Accent color */
+  border-radius: 4px;
+}
+
+
+/* Annotations Card */
+.annotations-card {
+  background: #F8F9FA; /* Match card background */
+  color: #434C88;
+  border-radius: 8px; /* Consistent rounding */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow for inset effect */
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Keeps the input box at the bottom */
+  height: calc((100vh - 60px) / 2); /* Matches the height of the other right card */
+  overflow: hidden; /* Prevent content overflow */
 }

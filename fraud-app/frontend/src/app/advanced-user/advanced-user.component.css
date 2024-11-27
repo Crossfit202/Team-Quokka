@@ -1,47 +1,235 @@
-/* Grid Layout */
-.advanced-user-grid {
-  background: linear-gradient(135deg, #081E26, #0F3443);
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Equal-sized columns */
-  gap: 30px; /* Space between cards */
-  justify-content: center; /* Center grid horizontally */
-  align-content: center; /* Center grid vertically */
-  place-items: center; /* Ensures proper centering in both directions */
-  height: 100vh; /* Use full viewport height */
-  width: 100%; /* Ensure grid spans the entire width of the viewport */
-  padding: 30px;
-  background-color: #081E26; /* Match the project's background */
-  box-sizing: border-box; /* Includes padding in width/height calculations */
+/* ------------------------ Global Body and Background ------------------------ */
+body {
+  margin: 0;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+  background: linear-gradient(135deg, #081E26, #0F3443); /* Global gradient */
+  font-family: 'Roboto', sans-serif;
 }
 
-/* Card Styling */
-.card {
+/* ----------------------------- Grid Layout ----------------------------- */
+.advanced-user-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Fixed 2-column layout */
+  gap: 5px; /* Space between cards */
+  justify-content: center; /* Center the grid horizontally */
+  align-items: center; /* Center the grid vertically */
+  height: 100vh; /* Full viewport height */
+  max-width: 1200px; /* Limit the total grid width */
+  margin: 0 auto; /* Center the grid container horizontally */
+  padding: 20px; /* Add consistent padding */
+  box-sizing: border-box; /* Includes padding in layout calculations */
+}
+
+/* ------------------------ Focused Card Container ------------------------ */
+/* ------------------------ Focus Card Container ------------------------ */
+.focus-card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+  gap: 20px; /* Space between the left and right cards */
+  position: fixed;
+  top: 0; /* Start at the top of the viewport */
+  left: 0; /* Start at the left of the viewport */
+  width: 100%; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  background: linear-gradient(135deg, #081E26, #0F3443); /* Match global background */
+  box-sizing: border-box; /* Include padding and border in dimensions */
+  padding: 20px; /* Consistent spacing inside the container */
+}
+
+
+/* ------------------------ Focused Delete Card Left ------------------------ */
+.delete-card {
+  background: linear-gradient(135deg, #FFFFFF, #EDEFF1); /* Subtle gradient */
+  color: #434C88;
+  border-radius: 12px; /* Consistent rounded corners */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content to the top */
+  overflow: hidden;
+  height: 100%;
+}
+
+.focused-delete-card-left h4 {
+  margin: 0 0 15px; /* Add spacing below the title */
+  font-size: 1.2rem; /* Title size */
+  color: #434C88;
+  text-align: center;
+}
+
+/* Divider styling for left-hand card */
+.focused-delete-card-left .divider {
+  border-top: 2px solid #BF9969;
+  margin: 10px 0;
+}
+
+/* Scrollbar for left-hand card */
+.focused-delete-card-left::-webkit-scrollbar {
+  width: 8px;
+}
+
+.focused-delete-card-left::-webkit-scrollbar-thumb {
+  background-color: #BF9969; /* Accent color */
+  border-radius: 4px;
+}
+
+/* Scrollable Report Summary */
+.report-summary {
+  flex: 1; /* Fill available space */
+  overflow-y: auto; /* Enable scrolling */
+  margin: 20px 0;
+  padding: 15px;
+  background: #FFFFFF; /* Match card background */
+  border-radius: 8px; /* Consistent rounding */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+}
+
+/* Scrollbar for Report Summary */
+.report-summary::-webkit-scrollbar {
+  width: 8px;
+}
+
+.report-summary::-webkit-scrollbar-thumb {
+  background-color: #BF9969; /* Accent color */
+  border-radius: 4px;
+}
+
+
+/* General Styling for Focused Delete Card */
+.focus-card.delete-card {
   background: linear-gradient(135deg, #FFFFFF, #EDEFF1);
-  background-color: #FFFFFF;
   color: #434C88;
   border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  padding: 30px;
-  text-align: center;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Reduced-Size Button for Focused Delete Card */
+.focus-card.delete-card .btn-danger {
+  padding: 5px 10px; /* Reduced padding */
+  font-size: 0.9rem; /* Slightly smaller text size */
+  border-radius: 6px; /* Rounded corners for smaller size */
+}
+
+.focus-card.delete-card .btn-danger:hover {
+  background-color: #FF8888; /* Adjusted hover color */
+}
+
+/* Reduced-Size Get Report Button for Focused Delete Card */
+.focus-card.delete-card .btn-primary {
+  padding: 5px 10px; /* Reduced padding */
+  font-size: 0.9rem; /* Slightly smaller text size */
+  border-radius: 6px; /* Rounded corners for smaller size */
+}
+
+.focus-card.delete-card .btn-primary:hover {
+  background-color: #C5B182; /* Adjusted hover color */
+}
+
+/* Scoped Back Button for Focused Delete Card */
+.focus-card.delete-card .back-button {
+  position: absolute;
+  top: 0px; /* Position 20px from the top */
+  right: 0px; /* Position 20px from the right */
+  background-color: #6C757D; /* Neutral gray button */
+  color: white;
+  font-size: 1rem;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 100; /* Ensure it appears above other content */
+}
+
+.focus-card.delete-card .back-button:hover {
+  background-color: #5A6268; /* Darker gray on hover */
+}
+
+
+/* ---------------------------- Annotations Card ---------------------------- */
+.annotations-card {
+  background: linear-gradient(135deg, #FFFFFF, #EDEFF1); /* Match other cards */
+  color: #434C88;
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 250px; /* Uniform card height */
-  width: 500px; /* Wider cards */
-  max-width: 90%; /* Ensures cards shrink on smaller screens */
+  overflow: hidden;
+  height: 100%;
 }
 
-.card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-}
-
-/* Button Styling */
-.btn {
-  margin-top: 10px;
-  padding: 10px 20px;
+/* Scrollable Annotations List */
+.annotations-list {
+  flex: 1; /* Allow list to fill card space */
+  overflow-y: auto;
+  margin: 20px 0;
+  padding: 15px;
+  background: #FFFFFF; /* Match card background */
   border-radius: 8px;
-  align-self: center; /* Centers buttons within the card */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+  list-style-type: none;
+}
+
+.annotations-list li {
+  margin-bottom: 10px;
+  padding: 5px;
+  word-wrap: break-word;
+}
+
+.annotations-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.annotations-list::-webkit-scrollbar-thumb {
+  background-color: #BF9969;
+  border-radius: 4px;
+}
+/* ------------------------------ Scrollable Areas ------------------------------ */
+.scrollable {
+  max-height: calc(100% - 20px);
+  overflow-y: auto;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #BF9969;
+  border-radius: 4px;
+}
+
+/* ------------------------------ Error Messages ------------------------------ */
+.error-message {
+  color: #FF6B6B;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ------------------------------ Buttons ------------------------------ */
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -55,107 +243,52 @@
 
 .btn-danger {
   background-color: #FF6B6B;
-  border: none;
 }
 
 .btn-danger:hover {
   background-color: #FF8888;
 }
 
-.btn-warning {
-  background-color: #FFC107;
-  border: none;
-}
-
-.btn-warning:hover {
-  background-color: #FFD54F;
-}
-
-.btn-success {
-  background-color: #28A745;
-  border: none;
-}
-
-.btn-success:hover {
-  background-color: #43B759;
-}
-
-/* Ensuring Consistency Across All Screen Sizes */
-body {
-  margin: 0; /* Removes default body margin */
-  overflow-x: hidden; /* Prevents horizontal scrollbars from appearing */
-}
-
-
-
-/* Enlarged Card View */
-.focus-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #FFFFFF;
-  color: #434C88;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  padding: 40px;
-  text-align: center;
-  width: 600px; /* Wider focused card */
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centers content horizontally */
-  justify-content: center; /* Centers content vertically */
-}
-
-
-/* Back Button */
 .btn-secondary {
   background-color: #6C757D;
-  color: #FFFFFF;
-  border: none;
 }
 
 .btn-secondary:hover {
   background-color: #5A6268;
 }
 
-.scrollable-list {
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* ---------------------------- Admin Home Component ---------------------------- */
+app-admin-home {
+  display: flex;
+  flex-direction: column; /* Align children vertically */
+  width: 100%; /* Full container width */
+  height: 100%; /* Full height of parent */
+  background: linear-gradient(135deg, #081E26, #0F3443); /* Match dashboard background */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  overflow: hidden; /* Prevent scrolling on main container */
+  position: relative; /* Allow absolutely positioned elements inside */
+  padding: 0; /* Ensure no extra padding around the container */
+  margin: 0; /* Ensure no extra margin from the parent */
+  box-sizing: border-box; /* Include padding/border in dimensions */
 }
 
-.scrollable-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollable-list::-webkit-scrollbar-thumb {
-  background-color: #434C88; /* Accent color */
-  border-radius: 4px;
-}
-
-/* Back to Dashboard Button */
-.btn-secondary.mb-3 {
-  background-color: #434C88; /* Consistent secondary color */
+/* --------------------------- Back to Dashboard Button --------------------------- */
+.back-to-dashboard {
+  position: absolute;
+  top: 20px; /* Position 20px from the top */
+  right: 20px; /* Position 20px from the right */
+  background-color: #6C757D; /* Neutral gray button */
   color: white;
-  font-size: 1rem; /* Adjust font size */
-  padding: 10px 20px; /* Add padding */
-  border: none; /* Remove default border */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  transition: all 0.3s ease; /* Smooth hover effect */
-  position: absolute; /* Place it relative to its nearest positioned ancestor */
-  top: 20px; /* Distance from the top of the screen */
-  right: 20px; /* Distance from the right of the screen */
-  z-index: 1000; /* Ensure it's above other content */
+  font-size: 1rem;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 100; /* Ensure it appears above other content */
 }
 
-/* Hover Effect */
-.btn-secondary.mb-3:hover {
-  background-color: #4E6C7F; /* Slightly lighter shade */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
-  transform: translateY(-2px); /* Subtle lift effect */
+.back-to-dashboard:hover {
+  background-color: #5A6268; /* Darker gray on hover */
 }

@@ -17,7 +17,8 @@
   <!-- Right Top Card: Current Report -->
   <div class="current-report-card fade-in">
     <h4>Current Report</h4>
-    <p><strong>Ticket Number:</strong> {{ currentReport?.ticket_number || 'N/A' }}</p>
+    <div class="report-summary">
+      <p><strong>Ticket Number:</strong> {{ currentReport?.ticket_number || 'N/A' }}</p>
     <p><strong>Report Type:</strong> {{ currentReport?.report_type || 'N/A' }}</p>
     <p><strong>Description:</strong> {{ currentReport?.description || 'N/A' }}</p>
     <p><strong>Perpetrator:</strong> {{ currentReport?.perpetrator || 'N/A' }}</p>
@@ -33,18 +34,25 @@
     </p>
     <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A' }}
     </p>
+
+
+    </div>
+    
   </div>
 
-  <!-- Right Bottom Card: Annotations -->
-  <div class="annotations-card fade-in" #annotationsContainer>
-    <h4>Annotations</h4>
-    <div *ngFor="let annotation of currentAnnotations">
-      <p><strong></strong> {{ annotation.annotation_text }}</p>
+<!-- Right Bottom Card: Annotations -->
+<div class="annotations-card fade-in">
+  <h4>Annotations</h4>
+  <ul class="annotations-list">
+    <li *ngFor="let annotation of currentAnnotations">
+      <p>{{ annotation.annotation_text }}</p>
       <small>{{ annotation.created_at | date: 'short' }}</small>
       <hr class="divider" />
-    </div>
-    <div class="input-container">
-      <textarea [(ngModel)]="newAnnotation" placeholder="Add your annotation"></textarea>
-      <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
-    </div>
+    </li>
+  </ul>
+  <div class="input-container">
+    <textarea [(ngModel)]="newAnnotation" placeholder="Add your annotation"></textarea>
+    <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
   </div>
+</div>
+

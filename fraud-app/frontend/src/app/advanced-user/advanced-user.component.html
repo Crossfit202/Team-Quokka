@@ -1,62 +1,104 @@
 <!-- Dashboard View -->
 <div class="advanced-user-grid" *ngIf="currentView === 'dashboard' && !activeCard">
-  <!-- Assigned Reports -->
   <div class="card">
     <h2>Assigned Reports</h2>
     <p>View and manage your assigned reports.</p>
     <button class="btn btn-primary" (click)="setCurrentView('viewReports')">View Reports</button>
   </div>
-
-  <!-- Delete Report -->
   <div class="card">
     <h2>Delete a Report</h2>
     <p>Remove reports after verification.</p>
-    <button class="btn btn-danger" (click)="focusOnCard('delete')">Delete Report</button>
+    <button class="btn btn-danger" (click)="activeCard = 'delete'">Delete Report</button>
   </div>
 
   <!-- Edit Report -->
   <div class="card">
     <h2>Edit a Report</h2>
     <p>Make changes to existing reports.</p>
-    <button class="btn btn-warning" (click)="focusOnCard('edit')">Edit Report</button>
+    <button class="btn btn-warning">Edit Report</button>
   </div>
 
   <!-- Review Reports -->
   <div class="card">
     <h2>Reports for Review</h2>
     <p>Review reports submitted by users.</p>
-    <button class="btn btn-success" (click)="viewReportsForReview()">Review Reports</button>
+    <button class="btn btn-success">Review Reports</button>
   </div>
 </div>
 
-
 <!-- View Reports Section -->
-<div *ngIf="currentView === 'viewReports'">
-  <button class="btn btn-secondary mb-3" (click)="setCurrentView('dashboard')">Back to Dashboard</button>
+<div class="view-reports-container" *ngIf="currentView === 'viewReports'">
+  <button class="btn btn-secondary back-to-dashboard" (click)="setCurrentView('dashboard')">
+    Back to Dashboard
+  </button>
   <app-admin-home></app-admin-home>
 </div>
 
+<!-- Background Overlay -->
+<div class="overlay" *ngIf="activeCard"></div>
 
-<!-- Enlarged Card View for Delete Report -->
-<div class="focus-card" *ngIf="activeCard === 'delete'">
-  <h2>Delete a Report</h2>
-  <p>Enter Report ID to delete:</p>
-  <input type="number" [(ngModel)]="deleteReportId" placeholder="Report ID" />
-  <input type="text" [(ngModel)]="confirmationInput" placeholder="Type 'delete' to confirm" />
-  <button class="btn btn-danger" (click)="deleteReport()">Delete Report</button>
-  <button class="btn btn-secondary" (click)="resetFocus()">Back</button>
-</div>
-
-<!-- Enlarged Card View for Edit Report -->
-<div class="focus-card" *ngIf="activeCard === 'edit'">
-  <h2>Edit a Report</h2>
-  <p>Enter Report ID to edit:</p>
-  <input type="number" [(ngModel)]="editReportId" placeholder="Report ID" />
-  <button class="btn btn-warning" (click)="editReport()">Edit Report</button>
-  <div *ngIf="selectedReport">
-    <p>Edit Report Details:</p>
-    <input type="text" [(ngModel)]="selectedReport.ticket_number" placeholder="Ticket Number" />
-    <button class="btn btn-success" (click)="saveReportEdits()">Save Changes</button>
+<!-- Focused Delete Card -->
+<div class="focus-card-container" *ngIf="activeCard === 'delete'">
+  <!-- Left Card: Report Retrieval and Summary -->
+  <div class="focus-card delete-card">
+    <h4>Delete a Report</h4>
+    <div class="input-container">
+      <input
+        type="text"
+        [(ngModel)]="deleteReportId"
+        placeholder="Enter Report ID"
+      />
+      <button class="btn btn-primary" (click)="findReport()">Get Report</button>
+    </div>
+    <div class="scrollable report-summary">
+      <ng-container *ngIf="selectedReport; else errorTemplate">
+        <p><strong>Ticket Number:</strong> {{ selectedReport.ticket_number || 'N/A' }}</p>
+        <p><strong>Report Type:</strong> {{ selectedReport.report_type || 'N/A' }}</p>
+        <p><strong>Description:</strong> {{ selectedReport.description || 'N/A' }}</p>
+        <p><strong>Perpetrator:</strong> {{ selectedReport.perpetrator || 'N/A' }}</p>
+        <p><strong>Incident Location:</strong> {{ selectedReport.incident_location || 'N/A' }}</p>
+        <p><strong>Monetary Damage:</strong> {{ selectedReport.monetary_damage || 'N/A' }}</p>
+        <p><strong>Additional Damage 1:</strong> {{ selectedReport.additional_damage1 ? 'Yes' : 'No' }}</p>
+        <p><strong>Additional Damage 2:</strong> {{ selectedReport.additional_damage2 ? 'Yes' : 'No' }}</p>
+        <p><strong>Ongoing:</strong> {{ selectedReport.ongoing || 'N/A' }}</p>
+        <p><strong>Discovery Method:</strong> {{ selectedReport.discovery_method || 'N/A' }}</p>
+        <p><strong>Status:</strong> {{ selectedReport.status || 'N/A' }}</p>
+        <p><strong>Priority:</strong> {{ selectedReport.priority || 'N/A' }}</p>
+        <p><strong>Created At:</strong> {{ selectedReport.created_at ? (selectedReport.created_at | date: 'short') : 'N/A' }}</p>
+        <p><strong>Updated At:</strong> {{ selectedReport.updated_at ? (selectedReport.updated_at | date: 'short') : 'N/A' }}</p>
+      </ng-container>
+      <ng-template #errorTemplate>
+        <p *ngIf="reportSearchClicked && !selectedReport" class="error-message">
+          No report found for the entered ID.
+        </p>
+      </ng-template>
+    </div>
+    <div *ngIf="selectedReport">
+      <input
+        type="text"
+        [(ngModel)]="confirmationInput"
+        placeholder="Type 'delete' to confirm"
+      />
+      <button
+        class="btn btn-danger"
+        [disabled]="confirmationInput !== 'delete'"
+        (click)="deleteReport()"
+      >
+        Confirm Delete
+      </button>
+    </div>
+    <button class="btn btn-secondary back-button" (click)="resetFocus()">Back to Dashboard</button>
   </div>
-  <button class="btn btn-secondary" (click)="resetFocus()">Back</button>
+
+  <!-- Right Card: Annotations -->
+  <div class="focus-card annotations-card">
+    <h4>Annotations</h4>
+    <ul class="annotations-list">
+      <li *ngFor="let annotation of currentAnnotations">
+        <p>{{ annotation.content }}</p>
+        <small>{{ annotation.created_at | date: 'short' }}</small>
+        <hr class="divider" />
+      </li>
+    </ul>
+  </div>
 </div>
