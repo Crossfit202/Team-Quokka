@@ -8,9 +8,12 @@ export class ReportAnnotationsController {
 
   // POST /users - Create a new user
   @Post()
-  async create(@Body() data: Partial<Report_annotations>): Promise<Report_annotations> {
+  @Post()
+  async create(@Body() data: { annotation_text: string; reportKey: number; userKey: number }): Promise<Report_annotations> {
+    // Call service to create the annotation
     return await this.reportAnnotationsService.create(data);
   }
+
 
   // GET all users
   @Get()

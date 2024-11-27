@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportsService } from '../services/reports.service';
-import { AuthService } from '../services/auth.service';
+import { UserStateService } from '../services/user-state.service'; // Import UserStateService
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -12,35 +12,40 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule]
 })
 export class AdminHomeComponent implements OnInit {
-  reports: any[] = []; // All reports
-  currentReport: any | null = null; // Currently selected report
-  currentAnnotations: any[] = []; // Annotations for the current report
-  newAnnotation: string = ''; // New annotation content
+  reports: any[] = [];
+  currentReport: any | null = null;
+  currentAnnotations: any[] = [];
+  newAnnotation: string = '';
+  loggedInUser: any = null; // Holds logged-in user data
 
-  constructor(private reportsService: ReportsService, private authService: AuthService) { }
+  constructor(
+    private reportsService: ReportsService,
+    private userStateService: UserStateService // Inject UserStateService
+  ) { }
 
   ngOnInit() {
-    this.fetchReports(); // Fetch reports on component initialization
+    // Fetch logged-in user data
+    this.loggedInUser = this.userStateService.getUser();
+    console.log('Logged-in user:', this.loggedInUser);
+
+    // Fetch reports
+    this.fetchReports();
   }
 
-  // Fetch all reports
   fetchReports() {
     this.reportsService.getReports().subscribe({
       next: (data) => {
-        console.log('Fetched Reports:', data); // Log fetched reports
-        this.reports = data; // Assign the fetched reports
+        this.reports = data;
         if (this.reports.length > 0) {
-          this.selectReport(this.reports[0]); // Select the first report by default
+          this.selectReport(this.reports[0]);
         }
       },
       error: (err) => {
-        console.error('Error fetching reports:', err); // Log errors
+        console.error('Error fetching reports:', err);
       },
     });
   }
 
-
-  // Select a report and fetch its annotations
   selectReport(report: any): void {
     this.currentReport = report;
 
@@ -49,28 +54,35 @@ export class AdminHomeComponent implements OnInit {
       next: (annotations) => {
         this.currentAnnotations = annotations;
       },
-      error: (err) => console.error('Error fetching annotations:', err),
+      error: (err) => {
+        console.error('Error fetching annotations:', err);
+      },
     });
   }
 
-  // Add a new annotation
   addAnnotation() {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}'); // Get logged-in user
+    const userId = loggedInUser.user_id; // Extract user ID
+
     if (this.newAnnotation.trim() && this.currentReport) {
       const annotationData = {
         annotation_text: this.newAnnotation,
-        created_at: new Date().toISOString(),
-        reportKey: this.currentReport.report_id,
-        userKey: this.authService.getCurrentUserId()
+        userKey: this.loggedInUser?.user_id, // Retrieved from localStorage
+        reportKey: this.currentReport?.report_id, // The selected report ID
       };
-      console.log('Annotation Data:', annotationData);
 
       this.reportsService.createAnnotation(annotationData).subscribe({
-        next: (newAnnotation) => {
-          this.currentAnnotations.push(newAnnotation); // Add the new annotation to the list
-          this.newAnnotation = ''; // Clear the input
+        next: (response) => {
+          console.log('Annotation created:', response);
+          this.currentAnnotations.push(response); // Add new annotation to the UI
+          this.newAnnotation = ''; // Clear the input field
         },
-        error: (err) => console.error('Error creating annotation:', err),
+        error: (err) => {
+          console.error('Error adding annotation:', err);
+          alert('Failed to add annotation!');
+        },
       });
     }
   }
+
 }

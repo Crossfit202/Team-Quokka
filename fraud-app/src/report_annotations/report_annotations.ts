@@ -11,7 +11,7 @@ export class Report_annotations {
     annotation_id: number;
 
     @Column()
-    @IsNotEmpty({message: 'Annotation text cannot be empty.'})
+    @IsNotEmpty({ message: 'Annotation text cannot be empty.' })
     annotation_text: string;
 
     @Column()
@@ -24,6 +24,12 @@ export class Report_annotations {
     @ManyToOne(() => Users, user => user.report_annotations)
     @JoinColumn({ name: "userKey" })
     users: Users
+
+    @Column({ nullable: true })
+    reportKey: number; // Foreign key for reports
+
+    @Column({ nullable: true })
+    userKey: number; // Foreign key for users
 
 }
 

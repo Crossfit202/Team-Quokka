@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { UserStateService } from '../services/user-state.service'; // Import UserStateService
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -14,22 +15,30 @@ export class LoginScreenComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private userStateService: UserStateService, // Inject UserStateService
+    private router: Router
+  ) { }
 
   login() {
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
 
+        // Save user data locally
+        this.userStateService.setUser({
+          user_id: response.user_id, // Assuming the backend sends user_id
+          username: response.username,
+          role: response.role,
+        });
+
         // Navigate based on user role
         if (response.role === 'admin') {
-          console.log('Navigating to Admin Home');
           this.router.navigate(['/admin-home']);
         } else if (response.role === 'admin2') {
-          console.log('Navigating to Advanced User Dashboard');
           this.router.navigate(['/advanced-user']);
         } else {
-          console.error('Unknown role:', response.role);
           alert('Invalid role detected!');
         }
       },
@@ -39,5 +48,4 @@ export class LoginScreenComponent {
       },
     });
   }
-  
 }
