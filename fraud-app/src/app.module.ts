@@ -35,11 +35,11 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres', // Using PostgreSQL
-        host: configService.get<string>('DB_HOST'), // Database Host
-        port: parseInt(configService.get<string>('DB_PORT'), 10), // Database Port
-        username: configService.get<string>('DB_USERNAME'), // Database Username
-        password: configService.get<string>('DB_PASSWORD'), // Database Password
-        database: configService.get<string>('DB_NAME'), // Database Name
+        host: 'quokka-db-instance-1.cls8gcae0v9f.us-east-1.rds.amazonaws.com', // Database Host
+        port: 5432, // Database Port
+        username: 'postgres', // Database Username
+        password: 'TeamQuokka4115', // Database Password
+        database: 'postgres', // Database Name
         ssl: {
           rejectUnauthorized: false, // For environments with SSL
         },
