@@ -12,13 +12,28 @@ export class ReportAnnotationsService {
 
     // CREATE
     async create(data: Partial<Report_annotations>): Promise<Report_annotations> {
+        console.log('Creating annotation with data:', data);
+
+        // Set created_at if not provided
+        if (!data.created_at) {
+            data.created_at = new Date();
+        }
+
+        // Validate required fields
+        if (!data.userKey || !data.reportKey || !data.annotation_text) {
+            throw new Error('userKey, reportKey, and annotation_text are required to create an annotation');
+        }
+
         const newAnnotation = this.reportAnnotationsRepository.create(data);
         return await this.reportAnnotationsRepository.save(newAnnotation);
     }
 
+
+
+
     // READ ALL
     async findAll(): Promise<Report_annotations[]> {
-        return await this.reportAnnotationsRepository.find( {
+        return await this.reportAnnotationsRepository.find({
             relations: {
                 reports: true, users: true
             }
@@ -27,8 +42,9 @@ export class ReportAnnotationsService {
 
     // READ ONE
     async findOne(id: number): Promise<Report_annotations> {
-        const annotation = await this.reportAnnotationsRepository.findOne({ 
-            where: { annotation_id: id }, relations: { reports: true, users: true } });
+        const annotation = await this.reportAnnotationsRepository.findOne({
+            where: { annotation_id: id }, relations: { reports: true, users: true }
+        });
         if (!annotation) {
             throw new NotFoundException(`Status with ID ${id} not found`);
         }

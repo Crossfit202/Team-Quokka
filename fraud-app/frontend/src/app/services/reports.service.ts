@@ -32,7 +32,8 @@ export class ReportsService {
   }
 
   // Create a new annotation
-  createAnnotation(annotationData: any): Observable<any> {
+  createAnnotation(annotationData: { annotation_text: string; reportKey: number; userKey: number }): Observable<any> {
     return this.http.post<any>(this.annotationsUrl, annotationData);
   }
+
 }
