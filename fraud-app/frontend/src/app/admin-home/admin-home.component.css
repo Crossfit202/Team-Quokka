@@ -39,27 +39,28 @@
   border-radius: 12px; /* Consistent border radius */
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   padding: 20px;
-  overflow-y: auto; /* Allows scrolling */
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
   height: calc(100vh - 40px); /* Full height with padding considered */
 }
 
 /* Reports List Title */
 .reports-list-card h4 {
-  margin: 0 0 10px; /* Add spacing below the title */
-  font-size: 1.2rem;
+  margin: 0 0 15px; /* Add spacing below the title */
   color: #434C88;
   text-align: center; /* Center align the title */
   position: sticky; /* Keep the title fixed */
   top: 0;
-  background: #F8F9FA; /* Match the card background */
+  background: #FFFFFF; /* Match the card background */
   z-index: 1; /* Ensure it stays above the scrollable content */
-  padding: 10px 0; /* Add padding for spacing */
+  padding: 5px 0; /* Add padding for spacing */
 }
 
 /* Reports List Items */
 .reports-list-card ul {
   margin: 0;
-  padding: 0;
+  padding: 0 5px 0 0;
   list-style: none;
   overflow-y: auto; /* Make the list scrollable */
   flex: 1; /* Allow the list to take up the remaining space */
@@ -94,11 +95,11 @@
 
 
 /* Scrollbar for Reports List */
-.reports-list-card::-webkit-scrollbar {
+.reports-list-card ul::-webkit-scrollbar {
   width: 8px;
 }
 
-.reports-list-card::-webkit-scrollbar-thumb {
+.reports-list-card ul::-webkit-scrollbar-thumb {
   background-color: #BF9969; /* Accent color */
   border-radius: 4px;
 }
@@ -117,8 +118,6 @@
   flex-direction: column;
   height: calc((100vh - 60px) / 2); /* Matches left card height */
 }
-
-
 
 /* Divider Styling */
 .divider {
