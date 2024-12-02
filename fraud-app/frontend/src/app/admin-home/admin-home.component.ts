@@ -3,6 +3,7 @@ import { ReportsService } from '../services/reports.service';
 import { UserStateService } from '../services/user-state.service'; // Import UserStateService
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LambdaService } from '../lambda.service';
 
 @Component({
   selector: 'app-admin-home',
@@ -20,7 +21,8 @@ export class AdminHomeComponent implements OnInit {
 
   constructor(
     private reportsService: ReportsService,
-    private userStateService: UserStateService // Inject UserStateService
+    private userStateService: UserStateService, // Inject UserStateService
+    private lambdaService: LambdaService
   ) { }
 
   ngOnInit() {
@@ -83,6 +85,22 @@ export class AdminHomeComponent implements OnInit {
         },
       });
     }
+  }
+  
+  invokeLambda() {  
+
+    console.log("lambda has been invoked");
+
+    this.lambdaService.callLambda(5).subscribe(
+      (response) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url); // Open PDF in a new tab
+      },
+      (error) => {
+        console.error('Error downloading PDF:', error);
+      }
+    );
   }
 
 }
