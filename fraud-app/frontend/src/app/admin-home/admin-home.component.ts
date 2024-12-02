@@ -91,7 +91,7 @@ export class AdminHomeComponent implements OnInit {
 
     console.log("lambda has been invoked");
 
-    this.lambdaService.callLambda(5).subscribe(
+    this.lambdaService.callLambda(this.currentReport.report_id).subscribe(
       (response) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
