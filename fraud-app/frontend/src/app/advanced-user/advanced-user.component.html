@@ -1,10 +1,10 @@
 <!-- Navbar (conditionally visible) -->
 <div class="navbar" *ngIf="currentView !== 'dashboard'">
+  <button class="btn btn-secondary" (click)="setCurrentView('dashboard')">Back to Dashboard</button>
   <button class="btn btn-primary" (click)="setCurrentView('viewReports')">View Reports</button>
   <button class="btn btn-danger" (click)="setCurrentView('deleteReports')">Delete Report</button>
   <button class="btn btn-warning" (click)="setCurrentView('editReports')">Edit Report</button>
   <button class="btn btn-success" (click)="setCurrentView('reviewReports')">Review Reports</button>
-  <button class="btn btn-secondary" (click)="setCurrentView('dashboard')">Back to Dashboard</button>
 </div>
 
 <!-- Reusable Modal -->

@@ -1,16 +1,24 @@
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  rel="stylesheet"
+/>
 
 <div class="admin-home-container">
-
   <!-- Left Card: Reports List -->
   <div class="reports-list-card">
     <h4>Assigned Reports</h4>
     <ul>
-      <li *ngFor="let report of reports" (click)="selectReport(report)"
-        [class.selected]="currentReport?.report_id === report.report_id">
+      <li
+        *ngFor="let report of reports"
+        (click)="selectReport(report)"
+        [class.selected]="currentReport?.report_id === report.report_id"
+      >
         <p><strong>Ticket:</strong> {{ report.ticket_number }}</p>
         <p><strong>Priority:</strong> {{ report.priority }}</p>
-        <p><strong>Assigned On:</strong> {{ report.created_at ? (report.created_at | date: 'short') : 'N/A' }}</p>
+        <p>
+          <strong>Assigned On:</strong>
+          {{ report.created_at ? (report.created_at | date: 'short') : 'N/A' }}
+        </p>
         <hr class="divider" />
       </li>
     </ul>
@@ -21,53 +29,96 @@
     <div class="current-header-container">
       <h4>Current Report</h4>
       <div class="action-buttons">
-        <div *ngIf="isReviewMode" class="action-buttons">
-          <button class="btn btn-approve" (click)="approveReport()">Approve</button>
-          <button class="btn btn-deny" (click)="denyReport()">Deny</button>
-        </div>
+
         <div class="action-buttons">
-          <button (click)= "invokeLambda()">PDF <i class="fas fa-file-pdf"></i></button>
+          <button (click)="invokeLambda()">
+            PDF <i class="fas fa-file-pdf"></i>
+          </button>
         </div>
       </div>
     </div>
     <!-- <h4>Current Report</h4>
     <button (click)= "invokeLambda()"> Lambda Function</button> -->
     <div class="report-summary">
-      <p><strong>Ticket Number:</strong> {{ currentReport?.ticket_number || 'N/A' }}</p>
-    <p><strong>Report Type:</strong> {{ currentReport?.report_type || 'N/A' }}</p>
-    <p><strong>Description:</strong> {{ currentReport?.description || 'N/A' }}</p>
-    <p><strong>Perpetrator:</strong> {{ currentReport?.perpetrator || 'N/A' }}</p>
-    <p><strong>Incident Location:</strong> {{ currentReport?.incident_location || 'N/A' }}</p>
-    <p><strong>Monetary Damage:</strong> {{ currentReport?.monetary_damage || 'N/A' }}</p>
-    <p><strong>Additional Damage 1:</strong> {{ currentReport?.additional_damage1 ? 'Yes' : 'N/A' }}</p>
-    <p><strong>Additional Damage 2:</strong> {{ currentReport?.additional_damage2 ? 'Yes' : 'N/A' }}</p>
-    <p><strong>Ongoing:</strong> {{ currentReport?.ongoing || 'N/A' }}</p>
-    <p><strong>Discovery Method:</strong> {{ currentReport?.discovery_method || 'N/A' }}</p>
-    <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
-    <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
-    <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport.created_at | date: 'short') : 'N/A' }}
-    </p>
-    <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A' }}
-    </p>
-
-
+      <p>
+        <strong>Ticket Number:</strong>
+        {{ currentReport?.ticket_number || 'N/A' }}
+      </p>
+      <p>
+        <strong>Report Type:</strong> {{ currentReport?.report_type || 'N/A' }}
+      </p>
+      <p>
+        <strong>Description:</strong> {{ currentReport?.description || 'N/A' }}
+      </p>
+      <p>
+        <strong>Perpetrator:</strong> {{ currentReport?.perpetrator || 'N/A' }}
+      </p>
+      <p>
+        <strong>Incident Location:</strong>
+        {{ currentReport?.incident_location || 'N/A' }}
+      </p>
+      <p>
+        <strong>Monetary Damage:</strong>
+        {{ currentReport?.monetary_damage || 'N/A' }}
+      </p>
+      <p>
+        <strong>Additional Damage 1:</strong>
+        {{ currentReport?.additional_damage1 ? 'Yes' : 'N/A' }}
+      </p>
+      <p>
+        <strong>Additional Damage 2:</strong>
+        {{ currentReport?.additional_damage2 ? 'Yes' : 'N/A' }}
+      </p>
+      <p><strong>Ongoing:</strong> {{ currentReport?.ongoing || 'N/A' }}</p>
+      <p>
+        <strong>Discovery Method:</strong>
+        {{ currentReport?.discovery_method || 'N/A' }}
+      </p>
+      <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
+      <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
+      <p>
+        <strong>Created At:</strong>
+        {{
+          currentReport?.created_at
+            ? (currentReport.created_at | date: 'short')
+            : 'N/A'
+        }}
+      </p>
+      <p>
+        <strong>Updated At:</strong>
+        {{
+          currentReport?.updated_at
+            ? (currentReport.updated_at | date: 'short')
+            : 'N/A'
+        }}
+      </p>
     </div>
-    
+    <div *ngIf="isReviewMode" class="action-buttons">
+      <button class="btn btn-approve" (click)="approveReport()">
+        Approve
+      </button>
+      <button class="btn btn-deny" (click)="denyReport()">Deny</button>
+    </div>
   </div>
 
-<!-- Right Bottom Card: Annotations -->
-<div class="annotations-card fade-in">
-  <h4>Annotations</h4>
-  <ul class="annotations-list">
-    <li *ngFor="let annotation of currentAnnotations">
-      <p>{{ annotation.annotation_text }}</p>
-      <small>{{ annotation.created_at | date: 'short' }}</small>
-      <hr class="divider" />
-    </li>
-  </ul>
-  <div class="input-container">
-    <textarea [(ngModel)]="newAnnotation" placeholder="Add your annotation"></textarea>
-    <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
+  <!-- Right Bottom Card: Annotations -->
+  <div class="annotations-card fade-in">
+    <h4>Annotations</h4>
+    <ul class="annotations-list">
+      <li *ngFor="let annotation of currentAnnotations">
+        <p>{{ annotation.annotation_text }}</p>
+        <small>{{ annotation.created_at | date: 'short' }}</small>
+        <hr class="divider" />
+      </li>
+    </ul>
+    <div class="input-container">
+      <textarea
+        [(ngModel)]="newAnnotation"
+        placeholder="Add your annotation"
+      ></textarea>
+      <button class="btn btn-primary" (click)="addAnnotation()">
+        Add Annotation
+      </button>
+    </div>
   </div>
 </div>
-
