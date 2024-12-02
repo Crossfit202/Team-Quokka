@@ -31,6 +31,15 @@ export class ReportsService {
     return this.http.get<any>(`${this.apiUrl}/ticket/${ticketNumber}`);
   }
 
+  updateReport(reportId: number, updatedData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${reportId}`, updatedData);
+  }
+
+  updateAnnotation(annotationId: number, updatedData: any): Observable<any> {
+    return this.http.put<any>(`${this.annotationsUrl}/${annotationId}`, updatedData);
+  }
+
+
 
   // Fetch annotations for a specific report
   getAnnotationsByReportId(reportId: number): Observable<any[]> {

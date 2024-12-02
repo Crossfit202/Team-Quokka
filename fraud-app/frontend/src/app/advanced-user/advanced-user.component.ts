@@ -21,18 +21,16 @@ export class AdvancedUserComponent implements OnInit {
   currentAnnotations: any[] = [];
   reportSearchClicked: boolean = false;
   editableFields: { label: string; key: string; value: string; editing: boolean }[] = [];
-  hasChanges: boolean = false; // Track if changes are made
+  hasChanges: boolean = false;
   showConfirmation: boolean = false;
   modalTitle: string = '';
   modalMessage: string = '';
   isSaveEnabled: boolean = false;
 
-
-
-
   constructor(private reportsService: ReportsService) { }
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    // Add any initialization logic here
   }
 
   // Set the current view
@@ -52,10 +50,9 @@ export class AdvancedUserComponent implements OnInit {
     this.reportsService.getReportByTicket(this.deleteReportId).subscribe({
       next: (report) => {
         this.selectedReport = report;
-
-        // Fetch associated annotations
+        this.initializeEditableFields(); // Initialize editable fields
         if (report?.report_id) {
-          this.fetchAnnotations(report.report_id);
+          this.fetchAnnotations(report.report_id); // Fetch associated annotations
         }
       },
       error: () => {
@@ -99,11 +96,10 @@ export class AdvancedUserComponent implements OnInit {
     const reportId = this.selectedReport.report_id;
     this.reportsService.deleteReportById(reportId).subscribe({
       next: () => {
-        alert(`Report "${this.selectedReport.ticket_number}" has been deleted.`);
         this.modalTitle = 'Report Deleted';
-      this.modalMessage = `The report with Ticket Number ${this.selectedReport.ticket_number} has been successfully deleted.`;
-      this.showConfirmation = true;
-      this.resetFocus();
+        this.modalMessage = `The report with Ticket Number ${this.selectedReport.ticket_number} has been successfully deleted.`;
+        this.showConfirmation = true;
+        this.resetFocus();
       },
       error: () => {
         alert('Failed to delete the report.');
@@ -111,6 +107,7 @@ export class AdvancedUserComponent implements OnInit {
     });
   }
 
+  // Initialize editable fields
   initializeEditableFields(): void {
     if (this.selectedReport) {
       this.editableFields = [
@@ -124,49 +121,51 @@ export class AdvancedUserComponent implements OnInit {
       ];
     }
   }
-  
-  
-  
 
-  // Update this method to enable save when any field changes
-  updateSelectedReport(key: string, value: string): void {
-    if (this.selectedReport && (this.selectedReport as any)[key] !== value) {
-      (this.selectedReport as any)[key] = value;
-      this.isSaveEnabled = true; // Enable save button
+  // Track changes made to fields
+  trackChanges(key: string, value: string): void {
+    if (this.selectedReport) {
+      const oldValue = (this.selectedReport as any)[key];
+      if (oldValue !== value) {
+        (this.selectedReport as any)[key] = value; // Update the field value
+        this.hasChanges = true; // Enable save button
+      }
     }
   }
 
+  // Save changes to the report
   saveChanges(): void {
-    // Save changes logic here...
-    console.log('Changes saved:', this.selectedReport);
-    this.isSaveEnabled = false; // Disable save button after saving
-    this.showConfirmation = true; // Display confirmation modal
+    if (!this.selectedReport) {
+      alert('No report selected to save.');
+      return;
+    }
 
-    // Show confirmation modal
-    this.modalTitle = 'Success';
-    this.modalMessage = 'Your changes have been saved successfully.';
-    this.showConfirmation = true;
+    const reportId = this.selectedReport.report_id;
+    this.reportsService.updateReport(reportId, this.selectedReport).subscribe({
+      next: () => {
+        this.isSaveEnabled = false; // Disable save button after saving
+        this.modalTitle = 'Success';
+        this.modalMessage = 'Your changes have been saved successfully.';
+        this.showConfirmation = true;
 
-    // Optionally, automatically close the modal after a few seconds
-    setTimeout(() => {
-      this.closeConfirmation();
-    }, 3000); // Closes after 3 seconds
+        // Optionally, refresh the report data
+        this.findReport();
+      },
+      error: () => {
+        this.modalTitle = 'Error';
+        this.modalMessage = 'Failed to save changes. Please try again.';
+        this.showConfirmation = true;
+      },
+    });
   }
 
+  // Close the confirmation modal
   closeConfirmation(): void {
     this.showConfirmation = false;
   }
 
-  trackChanges(key: string, value: string): void {
-    if (this.selectedReport) {
-      const oldValue = (this.selectedReport as any)[key];
-      this.hasChanges = oldValue !== value; // Set `hasChanges` to true as soon as the value changes
-    }
-  }
-
+  // Close the modal
   closeModal(): void {
     this.showConfirmation = false;
   }
-  
-  
 }

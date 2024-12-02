@@ -57,6 +57,7 @@ export class ReportAnnotationsService {
                 reports: { report_id: reportId },
             },
             relations: ['reports'],
+            select: ['annotation_id', 'annotation_text', 'created_at', 'reports'],
         });
     }
 
