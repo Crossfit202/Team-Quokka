@@ -1,3 +1,13 @@
+<!-- Reusable Modal -->
+<div class="confirmation-modal" *ngIf="showConfirmation">
+  <div class="modal-content">
+    <h3>{{ modalTitle }}</h3> <!-- Dynamic Title -->
+    <p>{{ modalMessage }}</p> <!-- Dynamic Message -->
+    <button class="btn btn-primary" (click)="closeModal()">OK</button>
+  </div>
+</div>
+
+
 <!-- Dashboard View -->
 <div class="advanced-user-grid" *ngIf="currentView === 'dashboard' && !activeCard">
   <div class="card">
@@ -12,11 +22,12 @@
   </div>
 
   <!-- Edit Report -->
-  <div class="card">
-    <h2>Edit a Report</h2>
-    <p>Make changes to existing reports.</p>
-    <button class="btn btn-warning">Edit Report</button>
-  </div>
+<div class="card">
+  <h2>Edit a Report</h2>
+  <p>Make changes to existing reports.</p>
+  <button class="btn btn-warning" (click)="setCurrentView('editReports')">Edit Report</button>
+</div>
+
 
   <!-- Review Reports -->
   <div class="card">
@@ -92,3 +103,110 @@
     </ul>
   </div>
 </div>
+
+
+
+<div class="focus-card-container" *ngIf="currentView === 'editReports'">
+  <!-- Left Card: Editable Report Input -->
+  <div class="focus-card edit-card">
+    <h4>Edit a Report</h4>
+    <div class="input-container">
+      <input
+        type="text"
+        [(ngModel)]="deleteReportId"
+        placeholder="Enter Report ID"
+        class="input-report-id"
+      />
+      <button class="btn btn-primary btn-scaled" (click)="findReport()">Get Report</button>
+    </div>
+    <!-- <div *ngIf="reportSearchClicked && !selectedReport" class="error-message">
+      No report found for the entered ID.
+    </div> -->
+    <div class="scrollable report-summary">
+      <ng-container *ngIf="selectedReport; else errorTemplate">
+        <!-- Static fields (non-editable) -->
+        <div>
+          <label><strong>Ticket Number:</strong></label>
+          <p class="static-field">{{ selectedReport.ticket_number || 'N/A' }}</p>
+        </div>
+        <div>
+          <label><strong>Created At:</strong></label>
+          <p class="static-field">
+            {{ selectedReport.created_at ? (selectedReport.created_at | date: 'short') : 'N/A' }}
+          </p>
+        </div>
+        <div>
+          <label><strong>Updated At:</strong></label>
+          <p class="static-field">
+            {{ selectedReport.updated_at ? (selectedReport.updated_at | date: 'short') : 'N/A' }}
+          </p>
+        </div>
+        
+  
+        <!-- Editable fields -->
+        <div *ngFor="let field of editableFields">
+          <label><strong>{{ field.label }}:</strong></label>
+          <div
+            (click)="field.editing = true"
+            *ngIf="!field.editing; else editFieldTemplate"
+            class="editable-field"
+          >
+            {{ field.value || 'N/A' }}
+          </div>
+          <ng-template #editFieldTemplate>
+            <input
+              type="text"
+              [(ngModel)]="field.value"
+              (input)="trackChanges(field.key, field.value)"
+              (blur)="field.editing = false"
+              class="editable-input"
+            />
+          </ng-template>
+        </div>
+      </ng-container>
+      <ng-template #errorTemplate>
+        <p class="error-message">No report found for the entered ID.</p>
+      </ng-template>
+    </div>
+  
+    <!-- Save Changes Button -->
+    <button
+      class="btn btn-success save-button"
+      [disabled]="!hasChanges"
+      (click)="saveChanges()"
+    >
+      Save Changes
+    </button>
+  </div>
+  
+  
+  
+
+  <!-- Right Card: Edit Annotations -->
+  <div class="focus-card annotations-card">
+    <button class="btn btn-secondary back-to-dashboard" (click)="resetFocus()">Back to Dashboard</button>
+    <h4>Edit Annotations</h4>
+    <ul class="annotations-list">
+      <li *ngFor="let annotation of currentAnnotations">
+        <div
+          (click)="annotation.editing = true"
+          *ngIf="!annotation.editing; else editAnnotationTemplate"
+          class="editable-field"
+        >
+          {{ annotation.content }}
+        </div>
+        <ng-template #editAnnotationTemplate>
+          <textarea
+            [(ngModel)]="annotation.content"
+            (blur)="annotation.editing = false"
+            (keydown.enter)="annotation.editing = false"
+            class="editable-textarea"
+          ></textarea>
+        </ng-template>
+        <small>{{ annotation.created_at | date: 'short' }}</small>
+        <hr class="divider" />
+      </li>
+    </ul>
+  </div>
+</div>
+

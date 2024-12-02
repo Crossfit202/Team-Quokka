@@ -292,3 +292,141 @@ app-admin-home {
 .back-to-dashboard:hover {
   background-color: #5A6268; /* Darker gray on hover */
 }
+
+
+/* Editable Field Styling */
+.edit-reports-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f0f0f0; /* Temporary background for visibility */
+  color: #000;
+}
+
+.edit-card {
+  background: linear-gradient(135deg, #FFFFFF, #EDEFF1); /* Subtle gradient */
+  color: #434C88;
+  border-radius: 12px; /* Consistent rounded corners */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content to the top */
+  overflow: hidden;
+  height: 100%;
+}
+
+.editable-field {
+  cursor: pointer;
+  padding: 5px;
+  border: 1px dashed #ccc;
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease;
+}
+
+.editable-field:hover {
+  background-color: #e8e9eb;
+}
+
+.editable-input,
+.editable-textarea {
+  width: 100%;
+  padding: 5px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+
+/* Input Container */
+.input-container {
+  display: flex;
+  gap: 10px; /* Space between input and button */
+  align-items: center; /* Align input and button vertically */
+  margin-bottom: 15px;
+}
+
+.input-report-id {
+  flex: 1; /* Make input take available space */
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+}
+
+.btn-scaled {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.save-button {
+  margin-top: auto; /* Push the button to the bottom */
+  width: 100%; /* Full width of the card */
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  background-color: #6c757d; /* Initial disabled state */
+  color: white;
+  cursor: not-allowed; /* Disabled cursor */
+  transition: background-color 0.3s ease;
+}
+
+.save-button:enabled {
+  background-color: #28a745; /* Green for active state */
+  cursor: pointer; /* Enable cursor */
+}
+
+.save-button:enabled:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* Confirmation Modal Styling */
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  width: 30%; /* Adjust for consistent size */
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Modal Content Styling */
+.modal-content p {
+  font-size: 1.2rem;
+  margin: 0 0 20px; /* Space below the message */
+  color: #434C88;
+}
+
+.modal-content .btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  background-color: #007BFF; /* Button color */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content .btn:hover {
+  background-color: #0056b3; /* Darker button color on hover */
+}
+
+
