@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { Reports } from 'src/reports/reports';
 
@@ -39,6 +39,11 @@ export class ReportsController {
   // DELETE 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
-    return await this.ReportsService.remove(id);
+    const report = await this.ReportsService.findOne(id);
+    if (!report) {
+      throw new NotFoundException(`Report with ID ${id} not found`);
+    }
+    await this.ReportsService.remove(id);
   }
+
 }

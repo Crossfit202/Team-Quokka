@@ -1,4 +1,5 @@
 import { IsNotEmpty, isNotEmpty } from "class-validator";
+import { on } from "events";
 import { Reports } from "src/reports/reports";
 import { Users } from "src/users/users";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
@@ -17,7 +18,7 @@ export class Report_annotations {
     @Column()
     created_at: Date;
 
-    @ManyToOne(() => Reports, report => report.report_annotations)
+    @ManyToOne(() => Reports, report => report.report_annotations, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "reportKey" })
     reports: Reports;
 

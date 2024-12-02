@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Reports } from './reports';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ReportAnnotationsService } from 'src/report_annotations/report_annotations.service';
 
 @Injectable()
 export class ReportsService {

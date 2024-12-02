@@ -26,6 +26,12 @@ export class ReportsService {
     return this.http.get<any>(`${this.apiUrl}/${reportId}`);
   }
 
+  // Fetch a report by ticket number
+  getReportByTicket(ticketNumber: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/ticket/${ticketNumber}`);
+  }
+
+
   // Fetch annotations for a specific report
   getAnnotationsByReportId(reportId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.annotationsUrl}/report/${reportId}`);
@@ -34,6 +40,11 @@ export class ReportsService {
   // Create a new annotation
   createAnnotation(annotationData: { annotation_text: string; reportKey: number; userKey: number }): Observable<any> {
     return this.http.post<any>(this.annotationsUrl, annotationData);
+  }
+
+  // Delete a report by ID
+  deleteReportById(reportId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${reportId}`);
   }
 
 }

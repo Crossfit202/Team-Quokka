@@ -3,24 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AdminHomeComponent } from "../admin-home/admin-home.component";
-
-interface Report {
-  report_id: number;
-  ticket_number: string;
-  report_type: string;
-  description: string;
-  perpetrator: string;
-  incident_location: string;
-  monetary_damage: string;
-  additional_damage1: boolean;
-  additional_damage2: boolean;
-  ongoing: string;
-  discovery_method: string;
-  status: string;
-  priority: 'High' | 'Medium' | 'Low';
-  created_at: Date;
-  updated_at: Date;
-}
+import { ReportsService } from '../services/reports.service';
 
 @Component({
   selector: 'app-advanced-user',
@@ -32,41 +15,59 @@ interface Report {
 export class AdvancedUserComponent {
   currentView: 'dashboard' | 'viewReports' | 'approveReports' | null = 'dashboard';
   activeCard: string | null = null;
-  deleteReportId: string | number | null = '';
+  deleteReportId: string = '';
   confirmationInput: string = '';
-  selectedReport: Report | null = null;
+  selectedReport: any | null = null;
   currentAnnotations: any[] = [];
   reportSearchClicked: boolean = false;
 
-  dummyReports: Report[] = [
-    {
-      report_id: 1,
-      ticket_number: 'ABC123',
-      report_type: 'Fraud',
-      description: 'Unauthorized transactions detected.',
-      perpetrator: 'John Doe',
-      incident_location: 'Main Office',
-      monetary_damage: '15000',
-      additional_damage1: true,
-      additional_damage2: false,
-      ongoing: 'Yes',
-      discovery_method: 'Audit',
-      status: 'Assigned',
-      priority: 'High',
-      created_at: new Date('2024-11-01'),
-      updated_at: new Date('2024-11-20'),
-    }
-  ];
+  constructor(private reportsService: ReportsService) { }
 
+  // Set the current view
   setCurrentView(view: 'dashboard' | 'viewReports' | 'approveReports'): void {
     this.currentView = view;
   }
 
+  // Fetch report by ticket number
   findReport(): void {
-    const reportId = Number(this.deleteReportId);
-    this.selectedReport = this.dummyReports.find(r => r.report_id === reportId) || null;
+    if (!this.deleteReportId.trim()) {
+      alert('Please enter a valid ticket number.');
+      return;
+    }
+
+    this.reportSearchClicked = true;
+
+    this.reportsService.getReportByTicket(this.deleteReportId).subscribe({
+      next: (report) => {
+        this.selectedReport = report;
+
+        // Fetch associated annotations
+        if (report?.report_id) {
+          this.fetchAnnotations(report.report_id);
+        }
+      },
+      error: () => {
+        this.selectedReport = null;
+        this.currentAnnotations = [];
+        alert('Report not found.');
+      },
+    });
   }
 
+  // Fetch annotations for the selected report
+  fetchAnnotations(reportId: number): void {
+    this.reportsService.getAnnotationsByReportId(reportId).subscribe({
+      next: (annotations) => {
+        this.currentAnnotations = annotations;
+      },
+      error: () => {
+        this.currentAnnotations = [];
+        alert('Failed to fetch annotations.');
+      },
+    });
+  }
+
+  // Reset focus and inputs
   resetFocus(): void {
     this.deleteReportId = '';
     this.selectedReport = null;
@@ -74,10 +75,22 @@ export class AdvancedUserComponent {
     this.activeCard = null;
   }
 
+  // Delete the selected report
   deleteReport(): void {
-    if (this.selectedReport) {
-      console.log(`Deleted report: ${this.selectedReport.ticket_number}`);
-      this.resetFocus();
+    if (!this.selectedReport) {
+      alert('No report selected for deletion.');
+      return;
     }
+
+    const reportId = this.selectedReport.report_id;
+    this.reportsService.deleteReportById(reportId).subscribe({
+      next: () => {
+        alert(`Report "${this.selectedReport.ticket_number}" has been deleted.`);
+        this.resetFocus();
+      },
+      error: () => {
+        alert('Failed to delete the report.');
+      },
+    });
   }
 }

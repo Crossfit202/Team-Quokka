@@ -43,11 +43,7 @@
   <div class="focus-card delete-card">
     <h4>Delete a Report</h4>
     <div class="input-container">
-      <input
-        type="text"
-        [(ngModel)]="deleteReportId"
-        placeholder="Enter Report ID"
-      />
+      <input type="text" [(ngModel)]="deleteReportId" placeholder="Enter Ticket Number" />
       <button class="btn btn-primary" (click)="findReport()">Get Report</button>
     </div>
     <div class="scrollable report-summary">
@@ -64,8 +60,10 @@
         <p><strong>Discovery Method:</strong> {{ selectedReport.discovery_method || 'N/A' }}</p>
         <p><strong>Status:</strong> {{ selectedReport.status || 'N/A' }}</p>
         <p><strong>Priority:</strong> {{ selectedReport.priority || 'N/A' }}</p>
-        <p><strong>Created At:</strong> {{ selectedReport.created_at ? (selectedReport.created_at | date: 'short') : 'N/A' }}</p>
-        <p><strong>Updated At:</strong> {{ selectedReport.updated_at ? (selectedReport.updated_at | date: 'short') : 'N/A' }}</p>
+        <p><strong>Created At:</strong> {{ selectedReport.created_at ? (selectedReport.created_at | date: 'short') :
+          'N/A' }}</p>
+        <p><strong>Updated At:</strong> {{ selectedReport.updated_at ? (selectedReport.updated_at | date: 'short') :
+          'N/A' }}</p>
       </ng-container>
       <ng-template #errorTemplate>
         <p *ngIf="reportSearchClicked && !selectedReport" class="error-message">
@@ -74,16 +72,8 @@
       </ng-template>
     </div>
     <div *ngIf="selectedReport">
-      <input
-        type="text"
-        [(ngModel)]="confirmationInput"
-        placeholder="Type 'delete' to confirm"
-      />
-      <button
-        class="btn btn-danger"
-        [disabled]="confirmationInput !== 'delete'"
-        (click)="deleteReport()"
-      >
+      <input type="text" [(ngModel)]="confirmationInput" placeholder="Type 'delete' to confirm" />
+      <button class="btn btn-danger" [disabled]="confirmationInput !== 'delete'" (click)="deleteReport()">
         Confirm Delete
       </button>
     </div>
