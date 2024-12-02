@@ -31,6 +31,9 @@ export class AdvancedUserComponent implements OnInit {
 
 
   constructor(private reportsService: ReportsService) { }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
 
   // Set the current view
   setCurrentView(view: 'dashboard' | 'viewReports' | 'approveReports'): void {
