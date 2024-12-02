@@ -36,7 +36,7 @@ export class AdvancedUserComponent implements OnInit {
   }
 
   // Set the current view
-  setCurrentView(view: 'dashboard' | 'viewReports' | 'approveReports'): void {
+  setCurrentView(view: 'dashboard' | 'viewReports' | 'approveReports' | 'editReports'): void {
     this.currentView = view;
   }
 
