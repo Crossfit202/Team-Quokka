@@ -126,6 +126,14 @@
   margin: 15px 0;
 }
 
+.current-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
 /* Input and Button Container */
 .input-container {
   display: flex;

@@ -1,3 +1,5 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <div class="admin-home-container">
 
   <!-- Left Card: Reports List -->
@@ -16,7 +18,12 @@
 
   <!-- Right Top Card: Current Report -->
   <div class="current-report-card fade-in">
-    <h4>Current Report</h4>
+    <div class="current-header-container">
+      <h4>Current Report</h4>
+      <button (click)= "invokeLambda()">PDF <i class="fas fa-file-pdf"></i></button>
+    </div>
+    <!-- <h4>Current Report</h4>
+    <button (click)= "invokeLambda()"> Lambda Function</button> -->
     <div class="report-summary">
       <p><strong>Ticket Number:</strong> {{ currentReport?.ticket_number || 'N/A' }}</p>
     <p><strong>Report Type:</strong> {{ currentReport?.report_type || 'N/A' }}</p>
