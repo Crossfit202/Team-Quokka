@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AdminHomeComponent } from "../admin-home/admin-home.component";
 import { ReportsService } from '../services/reports.service';
 
@@ -13,7 +13,7 @@ import { ReportsService } from '../services/reports.service';
   imports: [CommonModule, FormsModule, RouterModule, AdminHomeComponent],
 })
 export class AdvancedUserComponent implements OnInit {
-  currentView: 'dashboard' | 'viewReports' | 'approveReports' | 'editReports' | null = 'dashboard';
+  currentView: 'dashboard' | 'viewReports' | 'reviewReports' | 'editReports' | 'deleteReports' | null = 'dashboard';
   activeCard: string | null = null;
   deleteReportId: string = '';
   confirmationInput: string = '';
@@ -30,11 +30,12 @@ export class AdvancedUserComponent implements OnInit {
   constructor(private reportsService: ReportsService) { }
 
   ngOnInit(): void {
-    // Add any initialization logic here
+    console.log('Advanced User Component Initialized');
   }
+  
 
   // Set the current view
-  setCurrentView(view: 'dashboard' | 'viewReports' | 'approveReports' | 'editReports'): void {
+  setCurrentView(view: 'dashboard' | 'viewReports' | 'reviewReports' | 'editReports' | 'deleteReports'): void {
     this.currentView = view;
   }
 
@@ -168,4 +169,21 @@ export class AdvancedUserComponent implements OnInit {
   closeModal(): void {
     this.showConfirmation = false;
   }
+
+
+  // Approve the selected report
+  approveReport(): void {
+    if (!this.selectedReport) return;
+    this.selectedReport.status = 'Approved';
+    alert(`Report ${this.selectedReport.ticket_number} has been approved.`);
+  }
+
+  // Deny the selected report
+  denyReport(): void {
+    if (!this.selectedReport) return;
+    this.selectedReport.status = 'Denied';
+    alert(`Report ${this.selectedReport.ticket_number} has been denied.`);
+  }
+  
+  
 }

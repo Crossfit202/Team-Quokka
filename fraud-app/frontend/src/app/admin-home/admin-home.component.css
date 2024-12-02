@@ -1,3 +1,5 @@
+
+
 /* Admin Home Container */
 .admin-home-container {
   display: grid;
@@ -9,7 +11,7 @@
   background-color: #081E26;
   color: #FFFFFF;
   background: linear-gradient(135deg, #081E26, #0C3B4D);
-
+  overflow: hidden;
 }
 
 /* Breadcrumb Navigation */
@@ -170,6 +172,10 @@ button {
   color: #FFFFFF;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-align: center; /* Ensure text is centered */
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Prevent overflow issues */
+  display: inline-block; /* Ensure proper box model behavior */
 }
 
 button:hover {
@@ -250,4 +256,75 @@ button:hover {
 .report-summary::-webkit-scrollbar-thumb {
   background-color: #BF9969; /* Accent color */
   border-radius: 4px;
+}
+
+
+/* Annotations Card */
+.annotations-card {
+  background: #F8F9FA; /* Match card background */
+  color: #434C88;
+  border-radius: 8px; /* Consistent rounding */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow for inset effect */
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Keeps the input box at the bottom */
+  height: calc((100vh - 60px) / 2); /* Matches the height of the other right card */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+.action-buttons {
+  display: flex;
+  justify-content:space-evenly;
+  margin-top: 20px;
+  width: 40%;
+}
+
+.action-buttons .btn {
+  width: 45%; /* Buttons take 45% of the available space */
+  height: auto;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-approve {
+  justify-content: center;
+  text-align: center;
+  background-color: #28a745; /* Green for Approve */
+  color: white;
+  border: none;
+  width:fit-content !important; /* Adjust width automatically */
+  padding-right: 20px !important;
+}
+
+.btn-approve:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* Specific Styling for Deny Button */
+.btn-deny {
+  background-color: #dc3545; /* Red for Deny */
+  color: white;
+  border: none;
+  width: fit-content !important; /* Adjust width automatically */
+}
+
+.btn-deny:hover {
+  background-color: #c82333; /* Darker red on hover */
 }

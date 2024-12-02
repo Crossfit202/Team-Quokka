@@ -1,3 +1,12 @@
+<!-- Navbar (conditionally visible) -->
+<div class="navbar" *ngIf="currentView !== 'dashboard'">
+  <button class="btn btn-primary" (click)="setCurrentView('viewReports')">View Reports</button>
+  <button class="btn btn-danger" (click)="setCurrentView('deleteReports')">Delete Report</button>
+  <button class="btn btn-warning" (click)="setCurrentView('editReports')">Edit Report</button>
+  <button class="btn btn-success" (click)="setCurrentView('reviewReports')">Review Reports</button>
+  <button class="btn btn-secondary" (click)="setCurrentView('dashboard')">Back to Dashboard</button>
+</div>
+
 <!-- Reusable Modal -->
 <div class="confirmation-modal" *ngIf="showConfirmation">
   <div class="modal-content">
@@ -8,17 +17,22 @@
 </div>
 
 
+
 <!-- Dashboard View -->
 <div class="advanced-user-grid" *ngIf="currentView === 'dashboard' && !activeCard">
+  
+  
   <div class="card">
     <h2>Assigned Reports</h2>
     <p>View and manage your assigned reports.</p>
     <button class="btn btn-primary" (click)="setCurrentView('viewReports')">View Reports</button>
   </div>
+  
+  
   <div class="card">
     <h2>Delete a Report</h2>
     <p>Remove reports after verification.</p>
-    <button class="btn btn-danger" (click)="activeCard = 'delete'">Delete Report</button>
+    <button class="btn btn-danger" (click)="setCurrentView('deleteReports')">Delete Report</button>
   </div>
 
   <!-- Edit Report -->
@@ -33,23 +47,29 @@
   <div class="card">
     <h2>Reports for Review</h2>
     <p>Review reports submitted by users.</p>
-    <button class="btn btn-success">Review Reports</button>
+    <button class="btn btn-success" (click)="setCurrentView('reviewReports')">Review Reports</button>
   </div>
 </div>
 
+
+
+
+
 <!-- View Reports Section -->
 <div class="view-reports-container" *ngIf="currentView === 'viewReports'">
-  <button class="btn btn-secondary back-to-dashboard" (click)="setCurrentView('dashboard')">
-    Back to Dashboard
-  </button>
-  <app-admin-home></app-admin-home>
+  
+  <!-- Admin Home Wrapper -->
+  <div class="admin-home-wrapper">
+    <app-admin-home></app-admin-home>
+  </div>
 </div>
+
+
 
 <!-- Background Overlay -->
 <div class="overlay" *ngIf="activeCard"></div>
-
 <!-- Focused Delete Card -->
-<div class="focus-card-container" *ngIf="activeCard === 'delete'">
+<div class="focus-card-container" *ngIf="currentView === 'deleteReports'">
   <!-- Left Card: Report Retrieval and Summary -->
   <div class="focus-card delete-card">
     <h4>Delete a Report</h4>
@@ -88,7 +108,6 @@
         Confirm Delete
       </button>
     </div>
-    <button class="btn btn-secondary back-button" (click)="resetFocus()">Back to Dashboard</button>
   </div>
 
   <!-- Right Card: Annotations -->
@@ -106,6 +125,8 @@
 
 
 
+
+
 <div class="focus-card-container" *ngIf="currentView === 'editReports'">
   <!-- Left Card: Editable Report Input -->
   <div class="focus-card edit-card">
@@ -114,9 +135,6 @@
       <input type="text" [(ngModel)]="deleteReportId" placeholder="Enter Report ID" class="input-report-id" />
       <button class="btn btn-primary btn-scaled" (click)="findReport()">Get Report</button>
     </div>
-    <!-- <div *ngIf="reportSearchClicked && !selectedReport" class="error-message">
-      No report found for the entered ID.
-    </div> -->
     <div class="scrollable report-summary">
       <ng-container *ngIf="selectedReport; else errorTemplate">
         <!-- Static fields (non-editable) -->
@@ -160,13 +178,8 @@
       Save Changes
     </button>
   </div>
-
-
-
-
   <!-- Right Card: Edit Annotations -->
   <div class="focus-card annotations-card">
-    <button class="btn btn-secondary back-to-dashboard" (click)="resetFocus()">Back to Dashboard</button>
     <h4>Edit Annotations</h4>
     <ul class="annotations-list">
       <li *ngFor="let annotation of currentAnnotations">
@@ -182,5 +195,15 @@
         <hr class="divider" />
       </li>
     </ul>
+  </div>
+</div>
+
+
+
+<!-- Focused Review Reports View -->
+<div class="view-reports-container" *ngIf="currentView === 'reviewReports'">
+  <!-- Admin Home Wrapper -->
+  <div class="admin-home-wrapper">
+    <app-admin-home [isReviewMode]="true"></app-admin-home>
   </div>
 </div>

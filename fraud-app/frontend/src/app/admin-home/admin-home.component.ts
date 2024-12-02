@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ReportsService } from '../services/reports.service';
 import { UserStateService } from '../services/user-state.service'; // Import UserStateService
 import { CommonModule } from '@angular/common';
@@ -13,11 +13,13 @@ import { LambdaService } from '../lambda.service';
   imports: [CommonModule, FormsModule]
 })
 export class AdminHomeComponent implements OnInit {
+  @Input() isReviewMode: boolean = false; // Determines if Approve/Deny buttons are shown
   reports: any[] = [];
   currentReport: any | null = null;
   currentAnnotations: any[] = [];
   newAnnotation: string = '';
   loggedInUser: any = null; // Holds logged-in user data
+  selectedReport: any | null = null;
 
   constructor(
     private reportsService: ReportsService,
@@ -101,6 +103,20 @@ export class AdminHomeComponent implements OnInit {
         console.error('Error downloading PDF:', error);
       }
     );
+  }
+
+  approveReport(): void {
+    if (this.selectedReport) {
+      this.selectedReport.status = 'Approved';
+      alert(`Report ${this.selectedReport.ticket_number} has been approved.`);
+    }
+  }
+
+  denyReport(): void {
+    if (this.selectedReport) {
+      this.selectedReport.status = 'Denied';
+      alert(`Report ${this.selectedReport.ticket_number} has been denied.`);
+    }
   }
 
 }

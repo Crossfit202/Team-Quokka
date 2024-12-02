@@ -4,6 +4,7 @@ body {
   overflow-x: hidden; /* Prevents horizontal scrolling */
   background: linear-gradient(135deg, #081E26, #0F3443); /* Global gradient */
   font-family: 'Roboto', sans-serif;
+  overflow: hidden;
 }
 
 /* ----------------------------- Grid Layout ----------------------------- */
@@ -27,7 +28,7 @@ body {
   grid-template-columns: 1fr 1fr; /* Two equal-width columns */
   gap: 20px; /* Space between the left and right cards */
   position: fixed;
-  top: 0; /* Start at the top of the viewport */
+  top: 60px; /* Start at the top of the viewport */
   left: 0; /* Start at the left of the viewport */
   width: 100%; /* Full viewport width */
   height: 100vh; /* Full viewport height */
@@ -48,7 +49,7 @@ body {
   flex-direction: column;
   justify-content: flex-start; /* Align content to the top */
   overflow: hidden;
-  height: 100%;
+  height: 90%;
 }
 
 .focused-delete-card-left h4 {
@@ -107,7 +108,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-  height: 100%;
+  height: 90%;
 }
 
 /* Reduced-Size Button for Focused Delete Card */
@@ -164,7 +165,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  height: 100%;
+  height: 90%;
 }
 
 /* Scrollable Annotations List */
@@ -314,7 +315,7 @@ app-admin-home {
   flex-direction: column;
   justify-content: flex-start; /* Align content to the top */
   overflow: hidden;
-  height: 100%;
+  height: 90%;
 }
 
 .editable-field {
@@ -428,5 +429,84 @@ app-admin-home {
 .modal-content .btn:hover {
   background-color: #0056b3; /* Darker button color on hover */
 }
+
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Navbar Styling */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f8f9fa; /* Light background color */
+  display: flex;
+  justify-content: space-evenly; /* Evenly space the buttons */
+  align-items: center;
+  padding: 10px 0;
+  z-index: 100; /* Ensure it stays above other content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Button Styling (inherits current style) */
+.navbar .btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-home-wrapper {
+  position: fixed;
+  top: 60px; /* Matches navbar height */
+  left: 0;
+  width: 100%; /* Full viewport width */
+  height: calc(100vh); /* Full viewport height minus navbar */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center the content vertically */
+  align-items: center; /* Center the content horizontally */
+  background: linear-gradient(135deg, #081E26, #0F3443); /* Matches global background */
+  overflow: hidden; /* Prevent any scrolling */
+  box-sizing: border-box;
+  padding: 0; /* Remove extra padding */
+}
+
+/* Admin-Home Component Styling */
+.admin-home-wrapper app-admin-home {
+  width: 100%; /* Fill the full width of the wrapper */
+  height: 100%; /* Fill the full height of the wrapper */
+  background: inherit; /* Ensure background matches the parent */
+  border-radius: 12px; /* Maintain consistent rounding */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+  overflow: hidden; /* Ensure no internal scrolling */
+  transform: scale(0.9);
+  transform-origin: top center; /* Ensure scaling is centered */
+}
+
+
 
 
