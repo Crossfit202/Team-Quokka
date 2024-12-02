@@ -275,8 +275,9 @@ button:hover {
 
 .action-buttons {
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content:space-evenly;
+  margin-top: 20px;
+  width: 40%;
 }
 
 .action-buttons .btn {
