@@ -328,3 +328,12 @@ button:hover {
 .btn-deny:hover {
   background-color: #c82333; /* Darker red on hover */
 }
+
+.btn-submit {
+  background-color: #BF9969;
+  width: fit-content !important; /* Adjust width automatically */  
+}
+
+.btn-submit:hover {
+  background-color: #C5B182;
+}

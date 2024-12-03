@@ -21,6 +21,9 @@
     <div class="current-header-container">
       <h4>Current Report</h4>
       <div class="action-buttons">
+        <div *ngIf="isReviewMode !== true" class="action-buttons">
+          <button class="btn btn-submit" (click)="submitReport()">Submit for Review</button>
+        </div>
         <div *ngIf="isReviewMode" class="action-buttons">
           <button class="btn btn-approve" (click)="approveReport()">Approve</button>
           <button class="btn btn-deny" (click)="denyReport()">Deny</button>

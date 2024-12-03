@@ -13,6 +13,7 @@ import { LambdaService } from '../lambda.service';
   imports: [CommonModule, FormsModule]
 })
 export class AdminHomeComponent implements OnInit {
+
   @Input() isReviewMode: boolean = false; // Determines if Approve/Deny buttons are shown
   reports: any[] = [];
   currentReport: any | null = null;
@@ -20,6 +21,7 @@ export class AdminHomeComponent implements OnInit {
   newAnnotation: string = '';
   loggedInUser: any = null; // Holds logged-in user data
   selectedReport: any | null = null;
+  viewMode: any;
 
   constructor(
     private reportsService: ReportsService,
@@ -117,6 +119,9 @@ export class AdminHomeComponent implements OnInit {
       this.selectedReport.status = 'Denied';
       alert(`Report ${this.selectedReport.ticket_number} has been denied.`);
     }
+  }
+
+  submitReport() {
   }
 
 }
