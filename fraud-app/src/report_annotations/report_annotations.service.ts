@@ -2,15 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Report_annotations } from './report_annotations';
+import { ReportsService } from 'src/reports/reports.service';
 
 @Injectable()
 export class ReportAnnotationsService {
     constructor(
         @InjectRepository(Report_annotations)
         private readonly reportAnnotationsRepository: Repository<Report_annotations>,
+        private readonly reportsService: ReportsService // Inject ReportsService
     ) { }
 
-    // CREATE
     async create(data: Partial<Report_annotations>): Promise<Report_annotations> {
         console.log('Creating annotation with data:', data);
 
@@ -25,7 +26,12 @@ export class ReportAnnotationsService {
         }
 
         const newAnnotation = this.reportAnnotationsRepository.create(data);
-        return await this.reportAnnotationsRepository.save(newAnnotation);
+        const savedAnnotation = await this.reportAnnotationsRepository.save(newAnnotation);
+
+        // Update the report's updated_at field
+        await this.reportsService.update(data.reportKey, { updated_at: new Date() });
+
+        return savedAnnotation;
     }
 
 

@@ -7,10 +7,12 @@ import { ReportStatusHistoryModule } from 'src/report_status_history/report_stat
 import { Report_annotations } from './report_annotations';
 import { Reports } from 'src/reports/reports';
 import { Users } from 'src/users/users';
+import { ReportsModule } from 'src/reports/reports.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Report_annotations]),
+    forwardRef(() => ReportsModule),
     forwardRef(() => Users),
     forwardRef(() => Reports)
   ],

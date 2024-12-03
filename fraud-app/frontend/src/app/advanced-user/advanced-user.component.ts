@@ -32,7 +32,7 @@ export class AdvancedUserComponent implements OnInit {
   ngOnInit(): void {
     console.log('Advanced User Component Initialized');
   }
-  
+
 
   // Set the current view
   setCurrentView(view: 'dashboard' | 'viewReports' | 'reviewReports' | 'editReports' | 'deleteReports'): void {
@@ -135,6 +135,7 @@ export class AdvancedUserComponent implements OnInit {
   }
 
   // Save changes to the report
+  // advanced-user.component.ts
   saveChanges(): void {
     if (!this.selectedReport) {
       alert('No report selected to save.');
@@ -160,6 +161,36 @@ export class AdvancedUserComponent implements OnInit {
     });
   }
 
+  // advanced-user.component.ts
+  addAnnotation(annotationText: string): void {
+    if (!this.selectedReport) {
+      alert('No report selected to add an annotation.');
+      return;
+    }
+
+    const annotationData = {
+      annotation_text: annotationText,
+      reportKey: this.selectedReport.report_id,
+      userKey: 1, // Replace with actual logged-in user ID
+    };
+
+    this.reportsService.createAnnotation(annotationData).subscribe({
+      next: (response) => {
+        console.log('Annotation added:', response);
+
+        // Refresh annotations and updated_at
+        this.fetchAnnotations(this.selectedReport.report_id);
+        this.findReport(); // Refresh report to see updated_at
+      },
+      error: (err) => {
+        console.error('Error adding annotation:', err);
+        alert('Failed to add annotation. Please try again.');
+      },
+    });
+  }
+
+
+
   // Close the confirmation modal
   closeConfirmation(): void {
     this.showConfirmation = false;
@@ -169,6 +200,6 @@ export class AdvancedUserComponent implements OnInit {
   closeModal(): void {
     this.showConfirmation = false;
   }
-  
-  
+
+
 }

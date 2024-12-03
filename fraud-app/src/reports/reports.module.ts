@@ -6,7 +6,7 @@ import { ReportsController } from './reports.controller';
 import { AuditLogModule } from '../audit_log/audit_log.module';
 import { ReportAnnotationsModule } from '../report_annotations/report_annotations.module';
 import { UsersModule } from '../users/users.module';
-import { ReportStatusHistoryModule } from '../report_status_history/report_status_history.module';
+
 
 @Module({
   imports: [
