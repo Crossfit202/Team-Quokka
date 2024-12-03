@@ -20,6 +20,7 @@ import { Users } from './users/users';
 import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { config } from 'process';
 
 @Module({
   imports: [
@@ -35,11 +36,11 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres', // Using PostgreSQL
-        host: 'quokka-db-instance-1.cls8gcae0v9f.us-east-1.rds.amazonaws.com', // Database Host
-        port: 5432, // Database Port
-        username: 'postgres', // Database Username
-        password: 'TeamQuokka4115', // Database Password
-        database: 'postgres', // Database Name
+        host: configService.get<string>('DB_HOST'),
+        port: parseInt(configService.get<string>('DB_PORT'), 10),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
         ssl: {
           rejectUnauthorized: false, // For environments with SSL
         },
