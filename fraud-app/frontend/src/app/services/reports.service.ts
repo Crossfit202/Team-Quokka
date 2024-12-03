@@ -56,4 +56,19 @@ export class ReportsService {
     return this.http.delete(`${this.apiUrl}/${reportId}`);
   }
 
+  // Submit for Review
+submitReport(reportId: number): Observable<any> {
+  return this.http.put<any>(`${this.apiUrl}/${reportId}/submit-for-review`, {});
+}
+
+// Approve Report
+approveReport(reportId: number): Observable<any> {
+  return this.http.put<any>(`${this.apiUrl}/${reportId}/approve`, {});
+}
+
+// Deny Report
+denyReport(reportId: number): Observable<any> {
+  return this.http.put<any>(`${this.apiUrl}/${reportId}/deny`, {});
+}
+
 }

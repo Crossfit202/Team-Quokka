@@ -36,6 +36,22 @@ export class ReportsController {
     return await this.ReportsService.update(id, data);
   }
 
+  @Put(':id/submit-for-review')
+async submitForReview(@Param('id') id: number): Promise<Reports> {
+    return await this.ReportsService.submitForReview(id);
+}
+
+@Put(':id/approve')
+async approveReport(@Param('id') id: number): Promise<Reports> {
+    return await this.ReportsService.approveReport(id);
+}
+
+@Put(':id/deny')
+async denyReport(@Param('id') id: number): Promise<Reports> {
+    return await this.ReportsService.denyReport(id);
+}
+
+
   // DELETE 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {

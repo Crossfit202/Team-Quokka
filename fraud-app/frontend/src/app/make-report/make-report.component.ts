@@ -73,7 +73,7 @@ export class MakeReportComponent {
       // ticket_number: `TKT120`,
       report_type: this.crimeType, // Maps to "report_type" in DB
       description: this.incidentDescription, // Maps to "description"
-      status: 'Open', // Default status for new reports
+      status: 'Assigned', // Default status for new reports
       priority: 'High', // Default priority, or make it dynamic if needed
       created_by: 1, // Replace with logged-in user's ID
       perpetrator: this.peopleInvolved, // Maps to "perpetrator"

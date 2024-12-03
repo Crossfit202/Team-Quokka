@@ -169,21 +169,6 @@ export class AdvancedUserComponent implements OnInit {
   closeModal(): void {
     this.showConfirmation = false;
   }
-
-
-  // Approve the selected report
-  approveReport(): void {
-    if (!this.selectedReport) return;
-    this.selectedReport.status = 'Approved';
-    alert(`Report ${this.selectedReport.ticket_number} has been approved.`);
-  }
-
-  // Deny the selected report
-  denyReport(): void {
-    if (!this.selectedReport) return;
-    this.selectedReport.status = 'Denied';
-    alert(`Report ${this.selectedReport.ticket_number} has been denied.`);
-  }
   
   
 }

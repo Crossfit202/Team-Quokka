@@ -69,19 +69,30 @@ export class AdminHomeComponent implements OnInit {
   addAnnotation() {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}'); // Get logged-in user
     const userId = loggedInUser.user_id; // Extract user ID
-
+  
     if (this.newAnnotation.trim() && this.currentReport) {
       const annotationData = {
         annotation_text: this.newAnnotation,
         userKey: this.loggedInUser?.user_id, // Retrieved from localStorage
         reportKey: this.currentReport?.report_id, // The selected report ID
       };
-
+  
       this.reportsService.createAnnotation(annotationData).subscribe({
         next: (response) => {
           console.log('Annotation created:', response);
           this.currentAnnotations.push(response); // Add new annotation to the UI
           this.newAnnotation = ''; // Clear the input field
+  
+          // Update the report's status to "In Progress"
+          const updatedStatus = { status: 'In Progress' };
+          this.reportsService.updateReport(this.currentReport.report_id, updatedStatus).subscribe({
+            next: () => {
+              console.log('Report status updated to In Progress');
+            },
+            error: (err) => {
+              console.error('Error updating report status:', err);
+            },
+          });
         },
         error: (err) => {
           console.error('Error adding annotation:', err);
@@ -90,6 +101,7 @@ export class AdminHomeComponent implements OnInit {
       });
     }
   }
+  
   
   invokeLambda() {  
 
@@ -108,20 +120,66 @@ export class AdminHomeComponent implements OnInit {
   }
 
   approveReport(): void {
-    if (this.selectedReport) {
-      this.selectedReport.status = 'Approved';
-      alert(`Report ${this.selectedReport.ticket_number} has been approved.`);
+    if (!this.currentReport) {
+      alert('No report selected for approval.');
+      return;
     }
+  
+    this.reportsService.approveReport(this.currentReport.report_id).subscribe({
+      next: (updatedReport) => {
+        console.log('Report approved:', updatedReport);
+        alert(`Report ${this.currentReport.ticket_number} has been approved.`);
+        this.fetchReports(); // Refresh the report list
+        this.currentReport = null; // Deselect the current report
+      },
+      error: (err) => {
+        console.error('Error approving report:', err);
+        alert('Failed to approve report.');
+      },
+    });
   }
-
+  
   denyReport(): void {
-    if (this.selectedReport) {
-      this.selectedReport.status = 'Denied';
-      alert(`Report ${this.selectedReport.ticket_number} has been denied.`);
+    if (!this.currentReport) {
+      alert('No report selected for denial.');
+      return;
     }
+  
+    this.reportsService.denyReport(this.currentReport.report_id).subscribe({
+      next: (updatedReport) => {
+        console.log('Report denied:', updatedReport);
+        alert(`Report ${this.currentReport.ticket_number} has been denied and reassigned.`);
+        this.fetchReports(); // Refresh the report list
+        this.currentReport = null; // Deselect the current report
+      },
+      error: (err) => {
+        console.error('Error denying report:', err);
+        alert('Failed to deny report.');
+      },
+    });
   }
+  
+  
 
-  submitReport() {
+  submitReport(): void {
+    if (!this.currentReport) {
+      alert('No report selected for submission.');
+      return;
+    }
+  
+    this.reportsService.submitReport(this.currentReport.report_id).subscribe({
+      next: (updatedReport) => {
+        console.log('Report submitted for review:', updatedReport);
+        alert(`Report ${this.currentReport.ticket_number} has been submitted for review.`);
+        this.fetchReports(); // Refresh the report list
+        this.currentReport = null; // Deselect the current report
+      },
+      error: (err) => {
+        console.error('Error submitting report for review:', err);
+        alert('Failed to submit report for review.');
+      },
+    });
   }
+  
 
 }

@@ -6,8 +6,7 @@ import { Report_annotations } from './report_annotations';
 export class ReportAnnotationsController {
   constructor(private readonly reportAnnotationsService: ReportAnnotationsService) { }
 
-  // POST /users - Create a new user
-  @Post()
+  
   @Post()
   async create(@Body() data: { annotation_text: string; reportKey: number; userKey: number }): Promise<Report_annotations> {
     // Call service to create the annotation
