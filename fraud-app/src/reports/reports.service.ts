@@ -49,7 +49,7 @@ export class ReportsService {
         data.users = leastLoadedAdmin;
     
         // Initialize previous_user as null (or a default value like 0)
-        data.previous_user = null; // Explicitly set as null or 0
+        data.previous_user = 0; // Explicitly set as null or 0
     
         const newReport = this.reportRepository.create(data);
         return await this.reportRepository.save(newReport);
