@@ -116,13 +116,16 @@ export class AdvancedUserComponent implements OnInit {
         { label: 'Description', key: 'description', value: this.selectedReport.description, editing: false },
         { label: 'Perpetrator', key: 'perpetrator', value: this.selectedReport.perpetrator, editing: false },
         { label: 'Incident Location', key: 'incident_location', value: this.selectedReport.incident_location, editing: false },
-        { label: 'Monetary Damage', key: 'monetary_damage', value: this.selectedReport.monetary_damage, editing: false },
-        { label: 'Discovery Method', key: 'discovery_method', value: this.selectedReport.discovery_method, editing: false },
-        { label: 'Priority', key: 'priority', value: this.selectedReport.priority, editing: false },
-        // Add new fields here
         { label: 'Business Name', key: 'business_name', value: this.selectedReport.business_name, editing: false },
         { label: 'Business Address', key: 'business_address', value: this.selectedReport.business_address, editing: false },
         { label: 'Suspect Name', key: 'suspect_name', value: this.selectedReport.suspect_name, editing: false },
+        { label: 'Monetary Damage', key: 'monetary_damage', value: this.selectedReport.monetary_damage, editing: false },
+        { label: 'Reputation Damage', key: 'reputation_damage', value: this.selectedReport.reputation_damage, editing: false },
+        { label: 'Customer Retention Affected', key: 'customer_retention', value: this.selectedReport.customer_retention, editing: false },
+        { label: 'Discovery Method', key: 'discovery_method', value: this.selectedReport.discovery_method, editing: false },
+        { label: 'Priority', key: 'priority', value: this.selectedReport.priority, editing: false },
+        // Add new fields here
+        
       ];
       
     }
