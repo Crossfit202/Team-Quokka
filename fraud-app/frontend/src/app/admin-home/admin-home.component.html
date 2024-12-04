@@ -22,11 +22,11 @@
       <h4>Current Report</h4>
       <div class="action-buttons">
         <div *ngIf="isReviewMode !== true" class="action-buttons">
-          <button class="btn btn-submit" (click)="submitReport()">Submit for Review</button>
+          <button class="btn btn-submit" (click)="submitForReview(this.currentReport.report_id)">Submit for Review</button>
         </div>
         <div *ngIf="isReviewMode" class="action-buttons">
-          <button class="btn btn-approve" (click)="approveReport()">Approve</button>
-          <button class="btn btn-deny" (click)="denyReport()">Deny</button>
+          <button class="btn btn-approve" (click)="approveReport(this.currentReport.report_id)">Approve</button>
+          <button class="btn btn-deny" (click)="denyReport(this.currentReport.report_id)">Deny</button>
         </div>
         <div class="action-buttons">
           <button (click)= "invokeLambda()">PDF <i class="fas fa-file-pdf"></i></button>

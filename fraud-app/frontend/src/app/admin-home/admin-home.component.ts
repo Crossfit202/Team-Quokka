@@ -138,18 +138,11 @@ export class AdminHomeComponent implements OnInit {
     );
   }
 
-  approveReport(): void {
-    if (!this.currentReport) {
-      alert('No report selected for approval.');
-      return;
-    }
-  
-    this.reportsService.approveReport(this.currentReport.report_id).subscribe({
-      next: (updatedReport) => {
-        console.log('Report approved:', updatedReport);
-        alert(`Report ${this.currentReport.ticket_number} has been approved.`);
-        this.fetchReports(this.loggedInUser.user_id) // Refresh the report list
-        this.currentReport = null; // Deselect the current report
+  approveReport(reportId: number): void {
+    this.reportsService.updateReport(reportId, { status: 'Closed' }).subscribe({
+      next: () => {
+        alert('Report approved successfully.');
+        this.fetchAssignedReports(this.currentReport.report_id); // Refresh the list to remove the closed report
       },
       error: (err) => {
         console.error('Error approving report:', err);
@@ -158,40 +151,49 @@ export class AdminHomeComponent implements OnInit {
     });
   }
   
-  denyReport(): void {
-    if (!this.currentReport) {
-      alert('No report selected for denial.');
-      return;
-    }
   
-    this.reportsService.denyReport(this.currentReport.report_id).subscribe({
-      next: (updatedReport) => {
-        console.log('Report denied:', updatedReport);
-        alert(`Report ${this.currentReport.ticket_number} has been denied and reassigned.`);
-        this.fetchReports(this.loggedInUser.user_id); // Refresh the report list
-        this.currentReport = null; // Deselect the current report
+  denyReport(reportId: number): void {
+    this.reportsService.getReportById(reportId).subscribe({
+      next: (report) => {
+        const previousUserId = report.previous_user;
+        if (!previousUserId) {
+          alert('Error: No previous user found for this report.');
+          return;
+        }
+        
+        this.reportsService.updateReport(reportId, {
+          status: 'In Progress',
+          usersUserId: previousUserId, // Assign it back to the original user
+        }).subscribe({
+          next: () => {
+            alert('Report denied and sent back successfully.');
+            this.fetchAssignedReports(this.currentReport.report_id); // Refresh the list
+          },
+          error: (err) => {
+            console.error('Error denying report:', err);
+            alert('Failed to deny report.');
+          },
+        });
       },
       error: (err) => {
-        console.error('Error denying report:', err);
-        alert('Failed to deny report.');
+        console.error('Error fetching report:', err);
+        alert('Failed to fetch report details.');
       },
     });
   }
   
   
-
-  submitReport(): void {
-    if (!this.currentReport) {
-      alert('No report selected for submission.');
-      return;
-    }
   
-    this.reportsService.submitReport(this.currentReport.report_id).subscribe({
-      next: (updatedReport) => {
-        console.log('Report submitted for review:', updatedReport);
-        alert(`Report ${this.currentReport.ticket_number} has been submitted for review.`);
-        this.fetchReports(this.loggedInUser.user_id); // Refresh the report list
-        this.currentReport = null; // Deselect the current report
+
+  submitForReview(reportId: number): void {
+    const currentUser = this.userStateService.getUser(); // Fetch the current logged-in user
+    this.reportsService.updateReport(reportId, {
+      status: 'Under Review',
+      previous_user: currentUser.user_id, // Set the previous user field
+    }).subscribe({
+      next: () => {
+        alert('Report submitted for review successfully.');
+        this.fetchAssignedReports(this.currentReport.report_id); // Refresh the list of reports
       },
       error: (err) => {
         console.error('Error submitting report for review:', err);
@@ -199,6 +201,8 @@ export class AdminHomeComponent implements OnInit {
       },
     });
   }
+  
+  
   
 
 }
