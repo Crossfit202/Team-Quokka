@@ -137,14 +137,18 @@ export class ReportsService {
       }
       
 
-    async approveReport(reportId: number): Promise<Reports> {
+      async approveReport(reportId: number, currentUserId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
-
-        // Update the report's status
-        report.status = 'Closed';
-
+    
+        // Update previous_user and unassign the current user
+        report.previous_user = report.users?.user_id || 0; // Set to current user's ID
+        report.users = null; // Unassign the report
+        report.status = 'Closed'; // Update status to 'Closed'
+        report.updated_at = new Date(); // Update the timestamp
+    
         return await this.reportRepository.save(report);
     }
+    
 
     async denyReport(reportId: number): Promise<Reports> {
         const report = await this.findOne(reportId);

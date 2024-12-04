@@ -49,9 +49,10 @@ async submitForReview(@Param('id') id: number): Promise<Reports> {
 }
 
 @Put(':id/approve')
-async approveReport(@Param('id') id: number): Promise<Reports> {
-    return await this.ReportsService.approveReport(id);
+async approveReport(@Param('id') id: number, @Body('currentUserId') currentUserId: number): Promise<Reports> {
+    return await this.ReportsService.approveReport(id, currentUserId);
 }
+
 
 @Put(':id/deny')
 async denyReport(@Param('id') id: number): Promise<Reports> {
