@@ -5,14 +5,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LambdaService } from '../lambda.service';
 import { AuthService } from '../services/auth.service';
-import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent]
+  imports: [CommonModule, FormsModule ]
 })
 export class AdminHomeComponent implements OnInit {
 
