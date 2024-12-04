@@ -45,7 +45,7 @@ export class Reports {
     reputation_damage: boolean;
 
     @Column()
-    customer_retention_damage: boolean;
+    customer_retention: boolean;
 
     @Column()
     ongoing: string;
