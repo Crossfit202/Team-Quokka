@@ -87,8 +87,8 @@ export class MakeReportComponent {
       perpetrator: this.peopleInvolved, // Maps to "perpetrator"
       incident_location: this.incidentLocation || this.otherIncidentLocation, // Maps to "incident_location"
       monetary_damage: this.monetaryLoss ? this.monetaryLoss.toString() : '0', // Convert to string for DB
-      additional_damage1: this.reputationDamage, // Maps to "additional_damage1"
-      additional_damage2: this.customerRetention, // Maps to "additional_damage2"
+      reputation_damage: this.reputationDamage, // Maps to "additional_damage1"
+      customer_retention: this.customerRetention, // Maps to "additional_damage2"
       ongoing: this.isOngoing === true ? 'Yes' : this.isOngoing === false ? 'No' : 'Unknown', // Maps to "ongoing"
       discovery_method: this.incidentDiscovery || this.otherIncidentDiscovery, // Maps to "discovery_method"
       created_at: new Date().toISOString(), // Maps to "created_at" as a timestamp
@@ -97,7 +97,7 @@ export class MakeReportComponent {
       auditLogActionId: null, // If you don't have audit log actions now, set null
       business_name: this.businessName, // Maps to "business_name"
       business_address: this.businessAddress, // Maps to "business_address"
-      suspect_name: this.suspectName, // Maps to "suspect_name"
+      suspect_name: this.suspectName // Maps to "suspect_name"
     };
 
     console.log('payload send to backend', reportData)
