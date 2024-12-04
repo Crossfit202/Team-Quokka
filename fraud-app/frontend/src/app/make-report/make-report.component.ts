@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ReportsService } from '../services/reports.service'; // Adjust the path if necessary
 import { tick } from '@angular/core/testing';
+import { HeaderComponent } from '../header/header.component';
 
 
 
 @Component({
   selector: 'app-make-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent],
   templateUrl: './make-report.component.html',
   styleUrls: ['./make-report.component.css']
 })
