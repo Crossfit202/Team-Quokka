@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { Reports } from 'src/reports/reports';
 
@@ -76,7 +75,7 @@ async denyReport(
     @Param('id') reportId: number,
     @Body('currentUserId') currentUserId: number
 ): Promise<Reports> {
-    return await this.ReportsService.denyReport(reportId, currentUserId);
+    return await this.ReportsService.denyReport(reportId);
 }
 
 
