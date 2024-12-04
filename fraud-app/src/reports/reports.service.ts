@@ -24,7 +24,7 @@ export class ReportsService {
         // Fetch all admin1 and admin2 users
         const admins = await this.userRepository.find({
             where: [
-                { role: 'admin1' },
+                { role: 'admin' },
                 { role: 'admin2' },
             ],
         });
