@@ -24,6 +24,8 @@ export class AdminHomeComponent implements OnInit {
   loggedInUser: any = null; // Holds logged-in user data
   selectedReport: any | null = null;
   viewMode: any;
+  currentView: string = 'assignedReports'; // Default view, adjust as necessary
+
   
 
   constructor(
@@ -40,36 +42,24 @@ export class AdminHomeComponent implements OnInit {
 
     // Fetch reports assigned to the logged-in user
     if (this.loggedInUser) {
-      this.fetchAssignedReports(this.loggedInUser.user_id);
+      this.fetchAssignedReports();
     }
   }
 
-  fetchReports(userId: number) {
-    this.reportsService.getAssignedReports(userId).subscribe({
-      next: (data) => {
-        this.reports = data;
-        if (this.reports.length > 0) {
-          this.selectReport(this.reports[0]);
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching reports:', err);
-      },
-    });
-  }
-  fetchAssignedReports(userId: number) {
-    this.reportsService.getAssignedReports(userId).subscribe({
-      next: (data) => {
-        this.reports = data;
-        if (this.reports.length > 0) {
-          this.selectReport(this.reports[0]);
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching assigned reports:', err);
-      },
-    });
-  }
+  fetchAssignedReports(): void {
+  const currentUser = this.userStateService.getUser();
+  const statuses = this.currentView === 'reviewReports' ? 'Under Review' : 'Assigned,In Progress';
+
+  this.reportsService.getAssignedReports(currentUser.user_id, statuses).subscribe({
+    next: (reports) => {
+      this.reports = reports;
+    },
+    error: (err) => {
+      console.error('Error fetching assigned reports:', err);
+    },
+  });
+}
+
   
 
   selectReport(report: any) {
@@ -87,27 +77,32 @@ export class AdminHomeComponent implements OnInit {
   }
 
   addAnnotation() {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}'); // Get logged-in user
-    const userId = loggedInUser.user_id; // Extract user ID
-  
     if (this.newAnnotation.trim() && this.currentReport) {
       const annotationData = {
         annotation_text: this.newAnnotation,
-        userKey: this.loggedInUser?.user_id, // Retrieved from localStorage
-        reportKey: this.currentReport?.report_id, // The selected report ID
+        userKey: this.loggedInUser?.user_id,
+        reportKey: this.currentReport?.report_id,
       };
   
       this.reportsService.createAnnotation(annotationData).subscribe({
         next: (response) => {
           console.log('Annotation created:', response);
-          this.currentAnnotations.push(response); // Add new annotation to the UI
-          this.newAnnotation = ''; // Clear the input field
+          this.currentAnnotations.push(response);
+          this.newAnnotation = ''; // Clear the input
   
-          // Update the report's status to "In Progress"
-          const updatedStatus = { status: 'In Progress' };
-          this.reportsService.updateReport(this.currentReport.report_id, updatedStatus).subscribe({
+          // Update the report's status and refresh the current report
+          this.reportsService.updateReport(this.currentReport.report_id, { status: 'In Progress' }).subscribe({
             next: () => {
               console.log('Report status updated to In Progress');
+              // Refresh current report data
+              this.reportsService.getReportById(this.currentReport.report_id).subscribe({
+                next: (updatedReport) => {
+                  this.currentReport = updatedReport; // Refresh the UI with the updated report
+                },
+                error: (err) => {
+                  console.error('Error refreshing report:', err);
+                },
+              });
             },
             error: (err) => {
               console.error('Error updating report status:', err);
@@ -121,6 +116,7 @@ export class AdminHomeComponent implements OnInit {
       });
     }
   }
+  
   
   
   invokeLambda() {  
@@ -140,10 +136,18 @@ export class AdminHomeComponent implements OnInit {
   }
 
   approveReport(reportId: number): void {
-    this.reportsService.updateReport(reportId, { status: 'Closed' }).subscribe({
+    const currentUser = this.userStateService.getUser();
+  
+    this.reportsService.updateReport(reportId, {
+      status: 'Closed',
+      previous_user: currentUser.user_id,
+      usersUserId: null,
+    }).subscribe({
       next: () => {
         alert('Report approved successfully.');
-        this.fetchAssignedReports(this.currentReport.report_id); // Refresh the list to remove the closed report
+        // Remove the approved report from the list
+        this.reports = this.reports.filter((report) => report.report_id !== reportId);
+        this.currentReport = null; // Reset current report
       },
       error: (err) => {
         console.error('Error approving report:', err);
@@ -151,6 +155,8 @@ export class AdminHomeComponent implements OnInit {
       },
     });
   }
+  
+  
   
   
   denyReport(reportId: number): void {
@@ -161,14 +167,17 @@ export class AdminHomeComponent implements OnInit {
           alert('Error: No previous user found for this report.');
           return;
         }
-        
+  
         this.reportsService.updateReport(reportId, {
           status: 'In Progress',
-          usersUserId: previousUserId, // Assign it back to the original user
+          usersUserId: previousUserId,
+          previous_user: null,
         }).subscribe({
           next: () => {
             alert('Report denied and sent back successfully.');
-            this.fetchAssignedReports(this.currentReport.report_id); // Refresh the list
+            // Remove the denied report from the list
+            this.reports = this.reports.filter((r) => r.report_id !== reportId);
+            this.currentReport = null; // Reset the current report
           },
           error: (err) => {
             console.error('Error denying report:', err);
@@ -185,16 +194,21 @@ export class AdminHomeComponent implements OnInit {
   
   
   
+  
+  
 
   submitForReview(reportId: number): void {
-    const currentUser = this.userStateService.getUser(); // Fetch the current logged-in user
+    const currentUser = this.userStateService.getUser();
+  
     this.reportsService.updateReport(reportId, {
       status: 'Under Review',
-      previous_user: currentUser.user_id, // Set the previous user field
+      previous_user: currentUser.user_id,
     }).subscribe({
       next: () => {
         alert('Report submitted for review successfully.');
-        this.fetchAssignedReports(this.currentReport.report_id); // Refresh the list of reports
+        // Remove the submitted report from the list
+        this.reports = this.reports.filter((report) => report.report_id !== reportId);
+        this.currentReport = null; // Reset the current report
       },
       error: (err) => {
         console.error('Error submitting report for review:', err);
@@ -202,6 +216,8 @@ export class AdminHomeComponent implements OnInit {
       },
     });
   }
+  
+  
   
   
   

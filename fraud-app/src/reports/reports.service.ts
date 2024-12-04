@@ -97,76 +97,105 @@ export class ReportsService {
     }
 
 
-    async submitForReview(reportId: number): Promise<Reports> {
+    async submitForReview(reportId: number, userId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
-
-        // Fetch all admin2 users
-        const admin2Users = await this.userRepository.find({
-            where: { role: 'admin2' },
-        });
-
-        if (admin2Users.length === 0) {
-            throw new Error('No admin2 users found for reassignment.');
+        
+        if (!report) {
+            throw new Error(`Report with ID ${reportId} not found`);
         }
-
-        // Find the least-loaded admin2
+    
+        // Update previous_user and assign to a different admin2
+        report.previous_user = report.users.user_id;
+        
+        const admin2Users = await this.userRepository.find({ where: { role: 'admin2' } });
+        if (admin2Users.length === 0) {
+            throw new Error('No admin2 users available for reassignment.');
+        }
+    
+        const leastLoadedAdmin2 = await this.findLeastLoadedAdmin(admin2Users);
+        report.users = leastLoadedAdmin2;
+    
+        // Update status to "Under Review"
+        report.status = 'Under Review';
+        report.updated_at = new Date();
+    
+        return await this.reportRepository.save(report);
+    }
+    
+    private async findLeastLoadedAdmin(admins: Users[]): Promise<Users> {
         const adminLoad = await Promise.all(
-            admin2Users.map(async (admin) => {
+            admins.map(async (admin) => {
                 const reportCount = await this.reportRepository.count({
-                    where: { users: { user_id: admin.user_id } },
+                    where: { users: { user_id: admin.user_id }, status: 'Under Review' },
                 });
                 return { admin, reportCount };
             })
         );
-
-        const leastLoadedAdmin = adminLoad.sort((a, b) => a.reportCount - b.reportCount)[0].admin;
-
-        // Update the report's status and assign it to the least-loaded admin2
-        report.status = 'Under Review';
-        report.users = leastLoadedAdmin;
-
-        return await this.reportRepository.save(report);
+        return adminLoad.sort((a, b) => a.reportCount - b.reportCount)[0].admin;
     }
+    
 
     async findAssignedReports(userId: number): Promise<Reports[]> {
-        return await this.reportRepository.find({
-          where: { users: { user_id: userId } },
-          relations: ['users'], // Ensure the relation is loaded
-          order: { priority: 'DESC', created_at: 'ASC' }, // Sort by priority, then creation date
-        });
-      }
+        return await this.reportRepository.createQueryBuilder('report')
+            .where('report.usersUserId = :userId', { userId })
+            .andWhere('report.status IN (:...statuses)', { statuses: ['Assigned', 'In Progress'] })
+            .getMany();
+    }
+
+    async findAssignedReportsByStatuses(userId: number, statuses: string[]): Promise<Reports[]> {
+        return await this.reportRepository.createQueryBuilder('report')
+            .where('report.usersUserId = :userId', { userId })
+            .andWhere('report.status IN (:...statuses)', { statuses })
+            .getMany();
+    }
+    
+    
       
 
-      async approveReport(reportId: number, currentUserId: number): Promise<Reports> {
+    async approveReport(reportId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
     
-        // Update previous_user and unassign the current user
-        report.previous_user = report.users?.user_id || 0; // Set to current user's ID
-        report.users = null; // Unassign the report
-        report.status = 'Closed'; // Update status to 'Closed'
-        report.updated_at = new Date(); // Update the timestamp
+        if (!report) {
+            throw new Error(`Report with ID ${reportId} not found`);
+        }
+    
+        // Update previous_user and clear current user assignment
+        report.previous_user = report.users.user_id;
+        report.users = null; // No user assignment for closed reports
+        report.status = 'Closed';
+        report.updated_at = new Date();
     
         return await this.reportRepository.save(report);
     }
+    
     
 
     async denyReport(reportId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
-
-        // Ensure the report has an assigned user
-        if (!report.users) {
-            throw new Error('Cannot deny report: No user assigned to this report.');
+    
+        if (!report) {
+            throw new Error(`Report with ID ${reportId} not found`);
         }
-
-        // Update the report's status
+    
+        // Reassign the report back to the previous user
+        if (!report.previous_user) {
+            throw new Error(`Cannot deny report: No previous user found.`);
+        }
+    
+        const previousUser = await this.userRepository.findOne({ where: { user_id: report.previous_user } });
+    
+        if (!previousUser) {
+            throw new Error(`Previous user with ID ${report.previous_user} not found`);
+        }
+    
+        report.users = previousUser;
+        report.previous_user = null; // Clear previous_user after reassignment
         report.status = 'In Progress';
-
-        // Reassign the report back to the same user
-        const originalUser = report.users;
-        report.users = originalUser;
-
+        report.updated_at = new Date();
+    
         return await this.reportRepository.save(report);
     }
+    
 
 
 }

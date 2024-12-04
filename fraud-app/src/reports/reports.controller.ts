@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { Reports } from 'src/reports/reports';
 
@@ -26,10 +26,16 @@ export class ReportsController {
   }
 
   // GET all reports assigned to a specific user
-@Get('assigned/:userId')
-async findAssignedReports(@Param('userId') userId: number): Promise<Reports[]> {
-  return await this.ReportsService.findAssignedReports(userId);
-}
+  @Get('assigned/:userId')
+  async findAssignedReports(
+      @Param('userId') userId: number,
+      @Query('statuses') statuses?: string
+  ): Promise<Reports[]> {
+      const statusArray = statuses ? statuses.split(',') : ['Assigned', 'In Progress'];
+      return await this.ReportsService.findAssignedReportsByStatuses(userId, statusArray);
+  }
+  
+
 
 
   @Get('ticket/:id')
@@ -44,19 +50,20 @@ async findAssignedReports(@Param('userId') userId: number): Promise<Reports[]> {
   }
 
   @Put(':id/submit-for-review')
-async submitForReview(@Param('id') id: number): Promise<Reports> {
-    return await this.ReportsService.submitForReview(id);
+  async submitForReview(@Param('id') id: number): Promise<Reports> {
+    const currentUser = 1; // Replace with logic to get the logged-in user ID
+    return await this.ReportsService.submitForReview(id, currentUser);
 }
 
 @Put(':id/approve')
-async approveReport(@Param('id') id: number, @Body('currentUserId') currentUserId: number): Promise<Reports> {
-    return await this.ReportsService.approveReport(id, currentUserId);
+async approveReport(@Param('id') id: number): Promise<Reports> {
+  return await this.ReportsService.approveReport(id);
 }
 
 
 @Put(':id/deny')
 async denyReport(@Param('id') id: number): Promise<Reports> {
-    return await this.ReportsService.denyReport(id);
+  return await this.ReportsService.denyReport(id);
 }
 
 
