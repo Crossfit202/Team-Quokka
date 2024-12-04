@@ -1,5 +1,11 @@
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
 .logo {
     width: 160px;
     height: 60px;
-    margin: 20px;
+    margin: 20px 20px 0 20px;
 }

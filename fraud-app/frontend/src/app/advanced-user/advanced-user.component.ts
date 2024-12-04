@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AdminHomeComponent } from "../admin-home/admin-home.component";
 import { ReportsService } from '../services/reports.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-advanced-user',
   standalone: true,
   templateUrl: './advanced-user.component.html',
   styleUrls: ['./advanced-user.component.css'],
-  imports: [CommonModule, FormsModule, RouterModule, AdminHomeComponent],
+  imports: [CommonModule, FormsModule, RouterModule, AdminHomeComponent, HeaderComponent],
 })
 export class AdvancedUserComponent implements OnInit {
   currentView: 'dashboard' | 'viewReports' | 'reviewReports' | 'editReports' | 'deleteReports' | null = 'dashboard';
