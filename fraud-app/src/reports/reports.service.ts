@@ -20,7 +20,7 @@ export class ReportsService {
         const timestamp = Date.now();
         const randomNum = Math.floor(Math.random() * 1000);
         data.ticket_number = `TICK${timestamp}${randomNum}`;
-
+    
         // Fetch all admin1 and admin2 users
         const admins = await this.userRepository.find({
             where: [
@@ -28,11 +28,11 @@ export class ReportsService {
                 { role: 'admin2' },
             ],
         });
-
+    
         if (admins.length === 0) {
             throw new Error('No admin users found for assignment.');
         }
-
+    
         // Find the least-loaded admin among admin1 and admin2
         const adminLoad = await Promise.all(
             admins.map(async (admin) => {
@@ -42,15 +42,19 @@ export class ReportsService {
                 return { admin, reportCount };
             })
         );
-
+    
         const leastLoadedAdmin = adminLoad.sort((a, b) => a.reportCount - b.reportCount)[0].admin;
-
+    
         // Assign the report to the least-loaded admin
         data.users = leastLoadedAdmin;
-
+    
+        // Initialize previous_user as null (or a default value like 0)
+        data.previous_user = null; // Explicitly set as null or 0
+    
         const newReport = this.reportRepository.create(data);
         return await this.reportRepository.save(newReport);
     }
+    
 
 
     // READ ALL
