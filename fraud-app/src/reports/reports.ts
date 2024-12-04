@@ -82,4 +82,7 @@ export class Reports {
     @Column()
     suspect_name: string;
 
+    @Column()
+    previous_user: string;
+
 }
