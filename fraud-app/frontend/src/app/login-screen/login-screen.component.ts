@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UserStateService } from '../services/user-state.service'; // Import UserStateService
 import { FormsModule } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-login-screen',
   standalone: true,
   templateUrl: './login-screen.component.html',
   styleUrls: ['./login-screen.component.css'],
-  imports: [FormsModule],
+  imports: [FormsModule, HeaderComponent],
 })
 export class LoginScreenComponent {
   username: string = '';
