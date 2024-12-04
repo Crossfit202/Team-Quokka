@@ -31,6 +31,7 @@ export class Reports {
     @Column()
     created_by: number;
 
+
     @Column()
     perpetrator: string;
 
@@ -41,10 +42,10 @@ export class Reports {
     monetary_damage: string;
 
     @Column()
-    additional_damage1: boolean;
+    reputation_damage: boolean;
 
     @Column()
-    additional_damage2: boolean;
+    customer_retention_damage: boolean;
 
     @Column()
     ongoing: string;
@@ -71,4 +72,14 @@ export class Reports {
     @OneToOne(() => Audit_log, (audit_log) => audit_log.reports)
     @JoinColumn()
     audit_log: Audit_log;
+
+    @Column()
+    business_name: string;
+
+    @Column()
+    business_address: string;
+
+    @Column()
+    suspect_name: string;
+
 }
