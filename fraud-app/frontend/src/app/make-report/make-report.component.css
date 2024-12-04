@@ -11,7 +11,7 @@
 
 /* Card layout with a consistent size */
 .card-layout {
-  width: 90%; /* Responsive width */
+  width: 50%; /* Responsive width */
   max-width: 75%; /* Max width for larger screens */
   height: auto; /* Adjust height dynamically */
   padding: 20px;
@@ -73,6 +73,13 @@ textarea:focus, input:focus {
 .btn-primary:hover {
   background-color: #C5B182;
   transform: scale(1.05);
+}
+
+.button-mt-3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0 0 0;
 }
 
 /* Scrollable Review Section */

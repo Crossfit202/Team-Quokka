@@ -41,7 +41,7 @@
           <label class="form-check-label" for="otherCrime">Other</label>
           <input *ngIf="crimeType === 'Other'" [(ngModel)]="otherCrimeType" type="text" class="form-control mt-2" placeholder="Specify crime type" aria-label="Specify other crime type" />
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-primary" (click)="nextStep()" [disabled]="!crimeType">Next</button>
         </div>
       </div>
@@ -78,7 +78,7 @@
       <label class="form-check-label" for="otherPerson">Other</label>
       <input *ngIf="peopleInvolved === 'Other'" [(ngModel)]="peopleInvolved" type="text" class="form-control mt-2" placeholder="Specify other person" aria-label="Specify other person" />
     </div>
-    <div class="mt-3">
+    <div class="button-mt-3">
       <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
       <button class="btn btn-primary" (click)="nextStep()" [disabled]="!peopleInvolved">Next</button>
     </div>
@@ -105,7 +105,7 @@
           <label class="form-check-label" for="otherLocation">Other</label>
           <input *ngIf="incidentLocation === 'Other'" [(ngModel)]="otherIncidentLocation" type="text" class="form-control mt-2" placeholder="Specify location" aria-label="Specify other location" />
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()" [disabled]="!incidentLocation">Next</button>
         </div>
@@ -118,7 +118,7 @@
         <div *ngIf="incidentDescription.length < 10">
           <small class="text-warning">Please provide more details. A description of at least 10 characters is required.</small>
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()" [disabled]="incidentDescription.length < 10">Next</button>
         </div>
@@ -135,7 +135,7 @@
           <label for="businessAddress" class="form-label">Business Address:</label>
           <textarea id="businessAddress" class="form-control" rows="3" [(ngModel)]="businessAddress" placeholder="Enter business address"></textarea>
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()" [disabled]="!businessName || !businessAddress">Next</button>
         </div>
@@ -146,7 +146,7 @@
         <h4>If you're comfortable, you can share the name of any individual(s) involved in the incident:</h4>
         <input type="text" id="suspectName" class="form-control" [(ngModel)]="suspectName" placeholder="Enter suspect's name (optional)" />
         <small class="text-muted">You can leave this field blank if you'd prefer not to provide this information.</small>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()">Next</button>
         </div>
@@ -166,7 +166,7 @@
           <input class="form-check-input" type="checkbox" id="customerRetention" [(ngModel)]="customerRetention" aria-label="Customer Retention Impact" />
           <label class="form-check-label" for="customerRetention">Customer Retention Impact</label>
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()">Next</button>
         </div>
@@ -187,7 +187,7 @@
           <input class="form-check-input" type="radio" id="ongoingUnknown" name="ongoing" [(ngModel)]="isOngoing" [value]="null" aria-label="Ongoing Unknown" />
           <label class="form-check-label" for="ongoingUnknown">Unknown</label>
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()" [disabled]="isOngoing === undefined">Next</button>
         </div>
@@ -217,7 +217,7 @@
           <label class="form-check-label" for="otherDiscovery">Other</label>
           <input *ngIf="incidentDiscovery === 'Other'" [(ngModel)]="otherIncidentDiscovery" type="text" class="form-control mt-2" placeholder="Specify discovery method" aria-label="Specify other discovery method" />
         </div>
-        <div class="mt-3">
+        <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
           <button class="btn btn-primary" (click)="nextStep()" [disabled]="!incidentDiscovery">Next</button>
         </div>
