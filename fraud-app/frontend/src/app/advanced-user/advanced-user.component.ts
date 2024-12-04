@@ -119,7 +119,12 @@ export class AdvancedUserComponent implements OnInit {
         { label: 'Monetary Damage', key: 'monetary_damage', value: this.selectedReport.monetary_damage, editing: false },
         { label: 'Discovery Method', key: 'discovery_method', value: this.selectedReport.discovery_method, editing: false },
         { label: 'Priority', key: 'priority', value: this.selectedReport.priority, editing: false },
+        // Add new fields here
+        { label: 'Business Name', key: 'business_name', value: this.selectedReport.business_name, editing: false },
+        { label: 'Business Address', key: 'business_address', value: this.selectedReport.business_address, editing: false },
+        { label: 'Suspect Name', key: 'suspect_name', value: this.selectedReport.suspect_name, editing: false },
       ];
+      
     }
   }
 

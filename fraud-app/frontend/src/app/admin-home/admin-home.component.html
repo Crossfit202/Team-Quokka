@@ -37,21 +37,24 @@
     <button (click)= "invokeLambda()"> Lambda Function</button> -->
     <div class="report-summary">
       <p><strong>Ticket Number:</strong> {{ currentReport?.ticket_number || 'N/A' }}</p>
-    <p><strong>Report Type:</strong> {{ currentReport?.report_type || 'N/A' }}</p>
-    <p><strong>Description:</strong> {{ currentReport?.description || 'N/A' }}</p>
-    <p><strong>Perpetrator:</strong> {{ currentReport?.perpetrator || 'N/A' }}</p>
-    <p><strong>Incident Location:</strong> {{ currentReport?.incident_location || 'N/A' }}</p>
-    <p><strong>Monetary Damage:</strong> {{ currentReport?.monetary_damage || 'N/A' }}</p>
-    <p><strong>Additional Damage 1:</strong> {{ currentReport?.additional_damage1 ? 'Yes' : 'N/A' }}</p>
-    <p><strong>Additional Damage 2:</strong> {{ currentReport?.additional_damage2 ? 'Yes' : 'N/A' }}</p>
-    <p><strong>Ongoing:</strong> {{ currentReport?.ongoing || 'N/A' }}</p>
-    <p><strong>Discovery Method:</strong> {{ currentReport?.discovery_method || 'N/A' }}</p>
-    <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
-    <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
-    <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport.created_at | date: 'short') : 'N/A' }}
-    </p>
-    <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A' }}
-    </p>
+      <p><strong>Report Type:</strong> {{ currentReport?.report_type || 'N/A' }}</p>
+      <p><strong>Description:</strong> {{ currentReport?.description || 'N/A' }}</p>
+      <p><strong>Perpetrator:</strong> {{ currentReport?.perpetrator || 'N/A' }}</p>
+      <p><strong>Incident Location:</strong> {{ currentReport?.incident_location || 'N/A' }}</p>
+      <p><strong>Business Name:</strong> {{ currentReport?.business_name || 'Not Provided' }}</p>
+      <p><strong>Business Address:</strong> {{ currentReport?.business_address || 'Not Provided' }}</p>
+      <p><strong>Suspect Name:</strong> {{ currentReport?.suspect_name || 'Not Provided' }}</p>
+      <p><strong>Monetary Damage:</strong> {{ currentReport?.monetary_damage || 'N/A' }}</p>
+      <p><strong>Additional Damage 1:</strong> {{ currentReport?.additional_damage1 ? 'Yes' : 'N/A' }}</p>
+      <p><strong>Additional Damage 2:</strong> {{ currentReport?.additional_damage2 ? 'Yes' : 'N/A' }}</p>
+      <p><strong>Ongoing:</strong> {{ currentReport?.ongoing || 'N/A' }}</p>
+      <p><strong>Discovery Method:</strong> {{ currentReport?.discovery_method || 'N/A' }}</p>
+      <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
+      <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
+      <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport.created_at | date: 'short') : 'N/A' }}
+      </p>
+      <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A' }}
+      </p>
 
 
     </div>

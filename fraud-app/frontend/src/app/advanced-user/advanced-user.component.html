@@ -84,6 +84,9 @@
         <p><strong>Description:</strong> {{ selectedReport.description || 'N/A' }}</p>
         <p><strong>Perpetrator:</strong> {{ selectedReport.perpetrator || 'N/A' }}</p>
         <p><strong>Incident Location:</strong> {{ selectedReport.incident_location || 'N/A' }}</p>
+        <p><strong>Business Name:</strong> {{ selectedReport?.business_name || 'Not Provided' }}</p>
+        <p><strong>Business Address:</strong> {{ selectedReport?.business_address || 'Not Provided' }}</p>
+        <p><strong>Suspect Name:</strong> {{ selectedReport?.suspect_name || 'Not Provided' }}</p>
         <p><strong>Monetary Damage:</strong> {{ selectedReport.monetary_damage || 'N/A' }}</p>
         <p><strong>Additional Damage 1:</strong> {{ selectedReport.additional_damage1 ? 'Yes' : 'No' }}</p>
         <p><strong>Additional Damage 2:</strong> {{ selectedReport.additional_damage2 ? 'Yes' : 'No' }}</p>

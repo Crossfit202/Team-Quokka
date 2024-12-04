@@ -36,7 +36,12 @@ export class MakeReportComponent {
   reputationDamage: boolean = false; // Checkbox for reputation damage
   customerRetention: boolean = false; // Checkbox for customer retention impact
   isSubmitted: boolean = false; // Tracks whether the report is submitted
+  businessName: string = ''; // Tracks the business name
+  businessAddress: string = ''; // Tracks the business address
+  suspectName: string = ''; // Tracks the suspect's name
+  totalSteps = 10; // Update this value to match the total number of steps
 
+  
 
   isStepValid(): boolean {
     switch (this.step) {
@@ -49,17 +54,20 @@ export class MakeReportComponent {
       case 4:
         return !!this.incidentDescription && this.incidentDescription.length >= 10;
       case 5:
-        return true; // Assuming no required validation for this step
+        return !!this.businessName && !!this.businessAddress; // Ensure both fields are filled
       case 6:
-        return this.isOngoing !== undefined;
+        return !!this.suspectName || this.suspectName === ''; // Optional field
       case 7:
-        return !!this.incidentDiscovery;
+        return this.isOngoing !== undefined;
       case 8:
+        return !!this.incidentDiscovery;
+      case 9:
         return this.isAccurate !== null;
       default:
         return false;
     }
   }
+  
 
   constructor(private reportsService: ReportsService) { }
 
@@ -87,6 +95,9 @@ export class MakeReportComponent {
       updated_at: new Date().toISOString(), // Maps to "updated_at" as a timestamp
       usersUserId: 1, // Replace with the logged-in user's ID, maps to "usersUserId"
       auditLogActionId: null, // If you don't have audit log actions now, set null
+      business_name: this.businessName, // Maps to "business_name"
+      business_address: this.businessAddress, // Maps to "business_address"
+      suspect_name: this.suspectName, // Maps to "suspect_name"
     };
 
     console.log('payload send to backend', reportData)
@@ -158,15 +169,17 @@ export class MakeReportComponent {
 
 
   nextStep() {
-    if (this.step < 8) {
+    if (this.step < this.totalSteps) {
       this.step++; // Increment the step to move to the next one
     }
   }
-
-
+  
   previousStep() {
-    if (this.step > 1) this.step--;
+    if (this.step > 1) {
+      this.step--; // Decrement the step to move to the previous one
+    }
   }
+  
 
   toggleOtherCrime() {
     if (this.isUnknownCrime) {
