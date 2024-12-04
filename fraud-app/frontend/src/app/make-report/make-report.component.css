@@ -61,6 +61,14 @@ textarea:focus, input:focus {
   transition: width 0.3s ease-in-out;
 }
 
+.accuracy-section {
+  display: flex; /* Enables flexbox */
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  text-align: center; /* Centers text alignment */
+}
+
 /* Buttons */
 .btn-primary {
   background-color: #BF9969;
@@ -80,6 +88,21 @@ textarea:focus, input:focus {
   justify-content: space-between;
   align-items: center;
   padding: 20px 0 0 0;
+}
+
+.btn-next {
+  margin-left: auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0 0 0;
+}
+
+.btn-success {
+  margin-left: auto;
 }
 
 /* Scrollable Review Section */

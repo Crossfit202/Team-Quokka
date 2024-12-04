@@ -42,7 +42,7 @@
           <input *ngIf="crimeType === 'Other'" [(ngModel)]="otherCrimeType" type="text" class="form-control mt-2" placeholder="Specify crime type" aria-label="Specify other crime type" />
         </div>
         <div class="button-mt-3">
-          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!crimeType">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="!crimeType">Next</button>
         </div>
       </div>
   
@@ -80,7 +80,7 @@
     </div>
     <div class="button-mt-3">
       <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-      <button class="btn btn-primary" (click)="nextStep()" [disabled]="!peopleInvolved">Next</button>
+      <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="!peopleInvolved">Next</button>
     </div>
   </div>
   
@@ -107,7 +107,7 @@
         </div>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!incidentLocation">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="!incidentLocation">Next</button>
         </div>
       </div>
   
@@ -120,7 +120,7 @@
         </div>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()" [disabled]="incidentDescription.length < 10">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="incidentDescription.length < 10">Next</button>
         </div>
       </div>
 
@@ -137,7 +137,7 @@
         </div>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!businessName || !businessAddress">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="!businessName || !businessAddress">Next</button>
         </div>
       </div>
       
@@ -148,7 +148,7 @@
         <small class="text-muted">You can leave this field blank if you'd prefer not to provide this information.</small>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()">Next</button>
         </div>
       </div>
       
@@ -168,7 +168,7 @@
         </div>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()">Next</button>
         </div>
       </div>
   
@@ -189,7 +189,7 @@
         </div>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()" [disabled]="isOngoing === undefined">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="isOngoing === undefined">Next</button>
         </div>
       </div>
   
@@ -219,7 +219,7 @@
         </div>
         <div class="button-mt-3">
           <button class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-          <button class="btn btn-primary" (click)="nextStep()" [disabled]="!incidentDiscovery">Next</button>
+          <button class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="!incidentDiscovery">Next</button>
         </div>
       </div>
   
@@ -267,7 +267,7 @@
     </div>
     <div class="form-check">
       <input class="form-check-input" type="radio" id="accurateNo" name="accuracy" [(ngModel)]="isAccurate" [value]="false" />
-      <label class="form-check-label" for="accurateNo">No</label>
+      <label class="form-check-label" for="accurateNo">No </label>
     </div>
   </div>
   
@@ -275,7 +275,7 @@
     
     <div class="button-container">
         <button *ngIf="step > 1" class="btn btn-secondary me-2" (click)="previousStep()">Previous</button>
-        <button *ngIf="step < 10" class="btn btn-primary" (click)="nextStep()" [disabled]="!isStepValid()">Next</button>
+        <button *ngIf="step < 10" class="btn btn-primary btn-next" (click)="nextStep()" [disabled]="!isStepValid()">Next</button>
         <button *ngIf="step === 10" class="btn btn-success" (click)="onSubmit()" [disabled]="isAccurate === null">Submit</button>
     </div>
       
