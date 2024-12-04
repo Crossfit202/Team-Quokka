@@ -35,32 +35,49 @@ export class AdminHomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Get the logged-in user from the UserStateService
-    this.loggedInUser = this.userStateService.getUser();
-    console.log('Logged-in user:', this.loggedInUser);
+    const currentUser = this.userStateService.getUser();
 
-    // Fetch reports assigned to the logged-in user
-    if (this.loggedInUser) {
-      this.fetchAssignedReports();
+    if (currentUser) {
+      const statuses = this.getStatusesForView(); // Get statuses based on isReviewMode
+      this.fetchAssignedReports(statuses, currentUser.user_id);
+    } else {
+      console.error('No logged-in user found.');
     }
   }
 
-  fetchAssignedReports(): void {
-  const currentUser = this.userStateService.getUser();
-  const statuses = this.currentView === 'reviewReports' ? 'Under Review' : 'Assigned,In Progress';
+  /**
+   * Helper method to determine the statuses to fetch.
+   * @returns An array of statuses based on the current mode.
+   */
+  getStatusesForView(): string[] {
+    return this.isReviewMode ? ['Under Review'] : ['Assigned', 'In Progress'];
+  }
 
-  this.reportsService.getAssignedReports(currentUser.user_id, statuses).subscribe({
-    next: (reports) => {
-      this.reports = reports;
-    },
-    error: (err) => {
-      console.error('Error fetching assigned reports:', err);
-    },
-  });
-}
+  /**
+   * Fetch reports assigned to the current user with the given statuses.
+   * @param statuses - The report statuses to filter by.
+   * @param userId - The ID of the current logged-in user.
+   */
+  fetchAssignedReports(statuses: string[], userId: number): void {
+    this.reportsService.getAssignedReports(userId, statuses).subscribe({
+      next: (reports) => {
+        this.reports = reports;
+        if (this.reports.length > 0) {
+          this.selectReport(this.reports[0]); // Select the first report by default
+        } else {
+          this.currentReport = null; // Clear the current report if none exist
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching assigned reports:', err);
+      },
+    });
+  }
 
-  
-
+  /**
+   * Select a report to display its details and annotations.
+   * @param report - The report to select.
+   */
   selectReport(report: any) {
     this.currentReport = report;
 
@@ -75,33 +92,29 @@ export class AdminHomeComponent implements OnInit {
     });
   }
 
+  /**
+   * Add an annotation to the current report.
+   */
   addAnnotation() {
+    const currentUser = this.userStateService.getUser();
+
     if (this.newAnnotation.trim() && this.currentReport) {
       const annotationData = {
         annotation_text: this.newAnnotation,
-        userKey: this.loggedInUser?.user_id,
-        reportKey: this.currentReport?.report_id,
+        userKey: currentUser.user_id, // Current user ID
+        reportKey: this.currentReport.report_id, // Selected report ID
       };
-  
+
       this.reportsService.createAnnotation(annotationData).subscribe({
         next: (response) => {
-          console.log('Annotation created:', response);
-          this.currentAnnotations.push(response);
-          this.newAnnotation = ''; // Clear the input
-  
-          // Update the report's status and refresh the current report
+          this.currentAnnotations.push(response); // Add new annotation to UI
+          this.newAnnotation = ''; // Clear the input field
+
+          // Update report status to "In Progress"
           this.reportsService.updateReport(this.currentReport.report_id, { status: 'In Progress' }).subscribe({
             next: () => {
-              console.log('Report status updated to In Progress');
-              // Refresh current report data
-              this.reportsService.getReportById(this.currentReport.report_id).subscribe({
-                next: (updatedReport) => {
-                  this.currentReport = updatedReport; // Refresh the UI with the updated report
-                },
-                error: (err) => {
-                  console.error('Error refreshing report:', err);
-                },
-              });
+              const statuses = this.getStatusesForView();
+              this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh report list
             },
             error: (err) => {
               console.error('Error updating report status:', err);
@@ -110,115 +123,104 @@ export class AdminHomeComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error adding annotation:', err);
-          alert('Failed to add annotation!');
         },
       });
     }
   }
-  
-  
-  
-  invokeLambda() {  
 
-    console.log("lambda has been invoked");
-
-    this.lambdaService.callLambda(this.currentReport.report_id).subscribe(
-      (response) => {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        window.open(url); // Open PDF in a new tab
-      },
-      (error) => {
-        console.error('Error downloading PDF:', error);
-      }
-    );
-  }
-
-  approveReport(reportId: number): void {
-    const currentUser = this.userStateService.getUser();
-  
-    this.reportsService.updateReport(reportId, {
-      status: 'Closed',
-      previous_user: currentUser.user_id,
-      usersUserId: null,
-    }).subscribe({
-      next: () => {
-        alert('Report approved successfully.');
-        // Remove the approved report from the list
-        this.reports = this.reports.filter((report) => report.report_id !== reportId);
-        this.currentReport = null; // Reset current report
-      },
-      error: (err) => {
-        console.error('Error approving report:', err);
-        alert('Failed to approve report.');
-      },
-    });
-  }
-  
-  
-  
-  
-  denyReport(reportId: number): void {
-    this.reportsService.getReportById(reportId).subscribe({
-      next: (report) => {
-        const previousUserId = report.previous_user;
-        if (!previousUserId) {
-          alert('Error: No previous user found for this report.');
-          return;
-        }
-  
-        this.reportsService.updateReport(reportId, {
-          status: 'In Progress',
-          usersUserId: previousUserId,
-          previous_user: null,
-        }).subscribe({
-          next: () => {
-            alert('Report denied and sent back successfully.');
-            // Remove the denied report from the list
-            this.reports = this.reports.filter((r) => r.report_id !== reportId);
-            this.currentReport = null; // Reset the current report
-          },
-          error: (err) => {
-            console.error('Error denying report:', err);
-            alert('Failed to deny report.');
-          },
-        });
-      },
-      error: (err) => {
-        console.error('Error fetching report:', err);
-        alert('Failed to fetch report details.');
-      },
-    });
-  }
-  
-  
-  
-  
-  
-
+  /**
+   * Submit a report for review.
+   * @param reportId - The ID of the report to submit.
+   */
   submitForReview(reportId: number): void {
-    const currentUser = this.userStateService.getUser();
-  
-    this.reportsService.updateReport(reportId, {
-      status: 'Under Review',
-      previous_user: currentUser.user_id,
-    }).subscribe({
-      next: () => {
-        alert('Report submitted for review successfully.');
-        // Remove the submitted report from the list
-        this.reports = this.reports.filter((report) => report.report_id !== reportId);
-        this.currentReport = null; // Reset the current report
+    const currentUser = this.userStateService.getUser(); // Get the logged-in user
+
+    this.reportsService.submitReport(reportId, currentUser.user_id).subscribe({
+        next: () => {
+            alert('Report submitted for review successfully.');
+            const statuses = ['Assigned', 'In Progress'];
+            this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh reports list
+        },
+        error: (err) => {
+            console.error('Error submitting report for review:', err);
+        },
+    });
+}
+
+
+
+
+
+
+
+
+
+
+  /**
+   * Approve a report.
+   * @param reportId - The ID of the report to approve.
+   */
+  approveReport(reportId: number): void {
+    console.log(`Approve button clicked for report ID: ${reportId}`); // Debug log
+    this.reportsService.approveReport(reportId).subscribe({
+        next: () => {
+            alert('Report approved successfully.');
+            const statuses = this.getStatusesForView(); // Get the current statuses for the view
+            const currentUser = this.userStateService.getUser(); // Fetch the logged-in user
+            this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the report list
+        },
+        error: (err) => {
+            console.error('Error approving report:', err);
+        },
+    });
+}
+
+
+
+
+  /**
+ * Invoke the Lambda function to generate a PDF for the current report.
+ */
+
+invokeLambda(): void {
+  if (!this.currentReport) {
+      console.error('No report selected to invoke Lambda.');
+      return;
+  }
+
+  console.log("Lambda invoked for report ID:", this.currentReport.report_id);
+
+  this.lambdaService.callLambda(this.currentReport.report_id).subscribe({
+      next: (response) => {
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          window.open(url); // Open the generated PDF in a new tab
       },
       error: (err) => {
-        console.error('Error submitting report for review:', err);
-        alert('Failed to submit report for review.');
+          console.error('Error invoking Lambda:', err);
       },
+  });
+}
+
+
+  /**
+   * Deny a report and reassign it back to the previous user.
+   * @param reportId - The ID of the report to deny.
+   */
+  denyReport(reportId: number): void {
+    const currentUser = this.userStateService.getUser(); // Get the logged-in admin2 user
+
+    this.reportsService.denyReport(reportId, currentUser.user_id).subscribe({
+        next: () => {
+            alert('Report denied successfully.');
+            const statuses = this.getStatusesForView();
+            this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the list of reports
+        },
+        error: (err) => {
+            console.error('Error denying report:', err);
+        },
     });
-  }
-  
-  
-  
-  
-  
+}
+
 
 }

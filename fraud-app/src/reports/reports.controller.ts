@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { Reports } from 'src/reports/reports';
 
@@ -25,17 +26,15 @@ export class ReportsController {
     return await this.ReportsService.findOne(id);
   }
 
-  // GET all reports assigned to a specific user
   @Get('assigned/:userId')
   async findAssignedReports(
-      @Param('userId') userId: number,
-      @Query('statuses') statuses?: string
+    @Param('userId') userId: number,
+    @Query('statuses') statuses?: string
   ): Promise<Reports[]> {
-      const statusArray = statuses ? statuses.split(',') : ['Assigned', 'In Progress'];
-      return await this.ReportsService.findAssignedReportsByStatuses(userId, statusArray);
+    const statusArray = statuses ? statuses.split(',') : ['Assigned', 'In Progress'];
+    return await this.ReportsService.findAssignedReportsByStatuses(userId, statusArray);
   }
   
-
 
 
   @Get('ticket/:id')
@@ -50,21 +49,36 @@ export class ReportsController {
   }
 
   @Put(':id/submit-for-review')
-  async submitForReview(@Param('id') id: number): Promise<Reports> {
-    const currentUser = 1; // Replace with logic to get the logged-in user ID
-    return await this.ReportsService.submitForReview(id, currentUser);
+async submitForReview(
+    @Param('id') id: number,
+    @Body('userId') userId: number
+): Promise<Reports> {
+    return await this.ReportsService.submitForReview(id, userId);
 }
 
+
+
+
+
+
 @Put(':id/approve')
-async approveReport(@Param('id') id: number): Promise<Reports> {
-  return await this.ReportsService.approveReport(id);
+async approveReport(@Param('id') reportId: number): Promise<Reports> {
+    console.log(`Approve API called for report ID: ${reportId}`); // Debug log
+    return await this.ReportsService.approveReport(reportId);
 }
+
+
+
 
 
 @Put(':id/deny')
-async denyReport(@Param('id') id: number): Promise<Reports> {
-  return await this.ReportsService.denyReport(id);
+async denyReport(
+    @Param('id') reportId: number,
+    @Body('currentUserId') currentUserId: number
+): Promise<Reports> {
+    return await this.ReportsService.denyReport(reportId, currentUserId);
 }
+
 
 
   // DELETE 

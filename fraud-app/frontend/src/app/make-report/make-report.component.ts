@@ -84,7 +84,7 @@ export class MakeReportComponent {
       description: this.incidentDescription, // Maps to "description"
       status: 'Assigned', // Default status for new reports
       priority: 'High', // Default priority, or make it dynamic if needed
-      created_by: 1, // Replace with logged-in user's ID
+      created_by: 0,
       perpetrator: this.peopleInvolved, // Maps to "perpetrator"
       incident_location: this.incidentLocation || this.otherIncidentLocation, // Maps to "incident_location"
       monetary_damage: this.monetaryLoss ? this.monetaryLoss.toString() : '0', // Convert to string for DB
@@ -94,7 +94,6 @@ export class MakeReportComponent {
       discovery_method: this.incidentDiscovery || this.otherIncidentDiscovery, // Maps to "discovery_method"
       created_at: new Date().toISOString(), // Maps to "created_at" as a timestamp
       updated_at: new Date().toISOString(), // Maps to "updated_at" as a timestamp
-      usersUserId: 1, // Replace with the logged-in user's ID, maps to "usersUserId"
       auditLogActionId: null, // If you don't have audit log actions now, set null
       business_name: this.businessName, // Maps to "business_name"
       business_address: this.businessAddress, // Maps to "business_address"
