@@ -4,6 +4,7 @@ import { UserStateService } from '../services/user-state.service'; // Import Use
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LambdaService } from '../lambda.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-admin-home',
@@ -22,24 +23,28 @@ export class AdminHomeComponent implements OnInit {
   loggedInUser: any = null; // Holds logged-in user data
   selectedReport: any | null = null;
   viewMode: any;
+  
 
   constructor(
+    private authService: AuthService,
     private reportsService: ReportsService,
     private userStateService: UserStateService, // Inject UserStateService
     private lambdaService: LambdaService
   ) { }
 
   ngOnInit() {
-    // Fetch logged-in user data
+    // Get the logged-in user from the UserStateService
     this.loggedInUser = this.userStateService.getUser();
     console.log('Logged-in user:', this.loggedInUser);
 
-    // Fetch reports
-    this.fetchReports();
+    // Fetch reports assigned to the logged-in user
+    if (this.loggedInUser) {
+      this.fetchAssignedReports(this.loggedInUser.user_id);
+    }
   }
 
-  fetchReports() {
-    this.reportsService.getReports().subscribe({
+  fetchReports(userId: number) {
+    this.reportsService.getAssignedReports(userId).subscribe({
       next: (data) => {
         this.reports = data;
         if (this.reports.length > 0) {
@@ -51,8 +56,22 @@ export class AdminHomeComponent implements OnInit {
       },
     });
   }
+  fetchAssignedReports(userId: number) {
+    this.reportsService.getAssignedReports(userId).subscribe({
+      next: (data) => {
+        this.reports = data;
+        if (this.reports.length > 0) {
+          this.selectReport(this.reports[0]);
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching assigned reports:', err);
+      },
+    });
+  }
+  
 
-  selectReport(report: any): void {
+  selectReport(report: any) {
     this.currentReport = report;
 
     // Fetch annotations for the selected report
@@ -129,7 +148,7 @@ export class AdminHomeComponent implements OnInit {
       next: (updatedReport) => {
         console.log('Report approved:', updatedReport);
         alert(`Report ${this.currentReport.ticket_number} has been approved.`);
-        this.fetchReports(); // Refresh the report list
+        this.fetchReports(this.loggedInUser.user_id) // Refresh the report list
         this.currentReport = null; // Deselect the current report
       },
       error: (err) => {
@@ -149,7 +168,7 @@ export class AdminHomeComponent implements OnInit {
       next: (updatedReport) => {
         console.log('Report denied:', updatedReport);
         alert(`Report ${this.currentReport.ticket_number} has been denied and reassigned.`);
-        this.fetchReports(); // Refresh the report list
+        this.fetchReports(this.loggedInUser.user_id); // Refresh the report list
         this.currentReport = null; // Deselect the current report
       },
       error: (err) => {
@@ -171,7 +190,7 @@ export class AdminHomeComponent implements OnInit {
       next: (updatedReport) => {
         console.log('Report submitted for review:', updatedReport);
         alert(`Report ${this.currentReport.ticket_number} has been submitted for review.`);
-        this.fetchReports(); // Refresh the report list
+        this.fetchReports(this.loggedInUser.user_id); // Refresh the report list
         this.currentReport = null; // Deselect the current report
       },
       error: (err) => {

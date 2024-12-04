@@ -124,6 +124,15 @@ export class ReportsService {
         return await this.reportRepository.save(report);
     }
 
+    async findAssignedReports(userId: number): Promise<Reports[]> {
+        return await this.reportRepository.find({
+          where: { users: { user_id: userId } },
+          relations: ['users'], // Ensure the relation is loaded
+          order: { priority: 'DESC', created_at: 'ASC' }, // Sort by priority, then creation date
+        });
+      }
+      
+
     async approveReport(reportId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
 

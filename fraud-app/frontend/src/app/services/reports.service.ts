@@ -26,6 +26,12 @@ export class ReportsService {
     return this.http.get<any>(`${this.apiUrl}/${reportId}`);
   }
 
+  // Fetch reports assigned to a specific user
+getAssignedReports(userId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/assigned/${userId}`);
+}
+
+
   // Fetch a report by ticket number
   getReportByTicket(ticketNumber: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/ticket/${ticketNumber}`);

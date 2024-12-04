@@ -25,6 +25,13 @@ export class ReportsController {
     return await this.ReportsService.findOne(id);
   }
 
+  // GET all reports assigned to a specific user
+@Get('assigned/:userId')
+async findAssignedReports(@Param('userId') userId: number): Promise<Reports[]> {
+  return await this.ReportsService.findAssignedReports(userId);
+}
+
+
   @Get('ticket/:id')
   async findOneByTicket(@Param('id') id: string): Promise<Reports> {
     return await this.ReportsService.findOneByTicket(id);
