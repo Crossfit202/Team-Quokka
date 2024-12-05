@@ -59,21 +59,6 @@ export class AdminHomeComponent implements OnInit {
    * @param statuses - The report statuses to filter by.
    * @param userId - The ID of the current logged-in user.
    */
-  // fetchAssignedReports(statuses: string[], userId: number): void {
-  //   this.reportsService.getAssignedReports(userId, statuses).subscribe({
-  //     next: (reports) => {
-  //       this.reports = reports;
-  //       if (this.reports.length > 0) {
-  //         this.selectReport(this.reports[0]); // Select the first report by default
-  //       } else {
-  //         this.currentReport = null; // Clear the current report if none exist
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Error fetching assigned reports:', err);
-  //     },
-  //   });
-  // }
 
   fetchAssignedReports(statuses: string[], userId: number): void {
     this.reportsService.getAssignedReports(userId, statuses).subscribe({
