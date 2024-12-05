@@ -111,38 +111,49 @@ export class AdminHomeComponent implements OnInit {
   /**
    * Add an annotation to the current report.
    */
-  addAnnotation() {
-    const currentUser = this.userStateService.getUser();
-
+  addAnnotation(): void {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}'); // Get the logged-in user
+    const userId = loggedInUser.user_id; // Extract user ID
+  
     if (this.newAnnotation.trim() && this.currentReport) {
-      const annotationData = {
-        annotation_text: this.newAnnotation,
-        userKey: currentUser.user_id, // Current user ID
-        reportKey: this.currentReport.report_id, // Selected report ID
-      };
+        const annotationData = {
+            annotation_text: this.newAnnotation.trim(), // Ensure the text is trimmed
+            userKey: userId, // Pass the user ID
+            reportKey: this.currentReport.report_id, // Pass the report ID
+        };
 
-      this.reportsService.createAnnotation(annotationData).subscribe({
-        next: (response) => {
-          this.currentAnnotations.push(response); // Add new annotation to UI
-          this.newAnnotation = ''; // Clear the input field
+        console.log('Creating annotation with data:', annotationData); // Debug log
 
-          // Update report status to "In Progress"
-          this.reportsService.updateReport(this.currentReport.report_id, { status: 'In Progress' }).subscribe({
-            next: () => {
-              const statuses = this.getStatusesForView();
-              this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh report list
+        this.reportsService.createAnnotation(annotationData).subscribe({
+            next: (response) => {
+                console.log('Annotation created:', response);
+                this.currentAnnotations.push(response); // Add new annotation to the UI
+                this.newAnnotation = ''; // Clear the input field
+
+                if (this.currentReport.status === 'Assigned') {
+                    const updatedStatus = { status: 'In Progress' };
+                    this.reportsService.updateReport(this.currentReport.report_id, updatedStatus).subscribe({
+                        next: () => {
+                            console.log('Report status updated to In Progress');
+                            this.currentReport.status = 'In Progress'; // Update local status
+                        },
+                        error: (err) => {
+                            console.error('Error updating report status:', err);
+                        },
+                    });
+                }
             },
             error: (err) => {
-              console.error('Error updating report status:', err);
+                console.error('Error adding annotation:', err);
+                alert('Failed to add annotation!');
             },
-          });
-        },
-        error: (err) => {
-          console.error('Error adding annotation:', err);
-        },
-      });
+        });
+    } else {
+        console.error('Invalid annotation data. Ensure all fields are provided.');
     }
-  }
+}
+
+
 
   /**
    * Submit a report for review.
