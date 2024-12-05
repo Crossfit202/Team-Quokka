@@ -136,15 +136,16 @@ export class AdminHomeComponent implements OnInit {
     const currentUser = this.userStateService.getUser(); // Get the logged-in user
 
     this.reportsService.submitReport(reportId, currentUser.user_id).subscribe({
-        next: () => {
-            alert('Report submitted for review successfully.');
-            const statuses = ['Assigned', 'In Progress'];
-            this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh reports list
-        },
-        error: (err) => {
-            console.error('Error submitting report for review:', err);
-        },
-    });
+      next: () => {
+          alert('Report submitted for review successfully.');
+          const statuses = ['Assigned', 'In Progress'];
+          this.fetchAssignedReports(statuses, currentUser.user_id);
+      },
+      error: (err) => {
+          console.error('Error submitting report for review:', err);
+      },
+  });
+  
 }
 
 

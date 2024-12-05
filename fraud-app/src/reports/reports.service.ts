@@ -62,14 +62,17 @@ export class ReportsService {
         return await this.reportRepository.find();
     }
 
-    // READ ONE REPORT BY ID
     async findOne(id: number): Promise<Reports> {
-        const report = await this.reportRepository.findOne({ where: { report_id: id } });
+        const report = await this.reportRepository.findOne({
+            where: { report_id: id },
+            relations: ['users'], // Ensure the users relation is loaded
+        });
         if (!report) {
             throw new NotFoundException(`Report with ID ${id} not found`);
         }
         return report;
     }
+    
 
     // READ ONE REPORT BY TICKET NUMBER
     async findOneByTicket(id: string): Promise<Reports> {
@@ -173,28 +176,29 @@ export class ReportsService {
     async denyReport(reportId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
     
-        if (!report) {
-            throw new Error(`Report with ID ${reportId} not found`);
-        }
-    
-        // Reassign the report back to the previous user
         if (!report.previous_user) {
-            throw new Error(`Cannot deny report: No previous user found.`);
+            throw new Error('Cannot deny report: No previous user found.');
         }
     
         const previousUser = await this.userRepository.findOne({ where: { user_id: report.previous_user } });
-    
         if (!previousUser) {
-            throw new Error(`Previous user with ID ${report.previous_user} not found`);
+            throw new Error(`Previous user with ID ${report.previous_user} not found.`);
         }
     
-        report.users = previousUser;
-        report.previous_user = null; // Clear previous_user after reassignment
-        report.status = 'In Progress';
-        report.updated_at = new Date();
+        // Store the current user in previous_user
+        const currentUser = report.users; // Current assigned user
+        if (!currentUser) {
+            throw new Error('Cannot deny report: No current user assigned.');
+        }
+    
+        report.previous_user = currentUser.user_id; // Set the current user as the previous user
+        report.users = previousUser; // Assign the report back to the previous user
+        report.status = 'In Progress'; // Update the status
+        report.updated_at = new Date(); // Update the timestamp
     
         return await this.reportRepository.save(report);
     }
+    
     
 
 
