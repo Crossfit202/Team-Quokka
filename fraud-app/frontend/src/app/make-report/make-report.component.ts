@@ -42,7 +42,7 @@ export class MakeReportComponent {
   suspectName: string = ''; // Tracks the suspect's name
   totalSteps = 10; // Update this value to match the total number of steps
 
-  
+
 
   isStepValid(): boolean {
     switch (this.step) {
@@ -68,7 +68,7 @@ export class MakeReportComponent {
         return false;
     }
   }
-  
+
 
   constructor(private reportsService: ReportsService) { }
 
@@ -83,7 +83,7 @@ export class MakeReportComponent {
       report_type: this.crimeType, // Maps to "report_type" in DB
       description: this.incidentDescription, // Maps to "description"
       status: 'Assigned', // Default status for new reports
-      priority: 'High', // Default priority, or make it dynamic if needed
+      priority: riskDetails.category, // Default priority, or make it dynamic if needed
       created_by: 0,
       perpetrator: this.peopleInvolved, // Maps to "perpetrator"
       incident_location: this.incidentLocation || this.otherIncidentLocation, // Maps to "incident_location"
@@ -173,13 +173,13 @@ export class MakeReportComponent {
       this.step++; // Increment the step to move to the next one
     }
   }
-  
+
   previousStep() {
     if (this.step > 1) {
       this.step--; // Decrement the step to move to the previous one
     }
   }
-  
+
 
   toggleOtherCrime() {
     if (this.isUnknownCrime) {
