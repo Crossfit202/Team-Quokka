@@ -107,7 +107,7 @@ export class MakeReportComponent {
     // Show confirmation screen
     this.isSubmitted = true;
 
-    // Send reportData to backend using a service (uncomment and implement this part)
+    // Send reportData to backend using a service
     this.reportsService.create(reportData).subscribe(
       (response) => {
         console.log('Report created successfully:', response);
