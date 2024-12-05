@@ -4,9 +4,10 @@
 
   <!-- Left Card: Reports List -->
   <div class="reports-list-card">
-    <h4>Assigned Reports</h4>
+    <h4 *ngIf="isReviewMode">Review Reports</h4>
+    <h4 *ngIf="isReviewMode !== true">Assigned Reports</h4>
     <ul>
-      <li *ngFor="let report of reports" (click)="selectReport(report)"
+      <li *ngFor=" let report of reports" (click)="selectReport(report)"
         [class.selected]="currentReport?.report_id === report.report_id">
         <p><strong>Ticket:</strong> {{ report.ticket_number }}</p>
         <p><strong>Priority:</strong> {{ report.priority }}</p>
@@ -21,7 +22,7 @@
     <div class="current-header-container">
       <h4>Current Report</h4>
       <div class="action-buttons">
-        <button (click)= "invokeLambda()">PDF <i class="fas fa-file-pdf"></i></button>
+        <button (click)="invokeLambda()">PDF <i class="fas fa-file-pdf"></i></button>
       </div>
 
     </div>
@@ -43,16 +44,19 @@
       <p><strong>Discovery Method:</strong> {{ currentReport?.discovery_method || 'N/A' }}</p>
       <p><strong>Status:</strong> {{ currentReport?.status || 'N/A' }}</p>
       <p><strong>Priority:</strong> {{ currentReport?.priority || 'N/A' }}</p>
-      <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport.created_at | date: 'short') : 'N/A' }}
+      <p><strong>Created At:</strong> {{ currentReport?.created_at ? (currentReport.created_at | date: 'short') : 'N/A'
+        }}
       </p>
-      <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A' }}
+      <p><strong>Updated At:</strong> {{ currentReport?.updated_at ? (currentReport.updated_at | date: 'short') : 'N/A'
+        }}
       </p>
 
 
     </div>
     <div class="action-buttons">
       <div *ngIf="isReviewMode !== true" class="action-buttons">
-        <button class="btn btn-submit" (click)="submitForReview(this.currentReport.report_id)">Submit for Review</button>
+        <button class="btn btn-submit" (click)="submitForReview(this.currentReport.report_id)">Submit for
+          Review</button>
       </div>
       <div *ngIf="isReviewMode" class="action-buttons">
         <button class="btn btn-approve" (click)="approveReport(this.currentReport.report_id)">Approve</button>
@@ -61,19 +65,18 @@
     </div>
   </div>
 
-<!-- Right Bottom Card: Annotations -->
-<div class="annotations-card fade-in">
-  <h4>Annotations</h4>
-  <ul class="annotations-list">
-    <li *ngFor="let annotation of currentAnnotations">
-      <p>{{ annotation.annotation_text }}</p>
-      <small>{{ annotation.created_at | date: 'short' }}</small>
-      <hr class="divider" />
-    </li>
-  </ul>
-  <div class="input-container">
-    <textarea [(ngModel)]="newAnnotation" placeholder="Add your annotation"></textarea>
-    <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
+  <!-- Right Bottom Card: Annotations -->
+  <div class="annotations-card fade-in">
+    <h4>Annotations</h4>
+    <ul class="annotations-list">
+      <li *ngFor="let annotation of currentAnnotations">
+        <p>{{ annotation.annotation_text }}</p>
+        <small>{{ annotation.created_at | date: 'short' }}</small>
+        <hr class="divider" />
+      </li>
+    </ul>
+    <div class="input-container">
+      <textarea [(ngModel)]="newAnnotation" placeholder="Add your annotation"></textarea>
+      <button class="btn btn-primary" (click)="addAnnotation()">Add Annotation</button>
+    </div>
   </div>
-</div>
-
