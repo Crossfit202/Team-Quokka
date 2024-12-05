@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-app-backend
+  namespace: quokka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fraud-app-backend
+  template:
+    metadata:
+      labels:
+        app: fraud-app-backend
+    spec:
+      containers:
+      - name: fraud-app-backend
+        image: ghcr.io/basswinston/image-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-app-frontend
+  namespace: quokka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fraud-app-frontend
+  template:
+    metadata:
+      labels:
+        app: fraud-app-frontend
+    spec:
+      containers:
+      - name: fraud-app-frontend
+        image: ghcr.io/basswinston/image-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4200
+
