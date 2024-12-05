@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-app
+  namespace: quokka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fraud-app
+  template:
+    metadata:
+      labels:
+        app: fraud-app
+    spec:
+      containers:
+      - name: fraud-app-backend
+        image: public.ecr.aws/c9v9k6j8/quokka/backend
+        ports:
+        - containerPort: 3000
+
