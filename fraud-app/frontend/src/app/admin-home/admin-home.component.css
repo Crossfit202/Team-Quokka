@@ -7,7 +7,7 @@
   grid-template-rows: 1fr 1fr; /* Two rows for the right section */
   gap: 20px;
   min-height: 100vh;
-  padding: 20px;
+  padding: 100px 20px 20px 20px;
   background-color: #081E26;
   color: #FFFFFF;
   background: linear-gradient(135deg, #081E26, #0C3B4D);
@@ -44,7 +44,7 @@
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 40px); /* Full height with padding considered */
+  height: calc(100vh - 120px); /* Full height with padding considered */
 }
 
 /* Reports List Title */
@@ -118,7 +118,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  height: calc((100vh - 60px) / 2); /* Matches left card height */
+  height: calc((100vh - 140px) / 2); /* Matches left card height */
 }
 
 /* Divider Styling */
@@ -197,7 +197,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Keeps the input box at the bottom */
-  height: calc((100vh - 60px) / 2); /* Matches the height of the other right card */
+  height: calc((100vh - 140px) / 2); /* Matches the height of the other right card */
   overflow: hidden; /* Prevent card overflow */
 }
 
@@ -269,7 +269,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Keeps the input box at the bottom */
-  height: calc((100vh - 60px) / 2); /* Matches the height of the other right card */
+  height: calc((100vh - 140px) / 2); /* Matches the height of the other right card */
   overflow: hidden; /* Prevent content overflow */
 }
 
