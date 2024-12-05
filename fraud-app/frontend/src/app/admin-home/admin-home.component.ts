@@ -26,7 +26,7 @@ export class AdminHomeComponent implements OnInit {
   viewMode: any;
   currentView: string = 'assignedReports'; // Default view, adjust as necessary
 
-  
+
 
   constructor(
     private authService: AuthService,
@@ -59,10 +59,38 @@ export class AdminHomeComponent implements OnInit {
    * @param statuses - The report statuses to filter by.
    * @param userId - The ID of the current logged-in user.
    */
+  // fetchAssignedReports(statuses: string[], userId: number): void {
+  //   this.reportsService.getAssignedReports(userId, statuses).subscribe({
+  //     next: (reports) => {
+  //       this.reports = reports;
+  //       if (this.reports.length > 0) {
+  //         this.selectReport(this.reports[0]); // Select the first report by default
+  //       } else {
+  //         this.currentReport = null; // Clear the current report if none exist
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching assigned reports:', err);
+  //     },
+  //   });
+  // }
+
   fetchAssignedReports(statuses: string[], userId: number): void {
     this.reportsService.getAssignedReports(userId, statuses).subscribe({
       next: (reports) => {
-        this.reports = reports;
+        // Sort reports by priority: High -> Medium -> Low
+        const priorityOrder: Record<string, number> = {
+          High: 1,
+          Medium: 2,
+          Low: 3,
+        };
+
+        this.reports = reports.sort((a, b) => {
+          const priorityA = priorityOrder[a.priority as keyof typeof priorityOrder] || 4;
+          const priorityB = priorityOrder[b.priority as keyof typeof priorityOrder] || 4;
+          return priorityA - priorityB;
+        });
+
         if (this.reports.length > 0) {
           this.selectReport(this.reports[0]); // Select the first report by default
         } else {
@@ -74,6 +102,8 @@ export class AdminHomeComponent implements OnInit {
       },
     });
   }
+
+
 
   /**
    * Select a report to display its details and annotations.
@@ -138,16 +168,16 @@ export class AdminHomeComponent implements OnInit {
 
     this.reportsService.submitReport(reportId, currentUser.user_id).subscribe({
       next: () => {
-          alert('Report submitted for review successfully.');
-          const statuses = ['Assigned', 'In Progress'];
-          this.fetchAssignedReports(statuses, currentUser.user_id);
+        alert('Report submitted for review successfully.');
+        const statuses = ['Assigned', 'In Progress'];
+        this.fetchAssignedReports(statuses, currentUser.user_id);
       },
       error: (err) => {
-          console.error('Error submitting report for review:', err);
+        console.error('Error submitting report for review:', err);
       },
-  });
-  
-}
+    });
+
+  }
 
 
 
@@ -165,17 +195,17 @@ export class AdminHomeComponent implements OnInit {
   approveReport(reportId: number): void {
     console.log(`Approve button clicked for report ID: ${reportId}`); // Debug log
     this.reportsService.approveReport(reportId).subscribe({
-        next: () => {
-            alert('Report approved successfully.');
-            const statuses = this.getStatusesForView(); // Get the current statuses for the view
-            const currentUser = this.userStateService.getUser(); // Fetch the logged-in user
-            this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the report list
-        },
-        error: (err) => {
-            console.error('Error approving report:', err);
-        },
+      next: () => {
+        alert('Report approved successfully.');
+        const statuses = this.getStatusesForView(); // Get the current statuses for the view
+        const currentUser = this.userStateService.getUser(); // Fetch the logged-in user
+        this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the report list
+      },
+      error: (err) => {
+        console.error('Error approving report:', err);
+      },
     });
-}
+  }
 
 
 
@@ -184,25 +214,25 @@ export class AdminHomeComponent implements OnInit {
  * Invoke the Lambda function to generate a PDF for the current report.
  */
 
-invokeLambda(): void {
-  if (!this.currentReport) {
+  invokeLambda(): void {
+    if (!this.currentReport) {
       console.error('No report selected to invoke Lambda.');
       return;
-  }
+    }
 
-  console.log("Lambda invoked for report ID:", this.currentReport.report_id);
+    console.log("Lambda invoked for report ID:", this.currentReport.report_id);
 
-  this.lambdaService.callLambda(this.currentReport.report_id).subscribe({
+    this.lambdaService.callLambda(this.currentReport.report_id).subscribe({
       next: (response) => {
-          const blob = new Blob([response], { type: 'application/pdf' });
-          const url = window.URL.createObjectURL(blob);
-          window.open(url); // Open the generated PDF in a new tab
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url); // Open the generated PDF in a new tab
       },
       error: (err) => {
-          console.error('Error invoking Lambda:', err);
+        console.error('Error invoking Lambda:', err);
       },
-  });
-}
+    });
+  }
 
 
   /**
@@ -213,16 +243,16 @@ invokeLambda(): void {
     const currentUser = this.userStateService.getUser(); // Get the logged-in admin2 user
 
     this.reportsService.denyReport(reportId, currentUser.user_id).subscribe({
-        next: () => {
-            alert('Report denied successfully.');
-            const statuses = this.getStatusesForView();
-            this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the list of reports
-        },
-        error: (err) => {
-            console.error('Error denying report:', err);
-        },
+      next: () => {
+        alert('Report denied successfully.');
+        const statuses = this.getStatusesForView();
+        this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the list of reports
+      },
+      error: (err) => {
+        console.error('Error denying report:', err);
+      },
     });
-}
+  }
 
 
 }
