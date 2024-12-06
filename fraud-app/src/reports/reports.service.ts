@@ -99,6 +99,7 @@ export class ReportsService {
         await this.reportRepository.remove(report);
     }
 
+    //Get reports assigned to user with specific statuses
     async findAssignedReportsByStatuses(userId: number, statuses: string[]): Promise<Reports[]> {
         return await this.reportRepository.createQueryBuilder('report')
             .where('report.usersUserId = :userId', { userId })
@@ -107,6 +108,7 @@ export class ReportsService {
     }
 
 
+    //Submitting the form 
     async submitForReview(reportId: number, userId: number): Promise<Reports> {
         const report = await this.findOne(reportId);
 

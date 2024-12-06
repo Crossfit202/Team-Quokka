@@ -26,14 +26,12 @@ export class ReportsService {
     return this.http.get<any>(`${this.apiUrl}/${reportId}`);
   }
 
+  //Fetch all reports assigned to a specific User
   getAssignedReports(userId: number, statuses: string[]): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/assigned/${userId}`, {
       params: { statuses: statuses.join(',') },
     });
   }
-  
-
-
 
   // Fetch a report by ticket number
   getReportByTicket(ticketNumber: string): Observable<any> {
@@ -66,21 +64,21 @@ export class ReportsService {
   }
 
   // Submit for Review
-submitReport(reportId: number, userId: number): Observable<any> {
-  return this.http.put<any>(`${this.apiUrl}/${reportId}/submit-for-review`, { userId });
-}
+  submitReport(reportId: number, userId: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${reportId}/submit-for-review`, { userId });
+  }
 
 
-approveReport(reportId: number): Observable<any> {
-  console.log(`Sending approve request for report ID: ${reportId}`); // Debug log
-  return this.http.put<any>(`${this.apiUrl}/${reportId}/approve`, {});
-}
+  approveReport(reportId: number): Observable<any> {
+    console.log(`Sending approve request for report ID: ${reportId}`); // Debug log
+    return this.http.put<any>(`${this.apiUrl}/${reportId}/approve`, {});
+  }
 
 
 
-denyReport(reportId: number, currentUserId: number): Observable<any> {
-  return this.http.put<any>(`${this.apiUrl}/${reportId}/deny`, { currentUserId });
-}
+  denyReport(reportId: number, currentUserId: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${reportId}/deny`, { currentUserId });
+  }
 
 
 

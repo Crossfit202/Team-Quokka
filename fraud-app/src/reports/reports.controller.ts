@@ -25,17 +25,20 @@ export class ReportsController {
     return await this.ReportsService.findOne(id);
   }
 
+  //GET reports assigned to userID
   @Get('assigned/:userId')
   async findAssignedReports(
     @Param('userId') userId: number,
     @Query('statuses') statuses?: string
   ): Promise<Reports[]> {
+    //Only getting reports with "assigned" and "In Progress" statuses.
     const statusArray = statuses ? statuses.split(',') : ['Assigned', 'In Progress'];
     return await this.ReportsService.findAssignedReportsByStatuses(userId, statusArray);
   }
-  
 
 
+
+  //GET report by ticket number
   @Get('ticket/:id')
   async findOneByTicket(@Param('id') id: string): Promise<Reports> {
     return await this.ReportsService.findOneByTicket(id);
@@ -48,35 +51,35 @@ export class ReportsController {
   }
 
   @Put(':id/submit-for-review')
-async submitForReview(
+  async submitForReview(
     @Param('id') id: number,
     @Body('userId') userId: number
-): Promise<Reports> {
+  ): Promise<Reports> {
     return await this.ReportsService.submitForReview(id, userId);
-}
+  }
 
 
 
 
 
 
-@Put(':id/approve')
-async approveReport(@Param('id') reportId: number): Promise<Reports> {
+  @Put(':id/approve')
+  async approveReport(@Param('id') reportId: number): Promise<Reports> {
     console.log(`Approve API called for report ID: ${reportId}`); // Debug log
     return await this.ReportsService.approveReport(reportId);
-}
+  }
 
 
 
 
 
-@Put(':id/deny')
-async denyReport(
+  @Put(':id/deny')
+  async denyReport(
     @Param('id') reportId: number,
     @Body('currentUserId') currentUserId: number
-): Promise<Reports> {
+  ): Promise<Reports> {
     return await this.ReportsService.denyReport(reportId);
-}
+  }
 
 
 
