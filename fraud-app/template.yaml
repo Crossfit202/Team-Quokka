@@ -27,7 +27,7 @@ Parameters:
   # Name of the S3 Bucket where report PDFs are stored
   PDFBucket:
     Type: String
-    Default: "quokka-pdf-bucket"
+    Default: "quokka-pdf"
     Description: Name of the S3 Bucket
   
   
