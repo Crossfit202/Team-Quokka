@@ -41,9 +41,9 @@ import { config } from 'process';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        ssl: {
-          rejectUnauthorized: false, // For environments with SSL
-        },
+        // ssl: {
+        //   rejectUnauthorized: false, // For environments with SSL
+        // },
         autoLoadEntities: true, // Automatically load entities
         entities: [Audit_log, Report_annotations, Report_status_history, Reports, Users], // List of entities
         synchronize: true, // Synchronize database schema (development only)
