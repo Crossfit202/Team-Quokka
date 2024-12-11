@@ -1,0 +1,194 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM for MEAN Project
+Parameters:
+  StackName:
+    Type: String
+    Default: quokka-stack
+    Description: Name of the stack to create
+  ReportBucket:
+    Type: String
+    Default: quokka-submitted-reports
+    Description: Name of the S3 Bucket
+  SusReportsBucket:
+    Type: String
+    Default: quokka-sus-reports
+    Description: Name of the S3 Bucket
+  PDFBucket:
+    Type: String
+    Default: quokka-pdf
+    Description: Name of the S3 Bucket
+  LambdaRoleName:
+    Type: String
+    Default: quokka-lambda-role
+    Description: Name of the Lambda Execution Role
+  CheckSusLambdaName:
+    Type: String
+    Default: quokka-check-sus
+    Description: Name of the Lambda
+  GenerateReportPDFLambdaName:
+    Type: String
+    Default: quokka-generate-report-pdf
+    Description: Name of the Lambda
+  SubmitReportLambdaName:
+    Type: String
+    Default: quokka-submit-report
+    Description: Name of the Lambda
+  ApiGatewayName:
+    Type: String
+    Default: quokka-api
+    Description: Name of the API Gateway
+  SubmitReportEvent:
+    Type: String
+    Default: quokka-submit-report-event
+    Description: Name of the event to trigger SubmitReport
+Resources:
+  QuokkaAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name:
+        Ref: ApiGatewayName
+      StageName: Prod
+  ReportBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Ref: ReportBucket
+      VersioningConfiguration:
+        Status: Disabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+  SusReportsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Ref: SusReportsBucket
+      VersioningConfiguration:
+        Status: Disabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+  PDFBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Ref: PDFBucket
+      VersioningConfiguration:
+        Status: Disabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Ref: LambdaRoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+      - PolicyName: Quokka-S3AccessPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:ListBucket
+            - s3:GetObject
+            Resource:
+            - Fn::Sub: '{bucket.Arn}'
+            - Fn::Sub: '{bucket.Arn}/*'
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  CheckSusLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Ref: CheckSusLambdaName
+      CodeUri: CheckSusLambdaFunction
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+      Events:
+        S3TriggerEvent:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: ReportBucket
+            Events: s3:ObjectCreated:*
+    Metadata:
+      SamResourceId: CheckSusLambdaFunction
+  GenerateReportLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Ref: GenerateReportLambdaName
+      CodeUri: GenerateReportLambdaFunction
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+      Events:
+        APIGatewayTriggerEvent:
+          Type: Api
+          Properties:
+            Path: /Generate-Report
+            Method: POST
+            RestApiId:
+              Ref: QuokkaAPI
+    Metadata:
+      SamResourceId: GenerateReportLambdaFunction
+  SubmitReportLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Ref: SubmitReportLambdaName
+      CodeUri: SubmitReportLambdaFunction
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+      Events:
+        EventBridgeTriggerEvent:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              Name:
+                Ref: SubmitReportEvent
+              EventPattern:
+                detail:
+                  table:
+                  - reports
+                  operation:
+                  - INSERT
+    Metadata:
+      SamResourceId: SubmitReportLambdaFunction

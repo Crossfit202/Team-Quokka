@@ -1,0 +1,240 @@
+AWSTemplateFormatVersion: "2010-09-09" 
+Transform: AWS::Serverless-2016-10-31 #identifies as SAM template file
+Description: AWS SAM for MEAN Project
+
+Parameters:
+  # Parameter for the stack name
+  StackName:
+    Type: String
+    Default: "quokka-stack"
+    Description: Name of the stack to create
+
+
+  # Name of the S3 Bucket for report storage
+  ReportBucket:
+    Type: String
+    Default: "quokka-submitted-reports"
+    Description: Name of the S3 Bucket
+  
+
+  # Name of the S3 Bucket for suspicious reports
+  SusReportsBucket:
+    Type: String
+    Default: "quokka-sus-reports"
+    Description: Name of the S3 Bucket
+
+
+  # Name of the S3 Bucket where report PDFs are stored
+  PDFBucket:
+    Type: String
+    Default: "quokka-pdf"
+    Description: Name of the S3 Bucket
+  
+  
+  # Name of the Lambda Execution Role
+  LambdaRoleName:
+    Type: String
+    Default: "quokka-lambda-role"
+    Description: Name of the Lambda Execution Role
+
+
+  # Name of the Lambda for checking for suspicious material
+  CheckSusLambdaName:
+    Type: String
+    Default: "quokka-check-sus"
+    Description: Name of the Lambda
+
+
+  # Name of the Lambda for generating a report
+  GenerateReportPDFLambdaName:
+    Type: String
+    Default: "quokka-generate-report-pdf"
+    Description: Name of the Lambda
+  
+
+  # Name of Lambda for submitting a report
+  SubmitReportLambdaName:
+    Type: String
+    Default: "quokka-submit-report"
+    Description: Name of the Lambda
+
+
+  # Name of the API Gateway
+  ApiGatewayName:
+    Type: String
+    Default: "quokka-api"
+    Description: Name of the API Gateway
+  
+
+  # Name of the event to trigger SubmitReport
+  SubmitReportEvent:
+    Type: String
+    Default: "quokka-submit-report-event"
+    Description: Name of the event to trigger SubmitReport
+
+
+Resources:
+
+  # API Gateway with path /Generate-Report and a post method
+  QuokkaAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name:
+        !Ref ApiGatewayName
+      StageName: Prod
+    # If API trigger doesn't work on Generate Report Lambda, may need to add manually
+
+
+  # S3 Bucket for the reports
+  ReportBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        !Ref ReportBucket
+      VersioningConfiguration:
+        Status: Disabled
+      # Make the bucket open to the internet
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+
+  # S3 Bucket for Reports quarantined by CheckSusLambda
+  SusReportsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref SusReportsBucket
+      VersioningConfiguration:
+        Status: Disabled
+      # Make the bucket open to the internet
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+  
+
+  # S3 Bucket for the generated PDFs
+  PDFBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Ref PDFBucket
+      VersioningConfiguration:
+        Status: Disabled
+      # Make the bucket open to the internet
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+
+  # Lambda Execution Role
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        !Ref LambdaRoleName
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        # Add S3AccessPolicy
+        - PolicyName: Quokka-S3AccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                  - s3:GetObject
+                Resource:
+                  - !Sub "{bucket.Arn}"
+                  - !Sub "{bucket.Arn}/*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+
+  # Lambda for checking for suspicous material in reports
+  CheckSusLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        !Ref CheckSusLambdaName
+      CodeUri: lambda/checksus/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
+      Events:
+        # Add S3TriggerEvent
+        S3TriggerEvent:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: ReportBucket
+            Events: s3:ObjectCreated:*
+
+
+  # Lambda for generating a report pdf
+  GenerateReportLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        !Ref GenerateReportLambdaName
+      CodeUri: lambda/generatereport/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
+      Events:
+        # Add APIGatewayTriggerEvent
+        APIGatewayTriggerEvent:
+          Type: Api
+          Properties:
+            Path: /Generate-Report
+            Method: POST
+            RestApiId: !Ref QuokkaAPI
+
+
+  # Lambda for submitting a report. Triggered by Eventbridge
+  SubmitReportLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref SubmitReportLambdaName
+      CodeUri: lambda/submitreport/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
+      Events:
+        # Add EventBridgeTriggerEvent
+        EventBridgeTriggerEvent:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              Name: !Ref SubmitReportEvent
+              EventPattern: {"detail": {"table": ["reports"],"operation": ["INSERT"]}}
