@@ -7,24 +7,24 @@ architecture = "x86_64"
 handler = "app.lambdaHandler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["CheckSusLambdaFunction"]
+functions = ["QuokkaDetectSusFunction"]
 
-[function_build_definitions.b0dad119-9961-4702-a916-fedda8d5723c]
-codeuri = "/Users/laurendudgeon/Team-Quokka/fraud-app/lambda/generatereport"
-runtime = "nodejs20.x"
-architecture = "x86_64"
-handler = "app.lambdaHandler"
-manifest_hash = ""
-packagetype = "Zip"
-functions = ["GenerateReportLambdaFunction"]
-
-[function_build_definitions.8b3582d3-5459-4cb1-a347-dd1cea9ddf9d]
+[function_build_definitions.395d887b-de77-4162-8ac2-84453f2e940f]
 codeuri = "/Users/laurendudgeon/Team-Quokka/fraud-app/lambda/submitreport"
 runtime = "nodejs20.x"
 architecture = "x86_64"
-handler = "app.lambdaHandler"
+handler = "index.handler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["SubmitReportLambdaFunction"]
+functions = ["QuokkaSubmitReportFunction"]
+
+[function_build_definitions.350e4f63-6a58-4a08-ad15-b68094528e86]
+codeuri = "/Users/laurendudgeon/Team-Quokka/fraud-app/lambda/generatereport"
+runtime = "nodejs20.x"
+architecture = "x86_64"
+handler = "index.handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["QuokkaReportToPDFFunction"]
 
 [layer_build_definitions]
