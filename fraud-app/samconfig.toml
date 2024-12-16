@@ -1,0 +1,10 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "sam-app"
+resolve_s3 = true
+s3_prefix = "sam-app"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "StackName=\"quokka-stack\" ReportBucket=\"quokka-submitted-reports\" SusReportsBucket=\"quokka-sus-reports\" PDFBucket=\"quokka-pdf\" LambdaRoleName=\"quokka-lambda-role\" CheckSusLambdaName=\"quokka-check-sus\" GenerateReportPDFLambdaName=\"quokka-generate-report-pdf\" SubmitReportLambdaName=\"quokka-submit-report\" ApiGatewayName=\"quokka-api\" SubmitReportEvent=\"quokka-submit-report-event\""
+image_repositories = []
