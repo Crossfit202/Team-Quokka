@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ReportsService {
-  private apiUrl = 'https://PangolinLoadBalancer-943882191.us-east-1.elb.amazonaws.com/reports'; // Base URL for reports
-  private annotationsUrl = 'https://PangolinLoadBalancer-943882191.us-east-1.elb.amazonaws.com/annotations'; // Base URL for annotations
+  private apiUrl = 'https://api.skillsolving.ai/reports'; // Base URL for reports
+  private annotationsUrl = 'https://api.skillsolving.ai/annotations'; // Base URL for annotations
 
   constructor(private http: HttpClient) { }
 
