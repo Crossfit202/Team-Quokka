@@ -6,10 +6,9 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class AuthService {
-    // private apiUrl = 'https://PangolinLoadBalancer-943882191.us-east-1.elb.amazonaws.com/auth'; // Backend base URL
+    private apiUrl = 'https://PangolinLoadBalancer-943882191.us-east-1.elb.amazonaws.com/auth'; // Backend base URL
 
-    private apiUrl = 'http://52.201.241.157:3000/auth'; // Backend base URL
-    //testing ci/cd pipeline... again....again
+
 
     constructor(private http: HttpClient) { }
 
