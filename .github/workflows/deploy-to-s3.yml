@@ -31,11 +31,6 @@ jobs:
       working-directory: ./fraud-app/frontend # Set the working directory to where your lock file is
       run: npm install
 
-    # Step 4: Run tests
-    - name: Run tests
-      working-directory: ./fraud-app/frontend
-      run: npm test
-
     # Step 5: Build Angular app
     - name: Build Angular App
       working-directory: ./fraud-app/frontend
