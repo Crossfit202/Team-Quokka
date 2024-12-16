@@ -39,7 +39,7 @@ jobs:
 
     # Step 6: Deploy to S3
     - name: Deploy to S3
-      uses: jakejarvis/s3-sync-action@v0.6.0
+      uses: jakejarvis/s3-sync-action@v0.5.1
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
