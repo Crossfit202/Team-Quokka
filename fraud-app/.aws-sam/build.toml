@@ -27,4 +27,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["QuokkaReportToPDFFunction"]
 
+[function_build_definitions.a6377072-7f4e-4b7d-9744-6cb18a80f89e]
+codeuri = "/Users/laurendudgeon/Team-Quokka/fraud-app/lambda/sns"
+runtime = "nodejs20.x"
+architecture = "x86_64"
+handler = "index.handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["SnsAlert"]
+
 [layer_build_definitions]

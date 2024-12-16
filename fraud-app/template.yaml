@@ -3,6 +3,7 @@ Transform: AWS::Serverless-2016-10-31 # identifies as SAM template file
 Description: AWS SAM for MEAN Project
 
 Resources:
+  #Buckets
   ReportBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -30,6 +31,7 @@ Resources:
         - Key: BatchID
           Value: SAM
 
+  #Lambda Functions
   QuokkaDetectSusFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -48,38 +50,142 @@ Resources:
             Events: s3:ObjectCreated:*
 
   QuokkaSubmitReportFunction:
-      Type: 'AWS::Serverless::Function'
-      Properties:
-        Handler: index.handler
-        Runtime: nodejs20.x
-        CodeUri: lambda/submitreport/
-        FunctionName: 'quokka-submit-report'
-        Description: Submits report to s3 bucket.
-        Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
-        Events:
-          EventBridgeTriggerEvent:
-            Type: EventBridgeRule
-            Properties:
-              Pattern: 
-                source: ["aws.rds"] 
-                detail-type: ["RDS DB Cluster Event"]
-                detail:
-                  eventName: ["INSERT"] # Match on INSERT operations
-                  databaseName: ["pangolin-db"]
-                  tableName: ["reports"] 
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs20.x
+      CodeUri: lambda/submitreport/
+      FunctionName: 'quokka-submit-report'
+      Description: Submits report to s3 bucket.
+      Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
+      Events:
+        EventBridgeTriggerEvent:
+          Type: EventBridgeRule
+          Properties:
+            Pattern: 
+              source: ["aws.rds"] 
+              detail-type: ["RDS DB Cluster Event"]
+              detail:
+                eventName: ["INSERT"] # Match on INSERT operations
+                databaseName: ["pangolin-db"]
+                tableName: ["reports"] 
 
   QuokkaReportToPDFFunction:
-        Type: 'AWS::Serverless::Function'
-        Properties:
-          Handler: index.handler
-          Runtime: nodejs20.x
-          CodeUri: lambda/generatereport/
-          FunctionName: 'quokka-generate-pdf'
-          Description: Generate pdf from report submission to database.
-          Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
-          Events:
-            APIGatewayTriggerEvent:
-              Type: HttpApi 
-              Properties:
-                Path: /reporttopdf
-                Method: post
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs20.x
+      CodeUri: lambda/generatereport/
+      FunctionName: 'quokka-generate-pdf'
+      Description: Generate pdf from report submission to database.
+      Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
+      Events:
+        APIGatewayTriggerEvent:
+          Type: HttpApi 
+          Properties:
+            Path: /reporttopdf
+            Method: post
+
+  #SNS Topics
+  SusAlert:
+    Type: AWS::SNS::Topic
+ 
+  SnsAlert:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/sns
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
+      Policies:
+        - Statement:
+            - Sid: Statement1
+              Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref SusAlert
+            - Sid: VisualEditor0
+              Effect: Allow
+              Action:
+                - s3:PutObject
+                - s3:GetObject
+                - s3:PutObjectTagging
+                - s3:DeleteObject
+              Resource: !Ref SusReportBucket
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt SusAlert.TopicName
+      RecursiveLoop: Terminate
+      Tags:
+        BatchID: SAM
+      Events:
+        EventBridgeRule1:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              source:
+                - aws.s3
+              detail-type:
+                - Object Created
+              detail:
+                bucket:
+                  name:
+                    - !Sub ${SusReportBucket}
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+      Environment:
+        Variables:
+          SUSALERT_TOPIC_NAME: !GetAtt SusAlert.TopicName
+          SUSALERT_TOPIC_ARN: !Ref SusAlert
+          BUCKET_NAME_SNS: !Sub ${SusReportBucket}
+
+  PDFAlert:
+    Type: AWS::SNS::Topic
+ 
+  SnsAlert:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/sns
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
+      Policies:
+        - Statement:
+            - Sid: Statement1
+              Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref SusAlert
+            - Sid: VisualEditor0
+              Effect: Allow
+              Action:
+                - s3:PutObject
+                - s3:GetObject
+                - s3:PutObjectTagging
+                - s3:DeleteObject
+              Resource: !Ref PDFReportBucket
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt PDFAlert.TopicName
+      RecursiveLoop: Terminate
+      Tags:
+        BatchID: SAM
+      Events:
+        EventBridgeRule1:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              source:
+                - aws.s3
+              detail-type:
+                - Object Created
+              detail:
+                bucket:
+                  name:
+                    - !Sub ${PDFReportBucket}
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+      Environment:
+        Variables:
+          SUSALERT_TOPIC_NAME: !GetAtt PDFAlert.TopicName
+          SUSALERT_TOPIC_ARN: !Ref PDFAlert
+          BUCKET_NAME_SNS: !Sub ${PDFReportBucket}
+ 

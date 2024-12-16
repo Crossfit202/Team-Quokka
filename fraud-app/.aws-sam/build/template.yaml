@@ -88,3 +88,66 @@ Resources:
             Method: post
     Metadata:
       SamResourceId: QuokkaReportToPDFFunction
+  SusAlert:
+    Type: AWS::SNS::Topic
+  SnsAlert:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: SnsAlert
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Role: arn:aws:iam::571600854971:role/QuokkaDetectSusFunctionRole
+      Policies:
+      - Statement:
+        - Sid: Statement1
+          Effect: Allow
+          Action:
+          - sns:Publish
+          Resource:
+            Ref: SusAlert
+        - Sid: VisualEditor0
+          Effect: Allow
+          Action:
+          - s3:PutObject
+          - s3:GetObject
+          - s3:PutObjectTagging
+          - s3:DeleteObject
+          Resource:
+            Ref: PDFReportBucket
+      - SNSPublishMessagePolicy:
+          TopicName:
+            Fn::GetAtt:
+            - PDFAlert
+            - TopicName
+      RecursiveLoop: Terminate
+      Tags:
+        BatchID: SAM
+      Events:
+        EventBridgeRule1:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              source:
+              - aws.s3
+              detail-type:
+              - Object Created
+              detail:
+                bucket:
+                  name:
+                  - Fn::Sub: ${PDFReportBucket}
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+      Environment:
+        Variables:
+          SUSALERT_TOPIC_NAME:
+            Fn::GetAtt:
+            - PDFAlert
+            - TopicName
+          SUSALERT_TOPIC_ARN:
+            Ref: PDFAlert
+          BUCKET_NAME_SNS:
+            Fn::Sub: ${PDFReportBucket}
+    Metadata:
+      SamResourceId: SnsAlert
+  PDFAlert:
+    Type: AWS::SNS::Topic

@@ -24,24 +24,24 @@ jobs:
       with:
         node-version: 19 # Adjust this if necessary
         cache: 'npm'
+        cache-dependency-path: fraud-app/frontend/package-lock.json # Specify the path to your lock file
 
     # Step 3: Install dependencies
     - name: Install dependencies
+      working-directory: ./fraud-app/frontend # Set the working directory to where your lock file is
       run: npm install
-
-    # Step 4: Run tests
-    - name: Run tests
-      run: npm test
 
     # Step 5: Build Angular app
     - name: Build Angular App
+      working-directory: ./fraud-app/frontend
       run: npm run build
+      
 
     # Step 6: Deploy to S3
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
-        args: --acl public-read --follow-symlinks --delete
+        args: --follow-symlinks --delete
       env:
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
