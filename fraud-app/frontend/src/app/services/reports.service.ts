@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ReportsService {
-  private apiUrl = 'https://api.skillsolving.ai/reports'; // Base URL for reports
-  private annotationsUrl = 'https://api.skillsolving.ai/annotations'; // Base URL for annotations
+  private apiUrl = 'https://www.skillsolving.ai/reports'; // Base URL for reports
+  private annotationsUrl = 'https://www.skillsolving.ai/annotations'; // Base URL for annotations
 
   constructor(private http: HttpClient) { }
 
