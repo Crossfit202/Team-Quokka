@@ -23,25 +23,19 @@ export class LoginScreenComponent {
   ) { }
 
   login() {
-    this.authService.login({ username: this.username, password: this.password }).subscribe({
+    this.userStateService.login(this.username, this.password).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-
-        // Save user data locally
-        this.userStateService.setUser({
-          user_id: response.user_id, // Assuming the backend sends user_id
-          username: response.username,
-          role: response.role,
-        });
-
         // Navigate based on user role
-        if (response.role === 'admin') {
-          this.router.navigate(['/admin-home']);
-        } else if (response.role === 'admin2') {
-          this.router.navigate(['/advanced-user']);
-        } else {
-          alert('Invalid role detected!');
-        }
+        this.userStateService.getUser().subscribe(data =>{
+          if (data.role === 'admin') {
+            this.router.navigate(['/admin-home']);
+          } else if (data.role === 'admin2') {
+            this.router.navigate(['/advanced-user']);
+          } else {
+            alert('Invalid role detected!');
+          }
+        })
       },
       error: (err) => {
         console.error('Login failed:', err);

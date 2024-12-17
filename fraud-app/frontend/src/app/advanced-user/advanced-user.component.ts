@@ -31,7 +31,6 @@ export class AdvancedUserComponent implements OnInit {
   constructor(private reportsService: ReportsService) { }
 
   ngOnInit(): void {
-    console.log('Advanced User Component Initialized');
   }
 
 

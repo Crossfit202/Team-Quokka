@@ -1,28 +1,51 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Users } from 'src/users/users';
-import { Repository } from 'typeorm';
+import { AuthValues } from './config'
+import { JwtService } from '@nestjs/jwt'
+import { UsersService } from 'src/users/users.service';
+import { hash, compare } from 'bcrypt'
+import { LoginDto } from 'src/users/dto/login-user.dto';
 
 
 @Injectable()
 export class AuthService {
     constructor(
-        @InjectRepository(Users)
-        private readonly usersRepository: Repository<Users>,
-    ) { }
+        private readonly jwtService: JwtService, // Remove the forwardRef here
+        @Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService
+    ) { }    
 
-    // Fetch the user from the database using the provided username and password
-    async validateUser(username: string, password: string): Promise<{ user_id: number; username: string; role: string }> {
-        const user = await this.usersRepository.findOne({ where: { username, password } });
+      /*
+   * takes a password and returns the hashed version of that password for safe storage
+   * */
+    async hashPassword(password: string): Promise<string> {
+        //crypto-fy that password!
+        return await hash(password + AuthValues.PEPPER, 10)
+    }
+    /*
+   * takes a username and password and determines if the credentials are valid
+   * then returns an access token if valid
+   * */
+    async validateLogin({ username, password}: LoginDto
+    ): Promise<{ access_token: string }> {
+        let userToAuth: Users = await this.usersService.findOneByUserName(username)
 
-        // If no user is found, throw an UnauthorizedException
-        if (!user) {
-            throw new UnauthorizedException('Invalid username or password');
+        let peppered_password: string = password + AuthValues.PEPPER
+        let authentication: boolean = await compare(
+        peppered_password,
+        userToAuth.password,
+        )
+
+        if (!authentication) throw new UnauthorizedException()
+
+        const payload = { sub: userToAuth.user_id, username: userToAuth.username }
+
+        let access_token = {
+        access_token: await this.jwtService.signAsync(payload, {
+            secret: process.env.JWTSECRET,
+        }),
         }
 
-        // Return ID, username, and role
-        return { user_id: user.user_id, username: user.username, role: user.role };
+        return access_token
     }
-
 }
 

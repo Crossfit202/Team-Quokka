@@ -58,13 +58,7 @@ import { config } from 'process';
     UsersModule,
     AuthModule
   ],
-  controllers: [
-    AppController,
-    AuthController, // Application Controller
-  ],
-  providers: [
-    AppService,
-    AuthService, // Application Service
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }
