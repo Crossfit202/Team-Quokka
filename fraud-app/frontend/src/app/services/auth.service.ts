@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class AuthService {
-    private apiUrl = 'https://skillsolving.ai/auth'; // Backend base URL
+    // private apiUrl = 'https://skillsolving.ai/auth'; // Backend base URL
+    private apiUrl = 'http://localhost:3000/auth'; // Backend base URL
 
 
 
