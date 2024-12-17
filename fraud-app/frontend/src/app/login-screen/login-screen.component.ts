@@ -27,15 +27,18 @@ export class LoginScreenComponent {
       next: (response) => {
         console.log('Login successful:', response);
         // Navigate based on user role
-        this.userStateService.getUser().subscribe(data =>{
-          if (data.role === 'admin') {
-            this.router.navigate(['/admin-home']);
-          } else if (data.role === 'admin2') {
-            this.router.navigate(['/advanced-user']);
-          } else {
-            alert('Invalid role detected!');
-          }
+        setTimeout(() => {
+          this.userStateService.getUser().subscribe(data => {
+            if (data.role === 'admin') {
+              this.router.navigate(['/admin-home']);
+            } else if (data.role === 'admin2') {
+              this.router.navigate(['/advanced-user']);
+            } else {
+              alert('Invalid role detected!');
+            }
+          })
         })
+
       },
       error: (err) => {
         console.error('Login failed:', err);
