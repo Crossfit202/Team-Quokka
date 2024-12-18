@@ -9,8 +9,8 @@ export class ReportsService {
   // private apiUrl = 'https://PangolinLoadBalancer-943882191.us-east-1.elb.amazonaws.com/reports'; // Base URL for reports
   // private annotationsUrl = 'https://PangolinLoadBalancer-943882191.us-east-1.elb.amazonaws.com/annotations'; // Base URL for annotations
 
-  private apiUrl = 'http://54.197.217.119:3000/reports';
-  private annotationsUrl = 'http://54.197.217.119:3000/annotations';
+  private apiUrl = 'https://api.skillsolving.ai/reports';
+  private annotationsUrl = 'https://api.skillsolving.ai/annotations';
 
 
   constructor(private http: HttpClient) { }
