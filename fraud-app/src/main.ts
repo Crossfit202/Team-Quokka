@@ -6,12 +6,12 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://skillsolving.ai',
+      'https://api.skillsolving.ai',
       'https://skillsolving.com',
       'http://quokka-frontend1.s3-website-us-east-1.amazonaws.com',
       'https://d3jbxkf10fm5wb.cloudfront.net',
       'https://www.skillsolving.com',
-      'https://www.skillsolving.ai',
+      'https://www.api.skillsolving.ai',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'],
