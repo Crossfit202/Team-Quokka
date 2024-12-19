@@ -8,7 +8,7 @@ import { AuthToken, LoginDto } from '../models/login';
     providedIn: 'root', // Ensures this service is a singleton and available throughout the app
 })
 export class UserStateService {
-    private apiUrl = 'http://localhost:3000/users';
+    private apiUrl = 'https://backend.skillsolving.com/users';
     constructor(
     private http: HttpClient,
     private cookieService: CookieService,
