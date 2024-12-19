@@ -37,7 +37,7 @@ export class LoginScreenComponent {
               alert('Invalid role detected!');
             }
           })
-        })
+        }, 300)
 
       },
       error: (err) => {
