@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LambdaService {
-  private apiUrl = 'https://t2ca0gbc39.execute-api.us-east-1.amazonaws.com//Quokka-Report-To-PDF'; // Replace with your API Gateway URL
+  private apiUrl = 'https://o0f5m29n7b.execute-api.us-east-1.amazonaws.com//reporttopdf'; // Replace with your API Gateway URL
 
   constructor(private http: HttpClient) {}
 
