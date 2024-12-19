@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Put, Delete, HttpCode, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './users';
 import { Reports } from 'src/reports/reports';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { LoginDto } from './dto/login-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService,
+    private readonly authService: AuthService
+  ) { }
+
+  // Define a POST endpoint at 'users/login' for user login
+  @Post('/login')
+  @HttpCode(200)
+  async login(@Body() loginUserDTO: LoginDto) {
+    return await this.authService.validateLogin(loginUserDTO) // Await the promise
+  }
 
   // POST 
   @Post()
@@ -13,6 +25,15 @@ export class UsersController {
     return await this.userService.create(data);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('whoami')
+  @HttpCode(200)
+  async getUserInfo(@Request() req: any) {
+    const user = await this.userService.getById(req.user.sub)
+    console.log(user)
+    return user
+  }
+  
   // GET ALL
   @Get()
   async findAll(): Promise<Users[]> {

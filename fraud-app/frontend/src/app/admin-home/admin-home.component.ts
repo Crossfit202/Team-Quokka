@@ -25,25 +25,26 @@ export class AdminHomeComponent implements OnInit {
   selectedReport: any | null = null;
   viewMode: any;
   currentView: string = 'assignedReports'; // Default view, adjust as necessary
-
+  currentUser: any | null = null;
 
 
   constructor(
-    private authService: AuthService,
     private reportsService: ReportsService,
     private userStateService: UserStateService, // Inject UserStateService
     private lambdaService: LambdaService
   ) { }
 
   ngOnInit() {
-    const currentUser = this.userStateService.getUser();
-
-    if (currentUser) {
-      const statuses = this.getStatusesForView(); // Get statuses based on isReviewMode
-      this.fetchAssignedReports(statuses, currentUser.user_id);
-    } else {
-      console.error('No logged-in user found.');
-    }
+    this.userStateService.getUser().subscribe(currentUser => {
+      if (currentUser) {
+        const statuses = this.getStatusesForView(); // Get statuses based on isReviewMode
+        console.log(currentUser); // Log the current user object
+        this.currentUser = currentUser;
+        this.fetchAssignedReports(statuses, currentUser.user_id); // Pass user_id directly from currentUser
+      } else {
+        console.error('No logged-in user found.');
+      }
+    });
   }
 
   /**
@@ -112,9 +113,7 @@ export class AdminHomeComponent implements OnInit {
    * Add an annotation to the current report.
    */
   addAnnotation(): void {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}'); // Get the logged-in user
-    const userId = loggedInUser.user_id; // Extract user ID
-  
+    const userId = this.currentUser.user_id; // Extract user ID
     if (this.newAnnotation.trim() && this.currentReport) {
         const annotationData = {
             annotation_text: this.newAnnotation.trim(), // Ensure the text is trimmed
@@ -153,8 +152,6 @@ export class AdminHomeComponent implements OnInit {
     }
 }
 
-
-
   /**
    * Submit a report for review.
    * @param reportId - The ID of the report to submit.
@@ -162,11 +159,11 @@ export class AdminHomeComponent implements OnInit {
   submitForReview(reportId: number): void {
     const currentUser = this.userStateService.getUser(); // Get the logged-in user
 
-    this.reportsService.submitReport(reportId, currentUser.user_id).subscribe({
+    this.reportsService.submitReport(reportId, this.currentUser.user_id).subscribe({
       next: () => {
         alert('Report submitted for review successfully.');
         const statuses = ['Assigned', 'In Progress'];
-        this.fetchAssignedReports(statuses, currentUser.user_id);
+        this.fetchAssignedReports(statuses, this.currentUser.user_id);
       },
       error: (err) => {
         console.error('Error submitting report for review:', err);
@@ -174,15 +171,6 @@ export class AdminHomeComponent implements OnInit {
     });
 
   }
-
-
-
-
-
-
-
-
-
 
   /**
    * Approve a report.
@@ -195,16 +183,13 @@ export class AdminHomeComponent implements OnInit {
         alert('Report approved successfully.');
         const statuses = this.getStatusesForView(); // Get the current statuses for the view
         const currentUser = this.userStateService.getUser(); // Fetch the logged-in user
-        this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the report list
+        this.fetchAssignedReports(statuses, this.currentUser.user_id); // Refresh the report list
       },
       error: (err) => {
         console.error('Error approving report:', err);
       },
     });
   }
-
-
-
 
   /**
  * Invoke the Lambda function to generate a PDF for the current report.
@@ -236,13 +221,11 @@ export class AdminHomeComponent implements OnInit {
    * @param reportId - The ID of the report to deny.
    */
   denyReport(reportId: number): void {
-    const currentUser = this.userStateService.getUser(); // Get the logged-in admin2 user
-
-    this.reportsService.denyReport(reportId, currentUser.user_id).subscribe({
+    this.reportsService.denyReport(reportId, this.currentUser.user_id).subscribe({
       next: () => {
         alert('Report denied successfully.');
         const statuses = this.getStatusesForView();
-        this.fetchAssignedReports(statuses, currentUser.user_id); // Refresh the list of reports
+        this.fetchAssignedReports(statuses, this.currentUser.user_id); // Refresh the list of reports
       },
       error: (err) => {
         console.error('Error denying report:', err);

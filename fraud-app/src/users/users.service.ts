@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users';
 import { Audit_log } from 'src/audit_log/audit_log';
 import { Reports } from 'src/reports/reports';
+import { AuthService } from 'src/auth/auth.service'
 
 @Injectable()
 export class UsersService {
@@ -16,13 +17,22 @@ export class UsersService {
 
         @InjectRepository(Reports)
         private readonly reportsRepository: Repository<Reports>,
+
+        @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService // Use forwardRef here
     ) { }
 
-    // CREATE
-    async create(data: Partial<Users>): Promise<Users> {
-        const newUser = this.userRepository.create(data);
-        return await this.userRepository.save(newUser);
-    }
+    async create({ username, password, ...userData }: Partial<Users>): Promise<Users> {
+        if (await this.userRepository.exists({ where: { username } }))
+          throw new HttpException(
+            `User with username ${username} already exists!`,
+            HttpStatus.BAD_REQUEST,
+          )
+    
+        const user = this.userRepository.create({ username, reports: [], ...userData })
+        user.password = await this.authService.hashPassword(password)
+        console.log(`saving user ${user}`)
+        return await this.userRepository.save(user)
+      }
 
     // READ ALL
     async findAll(): Promise<Users[]> {
@@ -34,6 +44,27 @@ export class UsersService {
         const user = await this.userRepository.findOne({ where: { user_id: id } });
         if (!user) {
             throw new NotFoundException(`User with ID ${id} not found`);
+        }
+        return user;
+    }
+
+    async getById(userId: number): Promise<Users> {
+        const user = await this.userRepository.findOne({
+          where: { user_id: userId }
+        })
+        if (user == null)
+          throw new HttpException(
+            `No user with id ${userId} exist.`,
+            HttpStatus.NOT_FOUND,
+          )
+        return user
+    }
+
+    // READ ONE by username
+    async findOneByUserName(username: string): Promise<Users> {
+        const user = await this.userRepository.findOne({ where: { username } });
+        if (!user) {
+            throw new NotFoundException(`User with username ${username} not found`);
         }
         return user;
     }
